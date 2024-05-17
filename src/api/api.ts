@@ -5,7 +5,7 @@ const host = import.meta.env.VITE_HOST
 const basePath = import.meta.env.VITE_BASE_PATH
 const apiKey = import.meta.env.VITE_API_KEY
 
-export class Api {
+export default class Api {
   static _baseUrl = `${host}${basePath}`
   static _instance: AxiosInstance = axios.create({
     baseURL: this._baseUrl,

@@ -40,8 +40,19 @@ export default {
 </script>
 
 <template>
-  <button @click="generateInvoice">Gen Invoice</button>
-  <button @click="fetchStatus()">Fetch Invoice</button>
+  <button
+    @click="generateInvoice"
+    class="py-2.5 px-5 me-2 mb-2 text-sm font-medium text-gray-900 focus:outline-none bg-white rounded-lg border border-gray-200 hover:bg-gray-100 hover:text-blue-700 focus:z-10 focus:ring-4 focus:ring-gray-100 dark:focus:ring-gray-700 dark:bg-gray-800 dark:text-gray-400 dark:border-gray-600 dark:hover:text-white dark:hover:bg-gray-700"
+  >
+    Gen Invoice
+  </button>
+  <button
+    @click="fetchStatus"
+    class="py-2.5 px-5 me-2 mb-2 text-sm font-medium text-gray-900 focus:outline-none bg-white rounded-lg border border-gray-200 hover:bg-gray-100 hover:text-blue-700 focus:z-10 focus:ring-4 focus:ring-gray-100 dark:focus:ring-gray-700 dark:bg-gray-800 dark:text-gray-400 dark:border-gray-600 dark:hover:text-white dark:hover:bg-gray-700"
+  >
+    Fetch Invoice
+  </button>
+
   <AwaitingPayment v-if="awaitingPayment" :qrCodeUrl="paymentQrCodeUrl"></AwaitingPayment>
   <PaymentConfirmed v-else-if="paymentSuccessful"></PaymentConfirmed>
 </template>

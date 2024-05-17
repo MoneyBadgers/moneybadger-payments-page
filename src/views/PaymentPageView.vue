@@ -11,13 +11,24 @@ export default {
     AwaitingPayment,
     PaymentConfirmed
   },
-  mounted: function () {
-    const paymentVerification = setInterval(() => {
-      // this.paymentsStore.pollPaymentStatus('')
-    }, 1000)
+  methods: {
+    generateInvoice() {
+      this.paymentsStore.generateInvoice()
+    },
+    async fetchStatus() {
+      if (this.awaitingPayment) {
+        await this.paymentsStore.pollPaymentStatus()
+        setTimeout(() => {
+          this.fetchStatus()
+        }, 500)
+      }
+    }
   },
   computed: {
     ...mapStores(usePaymentStore),
+    paymentQrCodeUrl: function (): String {
+      return this.paymentsStore.invoice.qrCodeUrl
+    },
     awaitingPayment: function (): boolean {
       return this.paymentsStore.status === PaymentStatus.Waiting
     },
@@ -29,7 +40,9 @@ export default {
 </script>
 
 <template>
-  <AwaitingPayment v-if="awaitingPayment"></AwaitingPayment>
+  <button @click="generateInvoice">Gen Invoice</button>
+  <button @click="fetchStatus()">Fetch Invoice</button>
+  <AwaitingPayment v-if="awaitingPayment" :qrCodeUrl="paymentQrCodeUrl"></AwaitingPayment>
   <PaymentConfirmed v-else-if="paymentSuccessful"></PaymentConfirmed>
 </template>
 

@@ -1,9 +1,17 @@
 <script lang="ts">
 import { ClipboardDocumentIcon } from '@heroicons/vue/24/outline'
+import LoadingSpinner from './LoadingSpinner.vue'
+
+let t: any
+
 export default {
   name: 'AwaitingPayment',
   components: {
-    ClipboardDocumentIcon
+    ClipboardDocumentIcon,
+    LoadingSpinner
+  },
+  props: {
+    qrCodeUrl: { type: String, default: '' }
   }
 }
 </script>
@@ -16,8 +24,11 @@ export default {
     <div class="columns-auto">
       <h4 class="text-gray-200 font-bold py-4">Scan QR code with Lighting Wallet</h4>
     </div>
-    <div class="columns-auto">
-      <img class="payment-qr-code mx-auto py-5" src="../assets/mock-qr.png" />
+    <div class="columns-auto justify-center text-center">
+      <img v-if="qrCodeUrl" class="payment-qr-code mx-auto py-5" :src="qrCodeUrl" />
+      <div v-else class="mx-auto w-10 py-5">
+        <LoadingSpinner />
+      </div>
     </div>
     <div class="columns-auto">
       <div class="inline-flex items-center w-100">

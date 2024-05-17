@@ -5,7 +5,7 @@ const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
   routes: [
     {
-      path: '/awaiting-payment',
+      path: '/',
       name: 'awaiting-payment',
       component: () => import('../views/PaymentPageView.vue')
     }

@@ -14,7 +14,7 @@ export default class Api {
     timeout: MAX_TIMEOUT,
     httpsAgent: true,
     headers: {
-      'x-api-key': apiKey,
+      'x-merchant-code': apiKey,
       'Content-Type': 'application/json'
     }
   })
@@ -31,11 +31,13 @@ export default class Api {
     timeoutInSeconds: number = 120
   ) {
     return this._instance.post(`${this._baseUrl}/invoice/`, {
-      AmountCents: amountCents,
-      Currency: currency,
-      OrderDescription: orderDescription,
-      OrderID: orderId,
-      TimeoutInSeconds: timeoutInSeconds
+      amount_cents: amountCents,
+      currency: currency,
+      order_description: orderDescription,
+      order_id: orderId,
+      allowed_payment_methods: ["lightning"],
+      device_id: "web",
+      scan_id: "web",
     })
   }
 }

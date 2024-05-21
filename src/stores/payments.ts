@@ -22,7 +22,7 @@ export const usePaymentStore = defineStore('payments', {
     },
     async generateInvoice() {
       this.status = PaymentStatus.Waiting
-      const invoice = await Api.invoice(100, 'ZAR', 'testiasddng12362', 'atefsfdtsa-id')
+      const invoice = await Api.invoice(100, 'ZAR', 'test order description', (new Date()).getTime().toString())
       if (invoice.data) {
         this.invoice = new Invoice(invoice.data)
       }

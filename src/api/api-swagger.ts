@@ -1,12 +1,31 @@
-import { Configuration } from './swagger/configuration'
-import { InvoiceApi } from './swagger/api'
+import { InvoiceApi, type ApiConfig } from './swagger/api'
 import type { Currency } from '@/types/Currency'
 
+const host = import.meta.env.VITE_HOST
+const basePath = import.meta.env.VITE_BASE_PATH
 const apiKey = import.meta.env.VITE_API_KEY
 
 export default class Api {
-  private config = new Configuration({ apiKey: apiKey })
+
+  private fetchWithMerchantCode = async (url: URL | RequestInfo, init?: RequestInit | undefined): Promise<Response> => {
+    init = init || {}
+    init.headers = {
+      ...init.headers,
+      'x-merchant-code': apiKey,
+    };
+    return fetch(url, init)
+  }
+
+
+  private config: ApiConfig = {
+    baseUrl: `${host}${basePath}`,
+    customFetch: this.fetchWithMerchantCode
+  }
   private _invoiceApi = new InvoiceApi(this.config)
+
+  fetchInvoiceStatus(invoiceId: string){
+    return this._invoiceApi.invoices.getInvoice(invoiceId)
+  }
 
   requestInvoice(
     amountCents: number,
@@ -14,11 +33,13 @@ export default class Api {
     orderDescription: string,
     orderId: string
   ) {
-    this._invoiceApi.requestInvoice({
-      amountCents,
+   return this._invoiceApi.invoice.requestInvoice({
+      amount_cents: amountCents,
       currency,
-      orderDescription,
-      orderId
+      order_description: orderDescription,
+      order_id: orderId,
+      allowed_payment_methods: ['lightning'],
+      timeout_in_seconds: 60,
     })
   }
 }

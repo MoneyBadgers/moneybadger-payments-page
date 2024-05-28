@@ -33,6 +33,17 @@ export default {
     },
     paymentSuccessful: function (): boolean {
       return this.paymentsStore.confirmed
+    },
+    // TODO: use these parameters (and others) for generating the invoice
+    // e.g. page can be opened with http://localhost:5173/?merchantCode=bork&orderId=foo&amountCents=100
+    param1() {
+      return this.$route.query.merchantCode || 'TODO: FAIL HERE and show error page';
+    },
+    param2() {
+      return this.$route.query.orderId || 'TODO: FAIL HERE and show error page';
+    },
+    param3() {
+      return this.$route.query.amountCents || 'TODO: FAIL HERE and show error page';
     }
   },
   created() {
@@ -47,6 +58,9 @@ export default {
 <template>
   <PaymentConfirmed v-if="paymentSuccessful"></PaymentConfirmed>
   <AwaitingPayment v-if="awaitingPayment" :qrCodeUrl="paymentQrCodeUrl"></AwaitingPayment>
+  {{ param1 }}
+  {{ param2 }}
+  {{ param3 }}
 </template>
 
 <style scoped></style>

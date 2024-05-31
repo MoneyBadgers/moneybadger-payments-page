@@ -9,6 +9,9 @@ export const usePaymentStore = defineStore('payments', {
   getters: {
     awaitPayment: (state): boolean =>  (typeof state.invoice.status !== 'undefined') && [InvoiceStatusEnum.REQUESTED, InvoiceStatusEnum.AUTHORIZED].includes(state.invoice.status),
     confirmed: (state): boolean => state.invoice.status === InvoiceStatusEnum.CONFIRMED,
+    paidAt: (state): string => state.invoice.paid_at || '',
+    amountPaid: (state): number => state.invoice.amount_cents || 0,
+    referenceId: (state): string => state.invoice.id || '',
     api: (state): Api =>  new Api()
   },
   actions: {

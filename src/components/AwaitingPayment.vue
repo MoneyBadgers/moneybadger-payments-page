@@ -17,12 +17,9 @@ export default {
 </script>
 
 <template>
-  <div class="text-center bg-amber-400 text-black">
-    <span>Waiting for Payment...</span>
-  </div>
   <div class="container mx-auto text-center">
     <div class="columns-auto">
-      <h4 class="text-gray-200 font-bold py-4">Scan QR code with Lighting Wallet</h4>
+      <h4 class="text-gray-200 font-bold py-4">Scan QR code with Lightning Wallet</h4>
     </div>
     <div class="columns-auto justify-center text-center">
       <img v-if="qrCodeUrl" class="payment-qr-code mx-auto py-5" :src="qrCodeUrl" />
@@ -38,7 +35,7 @@ export default {
     </div>
     <div class="columns-auto py-4 mx-4">
       <button
-        class="bg-yellow-500 hover:bg-yellow-600 text-black font-bold py-2 px-4 rounded w-full max-w-90"
+        class="open-wallet-btn py-2 px-4 rounded w-1/4"
       >
         Open Wallet
       </button>
@@ -49,5 +46,16 @@ export default {
 <style scoped>
 .payment-qr-code {
   max-width: 300px;
+}
+
+.status-bar, .status-bar .text, .open-wallet-btn {
+  background-color: var(--color-amber-med);
+  font-weight: bold;
+  color: var(--color-black);
+  text-align: center;
+}
+
+button:hover {
+  background-color: var(--color-amber-light);
 }
 </style>

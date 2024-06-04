@@ -33,7 +33,6 @@ export default {
 </script>
 
 <template>
-  <div class="container mx-auto text-center payment-success-card">
     <div>
       <h4 class="text-gray-200 font-bold">Payment Successful</h4>
     </div>
@@ -44,17 +43,12 @@ export default {
       <h1 class="payment-amount">{{currency}} {{paymentAmount}}</h1>
       <h4 class="time-stamp">{{timeStamp ? formatTime(timeStamp) : ''}}</h4>
       <h4 class="reference-id">{{ referenceId }}</h4>
-    </div>
   </div>
 </template>
 
 <style scoped>
 .payment-qr-code {
   max-width: 300px;
-}
-
-.payment-success-card {
-  width: 30%;
 }
 
 .logo-circle {

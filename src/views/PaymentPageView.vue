@@ -4,13 +4,15 @@ import { usePaymentStore } from '../stores/payments'
 import AwaitingPayment from '@/components/AwaitingPayment.vue'
 import PaymentConfirmed from '@/components/PaymentConfirmed.vue'
 import ErrorPage from '@/components/ErrorPage.vue'
+import Logo from '@/components/Logo.vue'
 
 export default {
   name: 'PaymentPageView',
   components: {
     AwaitingPayment,
     PaymentConfirmed,
-    ErrorPage
+    ErrorPage,
+    Logo
   },
   methods: {
     generateInvoice() {
@@ -106,12 +108,13 @@ export default {
     <div class="status-bar py-2">
       <span class="text">{{statusMessage}}</span>
     </div>
-    <ErrorPage v-if="!paymentSuccessful && errorMessage.length > 0" :errors="errorMessage"></ErrorPage>
-    <h1 v-else class="text-gray-200 font-bold py-4">
+    <div class="container mx-auto text-center payment-card">
+      <h1 class="py-4 font-bold flex justify-center items-center">
       Lightning
-      <img src="@/assets/lightning-amber.png" alt="Lightning" class="inline-block mx-2 w-7">
+        <Logo class="mx-1 lightning-logo"/>
       Payment
     </h1>
+      <ErrorPage v-if="!paymentSuccessful && errorMessage.length > 0" :errors="errorMessage"></ErrorPage>
     <PaymentConfirmed
       v-if="paymentSuccessful"
       :timeStamp="paymentTimeStamp"
@@ -119,8 +122,9 @@ export default {
       :referenceId="referenceId"
     ></PaymentConfirmed>
     <AwaitingPayment v-if="awaitingPayment" :qrCodeUrl="paymentQrCodeUrl"></AwaitingPayment>
-    <div class="columns-auto">
-      <img src="@/assets/secure-payment-money-badger.png" alt="Secure Payment" class="mx-auto py-4 w-1/4"  />
+      <div>
+        <img src="@/assets/secure-payment-money-badger.png" alt="Secure Payment" class="mx-auto py-4"  />
+      </div>
     </div>
     <div :style="{ display: 'none' }">
       <p>From Params:</p>
@@ -134,6 +138,15 @@ export default {
 </template>
 
 <style scoped>
+
+.lightning-logo {
+  width: 20px;
+  height: auto;
+}
+
+.payment-card {
+  width: 30%;
+}
 .status-bar, .status-bar .text, .open-wallet-btn {
   background-color: var(--color-amber-med);
   font-weight: bold;

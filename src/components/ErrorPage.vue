@@ -1,21 +1,27 @@
 <script lang="ts">
+import ErrorSymbol from './ErrorSymbol.vue';
+
 export default {
-  name: 'ErrorPage',
-  props: {
-    errors: {
-      type: Array,
-      required: true
-    }
-  }
+    name: 'ErrorPage',
+    props: {
+        errors: {
+            type: Array,
+            required: true
+        }
+    },
+    components: { ErrorSymbol }
 }
 </script>
 
 <template>
-  <div class="error-page">
-    <h1 class="error-symbol">X</h1>
+  <div class="error-page font-bold">
+    <h4>Oops! Something went wrong.</h4>
+    <div class="error-symbol">
+      <ErrorSymbol class="my-4" />
+    </div>
     <div class="error-message">
       <ul>
-        <li v-for="(error, index) in errors" :key="index">
+        <li v-for="(error, index) in errors" :key="index" class="font-bold">
           {{ error }}
         </li>
       </ul>
@@ -33,15 +39,12 @@ export default {
 }
 
 .error-symbol {
-  color: var(--color-red);
-  font-size: 5em;
-  line-height: 1.0;
-  font-weight: bold;
+  width: 50%;
+  height: auto;
 }
 
 .error-message {
   color: var(--color-red);
   font-size: 1.2em;
-  font-weight: bold;
 }
 </style>

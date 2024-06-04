@@ -39,6 +39,9 @@ export default {
     paymentSuccessful: function (): boolean {
       return this.paymentsStore.confirmed
     },
+    amountPaid: function (): number {
+      return this.paymentsStore.amountPaid || 0
+    },
     paymentTimeStamp: function (): string {
       return this.paymentsStore.paidAt || ''
     },
@@ -112,14 +115,14 @@ export default {
     <PaymentConfirmed
       v-if="paymentSuccessful"
       :timeStamp="paymentTimeStamp"
-      :paymentAmount="amountCents"
+      :paymentAmount="amountPaid"
       :referenceId="referenceId"
     ></PaymentConfirmed>
     <AwaitingPayment v-if="awaitingPayment" :qrCodeUrl="paymentQrCodeUrl"></AwaitingPayment>
     <div class="columns-auto">
       <img src="@/assets/secure-payment-money-badger.png" alt="Secure Payment" class="mx-auto py-4 w-1/4"  />
     </div>
-    <div :style="{ color: 'magenta', fontWeight: 'bold', textAlign: 'left' }">
+    <div :style="{ display: 'none' }">
       <p>From Params:</p>
       <p>Merchant Code: {{ merchantCode }}</p>
       <p>Order ID: {{ orderId }}</p>

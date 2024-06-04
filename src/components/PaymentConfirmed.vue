@@ -43,13 +43,6 @@ export default {
       <h4 class="reference-id">{{ referenceId }}</h4>
     </div>
   </div>
-  <div class="columns-auto py-4 mx-4">
-    <button
-      class="close-screen-btn py-2 px-4 rounded w-1/4"
-    >
-      Close Screen
-    </button>
-  </div>
 </template>
 
 <style scoped>
@@ -57,22 +50,7 @@ export default {
   max-width: 300px;
 }
 
-.close-screen-btn {
-  background-color: var(--color-amber-med);
-  font-weight: bold;
-  color: var(--color-black);
-  text-align: center;
-}
-
-button:hover {
-  background-color: var(--color-amber-light);
-}
-
 .payment-success-card {
-  border-color: var(--color-purple);
-  border-width: 1px;
-  border-style: dashed;
-  border-radius: 10px;
   width: 30%;
 }
 

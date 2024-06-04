@@ -1,5 +1,6 @@
 <script lang="ts">
 import { formatTime } from '@/utils/utils'
+import LogoCircle from '@/components/LogoCircle.vue'
 
 export default {
   name: 'PaymentConfirmed',
@@ -8,7 +9,9 @@ export default {
     referenceId: String,
     timeStamp: String,
   },
-  components: {},
+  components: {
+    LogoCircle
+  },
   computed: {
     amountCents() {
       return this.paymentAmount;
@@ -28,13 +31,13 @@ export default {
 
 <template>
   <div class="container mx-auto text-center payment-success-card">
-    <div class="columns-auto">
+    <div>
       <h4 class="text-gray-200 font-bold">Payment Successful</h4>
     </div>
-    <div class="columns-auto">
-      <img class="payment-qr-code mx-auto" src="../assets/payment-success.png" />
+    <div class="logo-circle">
+      <LogoCircle class="payment-success-logo" />
     </div>
-    <div class="columns-auto">
+    <div>
       <h1 class="payment-amount">{{currency}} {{paymentAmount}}</h1>
       <h4 class="time-stamp">{{formatTime(timeStamp)}}</h4>
       <h4 class="reference-id">{{ referenceId }}</h4>
@@ -71,6 +74,17 @@ button:hover {
   border-style: dashed;
   border-radius: 10px;
   width: 30%;
+}
+
+.logo-circle {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.payment-success-logo {
+  width: 50%;
+  height: auto;
 }
 
 .payment-amount, .time-stamp {

@@ -1,7 +1,7 @@
 import { InvoiceApi, type ApiConfig } from './cryptoqr/api'
 import type { Currency } from '../types/Currency'
 
-const host = import.meta.env.VITE_HOST
+const host = import.meta.env.HOST
 const basePath = '/api/v2'
 const merchantCode = 'test'
 

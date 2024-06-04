@@ -1,5 +1,5 @@
 <script lang="ts">
-import { formatTime } from '@/utils/utils'
+import { format } from 'date-fns'
 import LogoCircle from '@/components/LogoCircle.vue'
 
 export default {
@@ -24,7 +24,10 @@ export default {
     }
   },
   methods: {
-    formatTime,
+    formatTime(timeString: String) {
+      const timeStamp = new Date(timeString.toString())
+      return format(timeStamp, 'HH:mm MMM dd, yyyy')
+    }
   }
 }
 </script>
@@ -39,7 +42,7 @@ export default {
     </div>
     <div>
       <h1 class="payment-amount">{{currency}} {{paymentAmount}}</h1>
-      <h4 class="time-stamp">{{formatTime(timeStamp)}}</h4>
+      <h4 class="time-stamp">{{timeStamp ? formatTime(timeStamp) : ''}}</h4>
       <h4 class="reference-id">{{ referenceId }}</h4>
     </div>
   </div>

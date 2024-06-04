@@ -1,9 +1,9 @@
-import { InvoiceApi, type ApiConfig } from './swagger/api'
-import type { Currency } from '@/types/Currency'
+import { InvoiceApi, type ApiConfig } from './cryptoqr/api'
+import type { Currency } from '../types/Currency'
 
 const host = import.meta.env.VITE_HOST
-const basePath = import.meta.env.VITE_BASE_PATH
-const apiKey = import.meta.env.VITE_API_KEY
+const basePath = '/api/v2'
+const merchantCode = 'test'
 
 export default class Api {
 
@@ -11,7 +11,7 @@ export default class Api {
     init = init || {}
     init.headers = {
       ...init.headers,
-      'x-merchant-code': apiKey,
+      'x-merchant-code': merchantCode,
     };
     return fetch(url, init)
   }

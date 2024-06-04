@@ -1,6 +1,6 @@
 import { defineStore } from 'pinia'
-import Api from '../api/api-swagger'
-import { InvoiceStatusEnum, type Invoice } from '../api/swagger/api'
+import Api from '../api/api-cryptoqr'
+import { InvoiceStatusEnum, type Invoice } from '../api/cryptoqr/api'
 
 export const usePaymentStore = defineStore('payments', {
   state: () => ({

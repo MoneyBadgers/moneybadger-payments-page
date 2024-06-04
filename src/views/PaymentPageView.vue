@@ -85,9 +85,6 @@ export default {
     orderDescription() {
       return this.$route.query.orderDescription || null;
     },
-    currency() {
-      return this.$route.query.currency || null;
-    },
     statusWebhookUrl() {
       return this.$route.query.statusWebhookUrl || null;
     }
@@ -128,7 +125,6 @@ export default {
       <p>Order ID: {{ orderId }}</p>
       <p>Amount Cents: {{ amountCents }}</p>
       <p>Order Description: {{ orderDescription }}</p>
-      <p>Currency: {{ currency }}</p>
       <p>Status Webhook URL: {{ statusWebhookUrl }}</p>
     </div>
   </div>

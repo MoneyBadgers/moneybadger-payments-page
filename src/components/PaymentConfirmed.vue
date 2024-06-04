@@ -17,7 +17,7 @@ export default {
       return this.paymentAmount;
     },
     currency() {
-      return 'R'; //TODO: get currency from store
+      return 'R';
     },
     paidAt() {
       return this.timeStamp; 

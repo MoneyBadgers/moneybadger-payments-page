@@ -36,6 +36,9 @@ export default {
     paymentQrCodeUrl: function (): String {
       return this.paymentsStore.invoice.payment_request?.qr_code_url || '' // TODO: show an image to make it obvious this failed
     },
+    paymentAddress: function (): String {
+      return this.paymentsStore.address || ''
+    },
     awaitingPayment: function (): boolean {
       if (this.missingParams) {
         return false

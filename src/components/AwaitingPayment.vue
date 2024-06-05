@@ -11,7 +11,8 @@ export default {
     LoadingSpinner
   },
   props: {
-    qrCodeUrl: { type: String, default: '' }
+    qrCodeUrl: { type: String, default: '' },
+    paymentAddress: { type: String, default: '' }
   }
 }
 </script>
@@ -28,7 +29,7 @@ export default {
   </div>
   <div>
     <div class="inline-flex items-center w-100">
-      <h5 class="text-gray-200 font-bold py-4">Tap QR Code to copy address</h5> <!-- TODO: do this -->
+      <h5 class="text-gray-200 font-bold py-4">Tap QR Code or click here to copy address</h5> <!-- TODO: do this -->
       <ClipboardDocumentIcon class="mx-2 size-6 text-yellow-500" />
     </div>
   </div>

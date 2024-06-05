@@ -5,6 +5,7 @@ import AwaitingPayment from '@/components/AwaitingPayment.vue'
 import PaymentConfirmed from '@/components/PaymentConfirmed.vue'
 import ErrorPage from '@/components/ErrorPage.vue'
 import Logo from '@/components/Logo.vue'
+import router from '../router'
 
 export default {
   name: 'PaymentPageView',
@@ -15,6 +16,9 @@ export default {
     Logo
   },
   methods: {
+    initializeFromQueryParams() {
+      return this.paymentsStore.initializeFromQueryParams(this.$route.query)
+    },
     generateInvoice() {
       return this.paymentsStore.generateInvoice()
     },
@@ -60,41 +64,14 @@ export default {
       }
     },
     missingParams: function (): boolean {
-      return !this.merchantCode || !this.orderId || !this.amountCents
+      return this.paymentsStore.errors.length > 0
     },
-    errorMessage: function (): Array<string> {
-      const errors = [];
-      // required params
-      if (!this.merchantCode) {
-        errors.push('Merchant Code is missing.');
-      }
-      if (!this.orderId) {
-        errors.push('Order ID is missing.');
-      }
-      if (!this.amountCents) {
-        errors.push('Amount Cents is missing.');
-      }
-      return errors;
+    errorMessages: function (): Array<string> {
+      return this.paymentsStore.errors
     },
-    // TODO: use these parameters (and others) for generating the invoice
-    // e.g. page can be opened with http://localhost:5173/?merchantCode=bork&orderId=foo&amountCents=100
-    merchantCode() {
-      return this.$route.query.merchantCode || null;
-    },
-    orderId() {
-      return this.$route.query.orderId || null;
-    },
-    amountCents() {
-      return this.$route.query.amountCents || null;
-    },
-    orderDescription() {
-      return this.$route.query.orderDescription || null;
-    },
-    statusWebhookUrl() {
-      return this.$route.query.statusWebhookUrl || null;
-    }
   },
   created() {
+    this.initializeFromQueryParams()
     this.generateInvoice().then(() => {
       this.fetchStatus()
     })
@@ -125,14 +102,6 @@ export default {
       <div>
         <img src="@/assets/secure-payment-money-badger.png" alt="Secure Payment" class="mx-auto py-4"  />
       </div>
-    </div>
-    <div :style="{ display: 'none' }">
-      <p>From Params:</p>
-      <p>Merchant Code: {{ merchantCode }}</p>
-      <p>Order ID: {{ orderId }}</p>
-      <p>Amount Cents: {{ amountCents }}</p>
-      <p>Order Description: {{ orderDescription }}</p>
-      <p>Status Webhook URL: {{ statusWebhookUrl }}</p>
     </div>
   </div>
 </template>

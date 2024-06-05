@@ -33,16 +33,16 @@ export default {
 </script>
 
 <template>
-    <div>
-      <h4 class="text-gray-200 font-bold">Payment Successful</h4>
-    </div>
-    <div class="logo-circle">
-      <LogoCircle class="payment-success-logo" />
-    </div>
-    <div>
-      <h1 class="payment-amount">{{currency}} {{paymentAmount}}</h1>
-      <h4 class="time-stamp">{{timeStamp ? formatTime(timeStamp) : ''}}</h4>
-      <h4 class="reference-id">{{ referenceId }}</h4>
+  <div>
+    <h4 class="text-gray-200 font-bold">Payment Successful</h4>
+  </div>
+  <div class="logo-circle">
+    <LogoCircle class="payment-success-logo" />
+  </div>
+  <div>
+    <h1 class="payment-amount">{{currency}} {{paymentAmount}}</h1>
+    <h4 class="time-stamp">{{timeStamp ? formatTime(timeStamp) : ''}}</h4>
+    <h4 class="reference-id">{{ referenceId }}</h4>
   </div>
 </template>
 

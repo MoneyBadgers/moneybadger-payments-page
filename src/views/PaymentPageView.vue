@@ -3,7 +3,6 @@ import { mapStores } from 'pinia'
 import { usePaymentStore } from '../stores/payments'
 import AwaitingPayment from '@/components/AwaitingPayment.vue'
 import PaymentConfirmed from '@/components/PaymentConfirmed.vue'
-import ErrorPage from '@/components/ErrorPage.vue'
 import Logo from '@/components/Logo.vue'
 import router from '../router'
 
@@ -12,7 +11,6 @@ export default {
   components: {
     AwaitingPayment,
     PaymentConfirmed,
-    ErrorPage,
     Logo
   },
   methods: {
@@ -68,13 +66,13 @@ export default {
     },
     missingParams: function (): boolean {
       return this.paymentsStore.errors.length > 0
-    },
-    errorMessages: function (): Array<string> {
-      return this.paymentsStore.errors
-    },
+    }
   },
   created() {
-    this.initializeFromQueryParams()
+    const initSuccess = this.initializeFromQueryParams()
+    if (!initSuccess) {
+      router.push({ name: 'error' })
+    }
     this.generateInvoice().then(() => {
       this.fetchStatus()
     })
@@ -94,7 +92,6 @@ export default {
         <Logo class="mx-1 lightning-logo"/>
       Payment
     </h1>
-      <ErrorPage v-if="!paymentSuccessful && errorMessage.length > 0" :errors="errorMessage"></ErrorPage>
     <PaymentConfirmed
       v-if="paymentSuccessful"
       :timeStamp="paymentTimeStamp"

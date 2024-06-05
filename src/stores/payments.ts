@@ -57,9 +57,6 @@ export const usePaymentStore = defineStore('payments', {
       }
       this.invoice = (await this.api.fetchInvoiceStatus(this.invoice.id)).data
     },
-    // async generateInvoice() {
-    //   this.invoice = (await this.api.requestInvoice(100, 'ZAR', 'test order description', (new Date()).getTime().toString())).data
-    // }
     async generateInvoice() {
       this.invoice = (await this.api.requestInvoice(
         this.amountCents,

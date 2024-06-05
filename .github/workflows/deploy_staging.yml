@@ -11,7 +11,7 @@ jobs:
     env:
       HOST: 'https://api.staging.cryptoqr.co.za' # API host
       AWS_REGION: 'eu-west-2' # Define your AWS region
-      S3_BUCKET: 'payments-page-staging-bucket-test' # Staging bucket
+      S3_BUCKET: 'moneybadger-payments-page-staging' # Staging bucket
 
     steps:
       - name: Checkout code

@@ -9,7 +9,7 @@ jobs:
     runs-on: ubuntu-latest
 
     env:
-      HOST: 'https://api.staging.cryptoqr.co.za' # API host
+      VITE_HOST: 'https://api.staging.cryptoqr.co.za' # API host
       AWS_REGION: 'eu-west-2' # Define your AWS region
       S3_BUCKET: 'moneybadger-payments-page-staging' # Staging bucket
 
@@ -29,7 +29,7 @@ jobs:
       #   run: npm audit
 
       - name: Build the project
-        run: HOST=${{ env.HOST }} npm run build --if-present
+        run: npm run build --if-present
 
       - name: Configure AWS credentials
         uses: aws-actions/configure-aws-credentials@v2

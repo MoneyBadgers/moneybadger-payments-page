@@ -11,43 +11,48 @@ export default {
     LoadingSpinner
   },
   props: {
-    qrCodeUrl: { type: String, default: '' }
+    qrCodeUrl: { type: String, default: '' },
+    paymentAddress: { type: String, default: '' }
   }
 }
 </script>
 
 <template>
-  <div class="text-center bg-amber-400 text-black">
-    <span>Waiting for Payment...</span>
+  <div>
+    <h4 class="text-gray-200 font-bold py-4">Scan QR code with Lightning Wallet</h4>
   </div>
-  <div class="container mx-auto text-center">
-    <div class="columns-auto">
-      <h4 class="text-gray-200 font-bold py-4">Scan QR code with Lighting Wallet</h4>
+  <div class="justify-center text-center">
+    <img v-if="qrCodeUrl" class="payment-qr-code mx-auto py-5" :src="qrCodeUrl" />
+    <div v-else class="mx-auto w-10 py-5">
+      <LoadingSpinner />
     </div>
-    <div class="columns-auto justify-center text-center">
-      <img v-if="qrCodeUrl" class="payment-qr-code mx-auto py-5" :src="qrCodeUrl" />
-      <div v-else class="mx-auto w-10 py-5">
-        <LoadingSpinner />
-      </div>
+  </div>
+  <div>
+    <div class="inline-flex items-center w-100">
+      <h5 class="text-gray-200 font-bold py-4">Tap QR Code or click here to copy address</h5> <!-- TODO: do this -->
+      <ClipboardDocumentIcon class="mx-2 size-6 text-yellow-500" />
     </div>
-    <div class="columns-auto">
-      <div class="inline-flex items-center w-100">
-        <h5 class="text-gray-200 font-bold py-4">Tap QR Code to copy address</h5>
-        <ClipboardDocumentIcon class="mx-2 size-6 text-yellow-500" />
-      </div>
-    </div>
-    <div class="columns-auto py-4 mx-4">
-      <button
-        class="bg-yellow-500 hover:bg-yellow-600 text-black font-bold py-2 px-4 rounded w-full max-w-90"
-      >
-        Open Wallet
-      </button>
-    </div>
+  </div>
+  <div class="py-4 mx-4">
+    <button class="open-wallet-btn py-2 px-4 rounded w-3/4">
+      Open Wallet
+    </button>
   </div>
 </template>
 
 <style scoped>
-.payment-qr-code {
+.payment-qr-code, .open-wallet-btn {
   max-width: 300px;
+}
+
+.status-bar, .status-bar .text, .open-wallet-btn {
+  background-color: var(--color-amber-med);
+  font-weight: bold;
+  color: var(--color-black);
+  text-align: center;
+}
+
+button:hover {
+  background-color: var(--color-amber-light);
 }
 </style>

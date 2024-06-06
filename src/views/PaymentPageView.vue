@@ -1,24 +1,24 @@
 <script lang="ts">
 import { mapStores } from 'pinia'
 import { usePaymentStore } from '../stores/payments'
-import AwaitingPayment from '@/components/AwaitingPayment.vue'
-import PaymentConfirmed from '@/components/PaymentConfirmed.vue'
-import Logo from '@/components/Logo.vue'
 import router from '../router'
+import AwaitingPayment from '@/components/AwaitingPayment.vue'
+import Logo from '@/components/Logo.vue'
+import PaymentConfirmed from '@/components/PaymentConfirmed.vue'
 
 export default {
   name: 'PaymentPageView',
   components: {
     AwaitingPayment,
-    PaymentConfirmed,
-    Logo
+    Logo,
+    PaymentConfirmed
   },
   methods: {
     initializeFromQueryParams() {
       return this.paymentsStore.initializeFromQueryParams(this.$route.query)
     },
-    generateInvoice() {
-      return this.paymentsStore.generateInvoice()
+    findOrCreateInvoice() {
+      return this.paymentsStore.findOrCreateInvoice()
     },
     async fetchStatus() {
       if (this.awaitingPayment) {
@@ -61,7 +61,7 @@ export default {
       } else if (this.awaitingPayment) {
         return 'Waiting for Payment...'
       } else {
-        return 'Error'
+        return 'Loading...'
       }
     },
     missingParams: function (): boolean {
@@ -73,7 +73,7 @@ export default {
     if (!initSuccess) {
       router.push({ name: 'error' })
     }
-    this.generateInvoice().then(() => {
+    this.findOrCreateInvoice().then(() => {
       this.fetchStatus()
     })
     this.fetchStatus()
@@ -86,21 +86,21 @@ export default {
     <div class="status-bar py-2">
       <span class="text">{{statusMessage}}</span>
     </div>
-    <div class="container mx-auto text-center payment-card">
+    <div class="container mx-auto text-center">
       <h1 class="py-4 font-bold flex justify-center items-center">
-      Lightning
-        <Logo class="mx-1 lightning-logo"/>
-      Payment
-    </h1>
-    <PaymentConfirmed
-      v-if="paymentSuccessful"
-      :timeStamp="paymentTimeStamp"
-      :paymentAmount="amountPaid"
-      :referenceId="referenceId"
-    ></PaymentConfirmed>
-    <AwaitingPayment v-if="awaitingPayment" :qrCodeUrl="paymentQrCodeUrl"></AwaitingPayment>
-      <div>
-        <img src="@/assets/secure-payment-money-badger.png" alt="Secure Payment" class="mx-auto py-4"  />
+        Lightning
+          <Logo class="mx-1 lightning-logo"/>
+        Payment
+      </h1>
+      <AwaitingPayment v-if="awaitingPayment" :qrCodeUrl="paymentQrCodeUrl"></AwaitingPayment>
+      <PaymentConfirmed
+        v-if="paymentSuccessful"
+        :timeStamp="paymentTimeStamp"
+        :paymentAmount="amountPaid"
+        :referenceId="referenceId"
+      ></PaymentConfirmed>
+      <div class="secure-payment-logo">
+        <img src="@/assets/secure-payment-money-badger.png" alt="Secure Payment" class="mx-auto py-4"/>
       </div>
     </div>
   </div>
@@ -113,14 +113,35 @@ export default {
   height: auto;
 }
 
-.payment-card {
+.container {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
   width: 30%;
+  margin: 0 auto;
 }
-.status-bar, .status-bar .text, .open-wallet-btn {
+
+@media (max-width: 600px) {
+  .container {
+    width: 100%;
+  }
+}
+
+@media (max-width: 992px) {
+  .container {
+    width: 60%;
+  }
+}
+.status-bar, .status-bar .text {
   background-color: var(--color-amber-med);
   font-weight: bold;
   color: var(--color-black);
   text-align: center;
+}
+
+.secure-payment-logo {
+  max-width: 300px;
 }
 
 button:hover {

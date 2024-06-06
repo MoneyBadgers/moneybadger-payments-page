@@ -26,14 +26,13 @@ export const usePaymentStore = defineStore('payments', {
   },
   actions: {
     initializeFromQueryParams(queryParams: LocationQuery) {
-      console.log("Initializing from query params: ", queryParams)
       // Process the query parameters and update the store state
       const amount = queryParams.amountCents as string || null
-      this.merchantCode = (queryParams.merchantCode as string) || '';
-      this.orderId = (queryParams.orderId as string) || '';
-      this.orderDescription = (queryParams.description as string) || '';
-      this.statusWebhookUrl = (queryParams.statusWebhookUrl as string) || '';
-      this.timeoutInSeconds = parseInt(queryParams.timeout as string) || 60;
+      this.merchantCode = (queryParams.merchantCode as string) || ''
+      this.orderId = (queryParams.orderId as string) || ''
+      this.orderDescription = (queryParams.description as string) || ''
+      this.statusWebhookUrl = (queryParams.statusWebhookUrl as string) || ''
+      this.timeoutInSeconds = parseInt(queryParams.timeout as string) || 60
       // Check if any required data is missing or in an incorrect format
       if (!amount) {
         this.errors.push('Amount is required')

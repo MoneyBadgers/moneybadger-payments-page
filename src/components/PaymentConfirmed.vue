@@ -14,13 +14,13 @@ export default {
   },
   computed: {
     amountCents() {
-      return this.paymentAmount;
+      return this.paymentAmount
     },
     currency() {
-      return 'R';
+      return 'R'
     },
     paidAt() {
-      return this.timeStamp; 
+      return this.timeStamp
     }
   },
   methods: {
@@ -34,22 +34,21 @@ export default {
 
 <template>
   <div>
-    <h4 class="text-gray-200 font-bold">Payment Successful</h4>
-  </div>
-  <div class="logo-circle">
-    <LogoCircle class="payment-success-logo" />
-  </div>
-  <div>
-    <h1 class="payment-amount">{{currency}} {{paymentAmount}}</h1>
-    <h4 class="time-stamp">{{timeStamp ? formatTime(timeStamp) : ''}}</h4>
-    <h4 class="reference-id">{{ referenceId }}</h4>
+    <div>
+      <h4 class="font-bold">Payment Successful</h4>
+    </div>
+    <div class="logo-circle">
+      <LogoCircle class="payment-success-logo" />
+    </div>
+    <div>
+      <h1 class="payment-amount">{{currency}} {{paymentAmount}}</h1>
+      <h4 class="time-stamp">{{timeStamp ? formatTime(timeStamp) : ''}}</h4>
+      <h4 class="reference-id">{{ referenceId }}</h4>
+    </div>
   </div>
 </template>
 
 <style scoped>
-.payment-qr-code {
-  max-width: 300px;
-}
 
 .logo-circle {
   display: flex;

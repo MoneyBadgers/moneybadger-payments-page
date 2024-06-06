@@ -21,7 +21,7 @@ export default {
   <div>
     <h4 class="text-gray-200 font-bold py-4">Scan QR code with Lightning Wallet</h4>
   </div>
-  <div class="justify-center text-center">
+  <div>
     <img v-if="qrCodeUrl" class="payment-qr-code mx-auto py-5" :src="qrCodeUrl" />
     <div v-else class="mx-auto w-10 py-5">
       <LoadingSpinner />
@@ -33,15 +33,19 @@ export default {
       <ClipboardDocumentIcon class="mx-2 size-6 text-yellow-500" />
     </div>
   </div>
-  <div class="py-4 mx-4">
-    <button class="open-wallet-btn py-2 px-4 rounded w-3/4">
+  <div class="flex justify-center py-4 mx-4 w-300">
+    <button class="open-wallet-btn py-2 px-4 rounded">
       Open Wallet
     </button>
   </div>
 </template>
 
 <style scoped>
-.payment-qr-code, .open-wallet-btn {
+.payment-qr-code {
+  max-width: 300px;
+}
+
+.open-wallet-btn {
   max-width: 300px;
 }
 

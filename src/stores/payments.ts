@@ -56,15 +56,25 @@ export const usePaymentStore = defineStore('payments', {
       }
       this.invoice = (await this.api.fetchInvoiceStatus(this.invoice.id)).data
     },
-    async generateInvoice() {
-      this.invoice = (await this.api.requestInvoice(
-        this.amountCents,
-        'ZAR',
-        this.orderDescription,
-        this.orderId,
-        this.statusWebhookUrl,
-        this.timeoutInSeconds
-      )).data
+    async findOrCreateInvoice() {
+      try {
+        const invoiceResponse = await this.api.fetchInvoiceStatus(this.orderId)
+        this.invoice = invoiceResponse.data
+      } catch (error: any) {
+          if (error && error.status === 404) {
+            const newInvoiceResponse = await this.api.requestInvoice(
+              this.amountCents,
+              'ZAR',
+              this.orderDescription,
+              this.orderId,
+              this.statusWebhookUrl,
+              this.timeoutInSeconds
+            );
+            this.invoice = newInvoiceResponse.data;
+          } else {
+            this.errors.push('An error occurred while fetching the invoice')
+          }
+      }
     }
   }
 })

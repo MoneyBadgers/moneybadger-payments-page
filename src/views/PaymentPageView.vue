@@ -1,24 +1,24 @@
 <script lang="ts">
 import { mapStores } from 'pinia'
 import { usePaymentStore } from '../stores/payments'
-import AwaitingPayment from '@/components/AwaitingPayment.vue'
-import PaymentConfirmed from '@/components/PaymentConfirmed.vue'
-import Logo from '@/components/Logo.vue'
 import router from '../router'
+import AwaitingPayment from '@/components/AwaitingPayment.vue'
+import Logo from '@/components/Logo.vue'
+import PaymentConfirmed from '@/components/PaymentConfirmed.vue'
 
 export default {
   name: 'PaymentPageView',
   components: {
     AwaitingPayment,
-    PaymentConfirmed,
-    Logo
+    Logo,
+    PaymentConfirmed
   },
   methods: {
     initializeFromQueryParams() {
       return this.paymentsStore.initializeFromQueryParams(this.$route.query)
     },
-    generateInvoice() {
-      return this.paymentsStore.generateInvoice()
+    findOrCreateInvoice() {
+      return this.paymentsStore.findOrCreateInvoice()
     },
     async fetchStatus() {
       if (this.awaitingPayment) {
@@ -61,7 +61,7 @@ export default {
       } else if (this.awaitingPayment) {
         return 'Waiting for Payment...'
       } else {
-        return 'Error'
+        return 'Loading...'
       }
     },
     missingParams: function (): boolean {
@@ -73,7 +73,7 @@ export default {
     if (!initSuccess) {
       router.push({ name: 'error' })
     }
-    this.generateInvoice().then(() => {
+    this.findOrCreateInvoice().then(() => {
       this.fetchStatus()
     })
     this.fetchStatus()

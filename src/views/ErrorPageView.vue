@@ -1,8 +1,8 @@
 <script lang="ts">
 import ErrorPage from '@/components/ErrorPage.vue'
 import Logo from '@/components/Logo.vue'
-import { mapStores } from 'pinia';
-import { usePaymentStore } from '../stores/payments';
+import { mapStores } from 'pinia'
+import { usePaymentStore } from '../stores/payments'
 
 export default {
   name: 'ErrorPageView',

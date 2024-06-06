@@ -31,10 +31,10 @@ export default {
   },
   computed: {
     ...mapStores(usePaymentStore),
-    paymentQrCodeUrl: function (): String {
+    paymentQrCodeUrl: function (): string {
       return this.paymentsStore.invoice.payment_request?.qr_code_url || '' // TODO: show an image to make it obvious this failed
     },
-    paymentAddress: function (): String {
+    paymentAddress: function (): string {
       return this.paymentsStore.address || ''
     },
     awaitingPayment: function (): boolean {

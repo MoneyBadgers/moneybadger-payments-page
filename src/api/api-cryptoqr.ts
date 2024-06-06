@@ -1,9 +1,9 @@
-import { InvoiceApi, type ApiConfig } from './swagger/api'
-import type { Currency } from '@/types/Currency'
+import { InvoiceApi, type ApiConfig } from './cryptoqr/api'
+import type { Currency } from '../types/Currency'
 import { usePaymentStore } from '../stores/payments';
 
 const host = import.meta.env.VITE_HOST
-const basePath = import.meta.env.VITE_BASE_PATH
+const basePath = '/api/v2'
 
 export default class Api {
 

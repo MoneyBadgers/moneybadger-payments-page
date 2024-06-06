@@ -243,8 +243,8 @@ export class HttpClient<SecurityDataType = unknown> {
           property instanceof Blob
             ? property
             : typeof property === 'object' && property !== null
-            ? JSON.stringify(property)
-            : `${property}`
+              ? JSON.stringify(property)
+              : `${property}`
         )
         return formData
       }, new FormData()),
@@ -320,7 +320,7 @@ export class HttpClient<SecurityDataType = unknown> {
         body: typeof body === 'undefined' || body === null ? null : payloadFormatter(body)
       }
     ).then(async (response) => {
-      const r = response as HttpResponse<T, E>
+      const r = response.clone() as HttpResponse<T, E>
       r.data = null as unknown as T
       r.error = null as unknown as E
 

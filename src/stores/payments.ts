@@ -26,14 +26,13 @@ export const usePaymentStore = defineStore('payments', {
   },
   actions: {
     initializeFromQueryParams(queryParams: LocationQuery) {
-      console.log("Initializing from query params: ", queryParams)
       // Process the query parameters and update the store state
       const amount = queryParams.amountCents as string || null
-      this.merchantCode = (queryParams.merchantCode as string) || '';
-      this.orderId = (queryParams.orderId as string) || '';
-      this.orderDescription = (queryParams.description as string) || '';
-      this.statusWebhookUrl = (queryParams.statusWebhookUrl as string) || '';
-      this.timeoutInSeconds = parseInt(queryParams.timeout as string) || 60;
+      this.merchantCode = (queryParams.merchantCode as string) || ''
+      this.orderId = (queryParams.orderId as string) || ''
+      this.orderDescription = (queryParams.description as string) || ''
+      this.statusWebhookUrl = (queryParams.statusWebhookUrl as string) || ''
+      this.timeoutInSeconds = parseInt(queryParams.timeout as string) || 60
       // Check if any required data is missing or in an incorrect format
       if (!amount) {
         this.errors.push('Amount is required')
@@ -57,15 +56,25 @@ export const usePaymentStore = defineStore('payments', {
       }
       this.invoice = (await this.api.fetchInvoiceStatus(this.invoice.id)).data
     },
-    async generateInvoice() {
-      this.invoice = (await this.api.requestInvoice(
-        this.amountCents,
-        'ZAR',
-        this.orderDescription,
-        this.orderId,
-        this.statusWebhookUrl,
-        this.timeoutInSeconds
-      )).data
+    async findOrCreateInvoice() {
+      try {
+        const invoiceResponse = await this.api.fetchInvoiceStatus(this.orderId)
+        this.invoice = invoiceResponse.data
+      } catch (error: any) {
+          if (error && error.status === 404) {
+            const newInvoiceResponse = await this.api.requestInvoice(
+              this.amountCents,
+              'ZAR',
+              this.orderDescription,
+              this.orderId,
+              this.statusWebhookUrl,
+              this.timeoutInSeconds
+            );
+            this.invoice = newInvoiceResponse.data;
+          } else {
+            this.errors.push('An error occurred while fetching the invoice')
+          }
+      }
     }
   }
 })

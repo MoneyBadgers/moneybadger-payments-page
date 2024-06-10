@@ -12,7 +12,28 @@ export default {
   },
   props: {
     qrCodeUrl: { type: String, default: '' },
-    paymentAddress: { type: String, default: '' }
+    paymentRequest: { type: String, default: '' }
+  },
+  computed: {
+    paymentRequestLink: {
+      get() {
+        if (this.$props.paymentRequest) {
+          return `lightning:${this.$props.paymentRequest}`
+        }
+        return ''
+      },
+    }
+  },
+  methods: {
+    openWallet() {
+      if (this.paymentRequest) {
+        console.log('openWallet', this.paymentRequestLink)
+        const newWindow = window.open(this.paymentRequestLink, '_blank');
+        if (!newWindow || newWindow.closed || typeof newWindow.closed == 'undefined' ||  newWindow.location.href === 'about:blank') {
+          alert('Failed to open wallet. Please ensure you have a compatible lightning wallet installed.');
+        }
+      }
+    }
   }
 }
 </script>
@@ -29,12 +50,13 @@ export default {
   </div>
   <div>
     <div class="inline-flex items-center w-100">
-      <h5 class="text-gray-200 font-bold py-4">Tap QR Code or click here to copy address</h5> <!-- TODO: do this -->
+      <h5 class="text-gray-200 font-bold py-4">Tap QR Code or click here to copy Lightning invoice (BOLT11)</h5>
       <ClipboardDocumentIcon class="mx-2 size-6 text-yellow-500" />
     </div>
   </div>
   <div class="flex justify-center py-4 mx-4 w-300">
-    <button class="open-wallet-btn py-2 px-4 rounded">
+    <button v-if="paymentRequestLink && paymentRequestLink !== ''" @click="openWallet"
+      class="open-wallet-btn py-2 px-4 rounded">
       Open Wallet
     </button>
   </div>
@@ -49,7 +71,9 @@ export default {
   max-width: 300px;
 }
 
-.status-bar, .status-bar .text, .open-wallet-btn {
+.status-bar,
+.status-bar .text,
+.open-wallet-btn {
   background-color: var(--color-amber-med);
   font-weight: bold;
   color: var(--color-black);

@@ -15,9 +15,6 @@ on:
       vite-host:
         required: true
         type: string
-      aws-key-id:
-        required: false
-        type: string
 
 jobs:
   deploy:
@@ -30,7 +27,6 @@ jobs:
       - name: Log AWS credentials for debug (remove this in production)
         run: |
           echo "AWS Access Key ID: ${{ secrets.AWS_ACCESS_KEY_ID }}"
-          echo "input access key ID: ${{ inputs.aws-key-id }}"
 
       - name: Configure AWS credentials
         uses: aws-actions/configure-aws-credentials@v4

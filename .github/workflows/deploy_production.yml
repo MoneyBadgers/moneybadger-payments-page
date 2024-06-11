@@ -12,3 +12,6 @@ jobs:
       s3-bucket: ${{ vars.PRODUCTION_S3_BUCKET }}
       cloudfront-distribution-id: ${{ vars.PRODUCTION_CLOUDFRONT_DISTRIBUTION_ID }}
       vite-host: 'https://api.cryptoqr.co.za'
+    secrets:
+      aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+      aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}

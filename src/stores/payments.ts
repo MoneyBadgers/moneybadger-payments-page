@@ -21,7 +21,7 @@ export const usePaymentStore = defineStore('payments', {
     paidAt: (state): string => state.invoice.paid_at || '',
     amountPaid: (state): number => state.invoice.amount_cents || 0,
     referenceId: (state): string => state.invoice.id || '',
-    address: (state): string => state.invoice.payment_request?.data || '',
+    lnPaymentRequest: (state): string => state.invoice.payment_request?.data || '',
     api: (state): Api =>  new Api()
   },
   actions: {

@@ -9,6 +9,7 @@ jobs:
     uses: ./.github/workflows/deploy.yml
     with:
       aws-region: ${{ vars.AWS_REGION }}
+      aws-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
       s3-bucket: ${{ vars.STAGING_S3_BUCKET }}
       cloudfront-distribution-id: ${{ vars.STAGING_CLOUDFRONT_DISTRIBUTION_ID }}
       vite-host: 'https://api.staging.cryptoqr.co.za'

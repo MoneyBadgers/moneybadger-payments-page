@@ -3,8 +3,6 @@ import { ClipboardDocumentIcon, ClipboardDocumentCheckIcon } from '@heroicons/vu
 import LoadingSpinner from './LoadingSpinner.vue'
 import ClipboardJS from 'clipboard'
 
-let t: any
-
 export default {
   name: 'AwaitingPayment',
   components: {
@@ -32,10 +30,10 @@ export default {
   },
   mounted() {
     this.clipboard = new ClipboardJS('.copy-btn')
-    this.clipboard.on('success', (e) => {
+    this.clipboard.on('success', (e: ClipboardJS.Event) => {
       e.clearSelection()
     })
-    this.clipboard.on('error', (e) => {
+    this.clipboard.on('error', (e: ClipboardJS.Event) => {
       console.error('Failed to copy: ', e)
     })
   },

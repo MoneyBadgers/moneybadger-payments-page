@@ -33,7 +33,6 @@ export default {
   mounted() {
     this.clipboard = new ClipboardJS('.copy-btn')
     this.clipboard.on('success', (e) => {
-      this.showCopyHint()
       e.clearSelection()
     })
     this.clipboard.on('error', (e) => {

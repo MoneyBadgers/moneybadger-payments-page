@@ -1,0 +1,14 @@
+name: Production deployment
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  deploy:
+    uses: ./.github/workflows/deploy.yml
+    with:
+      aws-region: ${{ vars.AWS_REGION }}
+      s3-bucket: ${{ vars.PRODUCTION_S3_BUCKET }}
+      cloudfront-distribution-id: ${{ vars.PRODUCTION_CLOUDFRONT_DISTRIBUTION_ID }}
+      vite-host: 'https://api.cryptoqr.co.za'

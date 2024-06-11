@@ -34,8 +34,8 @@ export default {
     paymentQrCodeUrl: function (): string {
       return this.paymentsStore.invoice.payment_request?.qr_code_url || '' // TODO: show an image to make it obvious this failed
     },
-    paymentAddress: function (): string {
-      return this.paymentsStore.address || ''
+    paymentRequest: function (): string {
+      return this.paymentsStore.lnPaymentRequest || ''
     },
     awaitingPayment: function (): boolean {
       if (this.missingParams) {
@@ -92,7 +92,7 @@ export default {
           <Logo class="mx-1 lightning-logo"/>
         Payment
       </h1>
-      <AwaitingPayment v-if="awaitingPayment" :qrCodeUrl="paymentQrCodeUrl"></AwaitingPayment>
+      <AwaitingPayment v-if="awaitingPayment" :qrCodeUrl="paymentQrCodeUrl" :paymentRequest="paymentRequest"></AwaitingPayment>
       <PaymentConfirmed
         v-if="paymentSuccessful"
         :timeStamp="paymentTimeStamp"

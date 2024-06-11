@@ -17,4 +17,3 @@ This template should help get you started developing with Vue 3 in Vite.
 1. Add in the UI to change Wallet type
 2. Make it work on mobile (deep links)
 3. Error handling for API errors (including expired invoice)
-4. Copy payment address to clipboard

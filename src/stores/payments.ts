@@ -2,6 +2,7 @@ import { defineStore } from 'pinia'
 import Api from '../api/api-cryptoqr'
 import { InvoiceStatusEnum, type Invoice } from '../api/cryptoqr/api'
 import type { LocationQuery } from 'vue-router'
+import { error } from 'console'
 
 export const usePaymentStore = defineStore('payments', {
   state: () => ({
@@ -13,7 +14,8 @@ export const usePaymentStore = defineStore('payments', {
     orderDescription: '',
     orderId: '',
     statusWebhookUrl: '',
-    timeoutInSeconds: 60
+    timeoutInSeconds: 60,
+    errorWhileUpdatingInvoice: false
   }),
   getters: {
     awaitPayment: (state): boolean =>  (typeof state.invoice.status !== 'undefined') && [InvoiceStatusEnum.REQUESTED, InvoiceStatusEnum.AUTHORIZED].includes(state.invoice.status),
@@ -54,7 +56,12 @@ export const usePaymentStore = defineStore('payments', {
       if (!this.invoice.id) {
         return
       }
-      this.invoice = (await this.api.fetchInvoiceStatus(this.invoice.id)).data
+      try {
+        this.invoice = (await this.api.fetchInvoiceStatus(this.invoice.id)).data
+        this.errorWhileUpdatingInvoice = false
+      } catch (error: any) {
+        this.errorWhileUpdatingInvoice = true
+      }
     },
     async findOrCreateInvoice() {
       try {
@@ -62,19 +69,29 @@ export const usePaymentStore = defineStore('payments', {
         this.invoice = invoiceResponse.data
       } catch (error: any) {
           if (error && error.status === 404) {
-            const newInvoiceResponse = await this.api.requestInvoice(
-              this.amountCents,
-              'ZAR',
-              this.orderDescription,
-              this.orderId,
-              this.statusWebhookUrl,
-              this.timeoutInSeconds
-            );
-            this.invoice = newInvoiceResponse.data;
+            await this.createInvoice()
           } else {
             this.errors.push('An error occurred while fetching the invoice')
           }
       }
+    },
+    async createInvoice() {
+      try {
+        const newInvoiceResponse = await this.api.requestInvoice(
+          this.amountCents,
+          'ZAR',
+          this.orderDescription,
+          this.orderId,
+          this.statusWebhookUrl,
+          this.timeoutInSeconds
+        )
+        this.invoice = newInvoiceResponse.data
+      }
+      catch (err: any) {
+        this.errors.push(`An error occurred while creating the invoice - ${err.error.message}`)
+      }
     }
   }
 })
+
+

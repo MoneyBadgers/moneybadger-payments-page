@@ -5,13 +5,15 @@ import router from '../router'
 import AwaitingPayment from '@/components/AwaitingPayment.vue'
 import Logo from '@/components/Logo.vue'
 import PaymentConfirmed from '@/components/PaymentConfirmed.vue'
+import ErrorPage from '../components/ErrorPage.vue'
 
 export default {
   name: 'PaymentPageView',
   components: {
     AwaitingPayment,
     Logo,
-    PaymentConfirmed
+    PaymentConfirmed,
+    ErrorPage,
   },
   methods: {
     initializeFromQueryParams() {
@@ -43,6 +45,10 @@ export default {
       }
       return this.paymentsStore.awaitPayment
     },
+    errors: function (): string[] {
+      return this.paymentsStore.errors
+    },
+
     paymentSuccessful: function (): boolean {
       return this.paymentsStore.confirmed
     },
@@ -56,12 +62,21 @@ export default {
       return this.paymentsStore.referenceId || ''
     },
     statusMessage: function (): string {
-      if (this.paymentSuccessful) {
+      if (this.paymentsStore.errorWhileUpdatingInvoice) {
+        return 'Network Error'
+      } else if (this.paymentSuccessful) {
         return 'Payment Successful'
       } else if (this.awaitingPayment) {
         return 'Waiting for Payment...'
       } else {
         return 'Loading...'
+      }
+    },
+    statusStyle: function (): string {
+      if (this.paymentsStore.errorWhileUpdatingInvoice) {
+        return 'bg-red-500'
+      } else {
+        return ''
       }
     },
     missingParams: function (): boolean {
@@ -70,9 +85,6 @@ export default {
   },
   created() {
     const initSuccess = this.initializeFromQueryParams()
-    if (!initSuccess) {
-      router.push({ name: 'error' })
-    }
     this.findOrCreateInvoice().then(() => {
       this.fetchStatus()
     })
@@ -83,8 +95,8 @@ export default {
 
 <template>
   <div class="mx-auto text-center">
-    <div class="status-bar py-2">
-      <span class="text">{{statusMessage}}</span>
+    <div class="status-bar py-2" :class="statusStyle">
+      <span class="text" :class="statusStyle">{{statusMessage}}</span>
     </div>
     <div class="container mx-auto text-center">
       <h1 class="py-4 font-bold flex justify-center items-center">
@@ -92,13 +104,21 @@ export default {
           <Logo class="mx-1 lightning-logo"/>
         Payment
       </h1>
-      <AwaitingPayment v-if="awaitingPayment" :qrCodeUrl="paymentQrCodeUrl" :paymentRequest="paymentRequest"></AwaitingPayment>
-      <PaymentConfirmed
-        v-if="paymentSuccessful"
-        :timeStamp="paymentTimeStamp"
-        :paymentAmount="amountPaid"
-        :referenceId="referenceId"
-      ></PaymentConfirmed>
+      <ErrorPage v-if="errors.length > 0" :errors="errors"></ErrorPage>
+      <div v-else>
+        <AwaitingPayment
+          v-if="awaitingPayment"
+          :qrCodeUrl="paymentQrCodeUrl"
+          :paymentRequest="paymentRequest",
+          :errorWhileUpdatingInvoice="paymentsStore.errorWhileUpdatingInvoice"
+        ></AwaitingPayment>
+        <PaymentConfirmed
+          v-if="paymentSuccessful"
+          :timeStamp="paymentTimeStamp"
+          :paymentAmount="amountPaid"
+          :referenceId="referenceId"
+        ></PaymentConfirmed>
+      </div>
       <div class="secure-payment-logo">
         <img src="@/assets/secure-payment-money-badger.png" alt="Secure Payment" class="mx-auto py-4"/>
       </div>
@@ -138,6 +158,9 @@ export default {
   font-weight: bold;
   color: var(--color-black);
   text-align: center;
+  &.bg-red-500 {
+    background-color: var(--color-red);
+  }
 }
 
 .secure-payment-logo {

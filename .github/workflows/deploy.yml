@@ -1,0 +1,74 @@
+name: Deploy
+
+on:
+  workflow_call:
+    inputs:
+      aws-region:
+        required: true
+        type: string
+      s3-bucket:
+        required: true
+        type: string
+      cloudfront-distribution-id:
+        required: true
+        type: string
+      vite-host:
+        required: true
+        type: string
+    secrets:
+      aws-access-key-id:
+        required: true
+      aws-secret-access-key:
+        required: true
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20.x' # LTS version
+
+      - name: Install dependencies
+        run: npm ci
+
+      # - name: Run audit
+      #   run: npm audit
+
+      - name: Build the project
+        env:
+          VITE_HOST: ${{ inputs.vite-host }}
+        run: npm run build --if-present
+    
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          aws-access-key-id: ${{ secrets.aws-access-key-id }}
+          aws-secret-access-key: ${{ secrets.aws-secret-access-key }}
+          aws-region: ${{ inputs.aws-region }}
+
+      - name: Sync to S3
+        run: aws s3 sync ./dist s3://${{ inputs.s3-bucket }} --delete
+
+      - name: Invalidate CloudFront cache
+        id: invalidate_cache
+        run: |
+          invalidation_id=$(aws cloudfront create-invalidation --distribution-id ${{ inputs.cloudfront-distribution-id }} --paths "/*" --query 'Invalidation.Id' --output text)
+          echo "::set-output name=invalidation_id::$invalidation_id"
+
+      - name: Wait for CloudFront invalidation
+        run: |
+          while true; do
+            STATUS=$(aws cloudfront get-invalidation --distribution-id ${{ inputs.cloudfront-distribution-id }} --id ${{ steps.invalidate_cache.outputs.invalidation_id }} --query 'Invalidation.Status' --output text)
+            if [ "$STATUS" == "Completed" ]; then
+              echo "Invalidation completed."
+              break
+            fi
+            echo "Invalidation in progress..."
+            sleep 5
+          done

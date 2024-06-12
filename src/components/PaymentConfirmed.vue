@@ -13,9 +13,6 @@ export default {
     LogoCircle
   },
   computed: {
-    amountCents() {
-      return this.paymentAmount
-    },
     currency() {
       return 'R'
     },

@@ -16,7 +16,13 @@ export const usePaymentStore = defineStore('payments', {
   }),
   getters: {
     paidAt: (state): string => state.invoice.paid_at || '',
-    amountPaid: (state): number => state.invoice.amount_cents || 0,
+    amountPaidCents: (state): number =>
+    {
+      if (state.invoice.status === InvoiceStatusEnum.CONFIRMED) {
+        return state.invoice.amount_cents || 0
+      }
+      return 0
+    },
     referenceId: (state): string => state.invoice.id || '',
     lnPaymentRequest: (state): string => state.invoice.payment_request?.data || '',
     api: (state): Api =>  new Api()

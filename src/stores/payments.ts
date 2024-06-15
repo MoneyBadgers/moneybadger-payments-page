@@ -1,25 +1,20 @@
 import { defineStore } from 'pinia'
 import Api from '../api/api-cryptoqr'
 import { InvoiceStatusEnum, type Invoice } from '../api/cryptoqr/api'
-import type { LocationQuery } from 'vue-router'
-import { error } from 'console'
+import type Wallet from '../models/wallet'
+import InvoiceParameters from '../models/invoice_parameters'
+import type { LocationQuery } from "vue-router"
+import { PaymentStatus } from '../types/PaymentStatus'
 
 export const usePaymentStore = defineStore('payments', {
   state: () => ({
+    wallet: { valueStore: "lightning" } as Wallet,
+    invoiceParams: {} as InvoiceParameters,
     invoice: {} as Invoice,
     errors: [] as string[],
-    amountCents: 0,
-    currency: '',
-    merchantCode: '',
-    orderDescription: '',
-    orderId: '',
-    statusWebhookUrl: '',
-    timeoutInSeconds: 60,
-    errorWhileUpdatingInvoice: false
+    status: PaymentStatus.Loading,
   }),
   getters: {
-    awaitPayment: (state): boolean =>  (typeof state.invoice.status !== 'undefined') && [InvoiceStatusEnum.REQUESTED, InvoiceStatusEnum.AUTHORIZED].includes(state.invoice.status),
-    confirmed: (state): boolean => state.invoice.status === InvoiceStatusEnum.CONFIRMED,
     paidAt: (state): string => state.invoice.paid_at || '',
     amountPaid: (state): number => state.invoice.amount_cents || 0,
     referenceId: (state): string => state.invoice.id || '',
@@ -27,68 +22,79 @@ export const usePaymentStore = defineStore('payments', {
     api: (state): Api =>  new Api()
   },
   actions: {
-    initializeFromQueryParams(queryParams: LocationQuery) {
-      // Process the query parameters and update the store state
-      const amount = queryParams.amountCents as string || null
-      this.merchantCode = (queryParams.merchantCode as string) || ''
-      this.orderId = (queryParams.orderId as string) || ''
-      this.orderDescription = (queryParams.description as string) || ''
-      this.statusWebhookUrl = (queryParams.statusWebhookUrl as string) || ''
-      this.timeoutInSeconds = parseInt(queryParams.timeout as string) || 60
-      // Check if any required data is missing or in an incorrect format
-      if (!amount) {
-        this.errors.push('Amount is required')
-      } else {
-        this.amountCents = parseInt(amount)
-        if (isNaN(this.amountCents)) {
-          this.errors.push('Amount must be a valid number')
-        }
+    initialiseFromQueryParams(queryParams: LocationQuery) {
+      this.invoiceParams = InvoiceParameters.createFromQueryParams(queryParams)
+      if (this.invoiceParams.errors.length > 0) {
+        this.errors = this.invoiceParams.errors
+        this.status = PaymentStatus.Error
       }
-      if (!this.orderId) {
-        this.errors.push('Order ID is required')
-      }
-      if (!this.merchantCode) {
-        this.errors.push('Merchant Code is required')
-      }
-      return this.errors.length === 0
     },
-    async updateInvoice() {
+    async setWallet(wallet: Wallet) {
+      this.wallet = wallet
+      if(this.invoice.id) {
+        this.api.updateInvoicePaymentMethod(this.invoice.id, wallet.valueStore)
+      }else{
+         this.createInvoice()
+      }
+    },
+    async changeWallet() {
+      this.status = PaymentStatus.SelectWallet
+    },
+    async refreshInvoice() {
       if (!this.invoice.id) {
         return
       }
       try {
         this.invoice = (await this.api.fetchInvoiceStatus(this.invoice.id)).data
-        this.errorWhileUpdatingInvoice = false
+        this.errors = []
+        if (this.invoice.status === InvoiceStatusEnum.CONFIRMED) {
+          this.status = PaymentStatus.Successful
+        }
       } catch (error: any) {
-        this.errorWhileUpdatingInvoice = true
+        this.errors = ['Network Error']
       }
     },
-    async findOrCreateInvoice() {
-      try {
-        const invoiceResponse = await this.api.fetchInvoiceStatus(this.orderId)
-        this.invoice = invoiceResponse.data
-      } catch (error: any) {
-          if (error && error.status === 404) {
-            await this.createInvoice()
-          } else {
-            this.errors.push('An error occurred while fetching the invoice')
+    async pollStatus() {
+        setTimeout(async () => {
+          await this.refreshInvoice()
+          if (this.status === PaymentStatus.WaitForPayment) {
+            this.pollStatus()
           }
+        }, 500)
+    },
+    async checkForExistingInvoice() {
+      try {
+        const invoiceResponse = await this.api.fetchInvoiceStatus(this.invoiceParams.orderId)
+        this.invoice = invoiceResponse.data
+        this.status = PaymentStatus.WaitForPayment
+        this.pollStatus()
+      } catch (error: any) {
+          if(error.status === 404){
+            this.status = PaymentStatus.SelectWallet
+            return
+          }
+          this.errors = [error.response.data.message]
+          this.status = PaymentStatus.Error
       }
     },
     async createInvoice() {
       try {
         const newInvoiceResponse = await this.api.requestInvoice(
-          this.amountCents,
+          this.invoiceParams.amountCents,
           'ZAR',
-          this.orderDescription,
-          this.orderId,
-          this.statusWebhookUrl,
-          this.timeoutInSeconds
+          this.invoiceParams.orderDescription,
+          this.invoiceParams.orderId,
+          this.invoiceParams.statusWebhookUrl,
+          this.invoiceParams.timeoutInSeconds,
+          this.wallet.valueStore
         )
         this.invoice = newInvoiceResponse.data
+        this.status = PaymentStatus.WaitForPayment
+        this.pollStatus()
       }
       catch (err: any) {
-        this.errors.push(`An error occurred while creating the invoice - ${err.error.message}`)
+        this.errors = [`An error occurred while creating the invoice - ${err.error.message}`]
+        this.status = PaymentStatus.Error
       }
     }
   }

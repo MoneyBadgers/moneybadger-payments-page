@@ -1,56 +1,34 @@
 <script lang="ts">
 import { mapStores } from 'pinia'
 import { usePaymentStore } from '../stores/payments'
-import router from '../router'
 import AwaitingPayment from '@/components/AwaitingPayment.vue'
 import Logo from '@/components/Logo.vue'
 import PaymentConfirmed from '@/components/PaymentConfirmed.vue'
 import ErrorPage from '../components/ErrorPage.vue'
+import WalletSelect from '../components/WalletSelect.vue'
+import { PaymentStatus } from '../types/PaymentStatus'
 
 export default {
   name: 'PaymentPageView',
   components: {
+    WalletSelect,
     AwaitingPayment,
     Logo,
     PaymentConfirmed,
     ErrorPage,
   },
   methods: {
-    initializeFromQueryParams() {
-      return this.paymentsStore.initializeFromQueryParams(this.$route.query)
-    },
-    findOrCreateInvoice() {
-      return this.paymentsStore.findOrCreateInvoice()
-    },
-    async fetchStatus() {
-      if (this.awaitingPayment) {
-        await this.paymentsStore.updateInvoice()
-        setTimeout(() => {
-          this.fetchStatus()
-        }, 500)
-      }
-    }
   },
   computed: {
     ...mapStores(usePaymentStore),
+    status: function (): PaymentStatus {
+      return this.paymentsStore.status
+    },
     paymentQrCodeUrl: function (): string {
       return this.paymentsStore.invoice.payment_request?.qr_code_url || '' // TODO: show an image to make it obvious this failed
     },
     paymentRequest: function (): string {
       return this.paymentsStore.lnPaymentRequest || ''
-    },
-    awaitingPayment: function (): boolean {
-      if (this.missingParams) {
-        return false
-      }
-      return this.paymentsStore.awaitPayment
-    },
-    errors: function (): string[] {
-      return this.paymentsStore.errors
-    },
-
-    paymentSuccessful: function (): boolean {
-      return this.paymentsStore.confirmed
     },
     amountPaid: function (): number {
       return this.paymentsStore.amountPaid || 0
@@ -62,34 +40,39 @@ export default {
       return this.paymentsStore.referenceId || ''
     },
     statusMessage: function (): string {
-      if (this.paymentsStore.errorWhileUpdatingInvoice) {
-        return 'Network Error'
-      } else if (this.paymentSuccessful) {
+      if (this.paymentsStore.errors.length > 0) {
+        return this.paymentsStore.errors[0]
+      } else if (this.paymentsStore.status === PaymentStatus.Successful) {
         return 'Payment Successful'
-      } else if (this.awaitingPayment) {
+      } else if (this.paymentsStore.status === PaymentStatus.SelectWallet) {
+        return 'Select Wallet'
+      } else if (this.paymentsStore.status === PaymentStatus.WaitForPayment) {
         return 'Waiting for Payment...'
       } else {
         return 'Loading...'
       }
     },
     statusStyle: function (): string {
-      if (this.paymentsStore.errorWhileUpdatingInvoice) {
+      if (this.paymentsStore.errors.length > 0) {
         return 'bg-red-500'
       } else {
         return ''
       }
     },
-    missingParams: function (): boolean {
-      return this.paymentsStore.errors.length > 0
+  },
+  data() {
+    return {
+      Status: PaymentStatus
     }
   },
   created() {
-    const initSuccess = this.initializeFromQueryParams()
-    this.findOrCreateInvoice().then(() => {
-      this.fetchStatus()
-    })
-    this.fetchStatus()
-  }
+    this.paymentsStore.initialiseFromQueryParams(this.$route.query)
+    if (this.paymentsStore.status === PaymentStatus.Error) {
+      // don't try creating an invoice if we have errors
+      return
+    }
+    this.paymentsStore.checkForExistingInvoice()
+}
 }
 </script>
 
@@ -104,21 +87,21 @@ export default {
           <Logo class="mx-1 lightning-logo"/>
         Payment
       </h1>
-      <ErrorPage v-if="errors.length > 0" :errors="errors"></ErrorPage>
-      <div v-else>
-        <AwaitingPayment
-          v-if="awaitingPayment"
-          :qrCodeUrl="paymentQrCodeUrl"
-          :paymentRequest="paymentRequest",
-          :errorWhileUpdatingInvoice="paymentsStore.errorWhileUpdatingInvoice"
-        ></AwaitingPayment>
-        <PaymentConfirmed
-          v-if="paymentSuccessful"
-          :timeStamp="paymentTimeStamp"
-          :paymentAmount="amountPaid"
-          :referenceId="referenceId"
-        ></PaymentConfirmed>
-      </div>
+      <ErrorPage v-if="status === Status.Error" :errors="paymentsStore.errors"></ErrorPage>
+      <p v-if="status === Status.Loading">Loading</p>
+      <WalletSelect v-if="status === Status.SelectWallet"></WalletSelect>
+      <AwaitingPayment
+        v-if="status === Status.WaitForPayment"
+        :qrCodeUrl="paymentQrCodeUrl"
+        :paymentRequest="paymentRequest"
+        @change-wallet="paymentsStore.changeWallet"
+      ></AwaitingPayment>
+      <PaymentConfirmed
+        v-if="status === Status.Successful"
+        :timeStamp="paymentTimeStamp"
+        :paymentAmount="amountPaid"
+        :referenceId="referenceId"
+      ></PaymentConfirmed>
       <div class="secure-payment-logo">
         <img src="@/assets/secure-payment-money-badger.png" alt="Secure Payment" class="mx-auto py-4"/>
       </div>

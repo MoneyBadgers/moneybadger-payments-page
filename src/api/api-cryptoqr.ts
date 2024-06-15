@@ -6,12 +6,15 @@ const host = import.meta.env.VITE_HOST
 const basePath = '/api/v2'
 
 export default class Api {
+  updateInvoicePaymentMethod(id: string, valueStore: string) {
+    throw new Error('Method not implemented.');
+  }
 
   private fetchWithMerchantCode = async (url: URL | RequestInfo, init?: RequestInit | undefined): Promise<Response> => {
     init = init || {}
     init.headers = {
       ...init.headers,
-      'x-merchant-code': usePaymentStore().merchantCode,
+      'x-merchant-code': usePaymentStore().invoiceParams.merchantCode,
     };
     return fetch(url, init)
   }
@@ -32,16 +35,17 @@ export default class Api {
     orderDescription: string | undefined,
     orderId: string,
     statusWebhookUrl: string | undefined,
-    timeoutInSeconds: number
+    timeoutInSeconds: number,
+    paymentMethod: string
   ) {
    return this._invoiceApi.invoice.requestInvoice({
       amount_cents: amountCents,
       currency,
       order_description: orderDescription,
       order_id: orderId,
-      allowed_payment_methods: ['lightning'],
+      allowed_payment_methods: [paymentMethod],
       status_webhook_url: statusWebhookUrl,
-      timeout_in_seconds: timeoutInSeconds
+      timeout_in_seconds: timeoutInSeconds,
     })
   }
 }

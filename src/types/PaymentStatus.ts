@@ -1,5 +1,8 @@
 export enum PaymentStatus {
   None,
-  Waiting,
-  Successful
+  Loading,
+  SelectWallet,
+  WaitForPayment,
+  Successful,
+  Error,
 }

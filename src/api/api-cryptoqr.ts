@@ -1,4 +1,4 @@
-import { InvoiceApi, type ApiConfig } from './cryptoqr/api'
+import { InvoiceApi, type ApiConfig, type InvoiceUpdatePaymentMethod } from './cryptoqr/api'
 import type { Currency } from '../types/Currency'
 import { usePaymentStore } from '../stores/payments';
 
@@ -7,7 +7,12 @@ const basePath = '/api/v2'
 
 export default class Api {
   updateInvoicePaymentMethod(id: string, valueStore: string) {
-    throw new Error('Method not implemented.');
+    const body: InvoiceUpdatePaymentMethod = {
+      payment_method: valueStore,
+      transaction_id: id,
+      payment_currencies: ['BTC'],
+    }
+    return this._invoiceApi.invoices.updatePaymentMethod(id, body)
   }
 
   private fetchWithMerchantCode = async (url: URL | RequestInfo, init?: RequestInit | undefined): Promise<Response> => {

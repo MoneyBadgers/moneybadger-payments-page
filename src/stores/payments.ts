@@ -33,6 +33,8 @@ export const usePaymentStore = defineStore('payments', {
       this.wallet = wallet
       if(this.invoice.id) {
         this.api.updateInvoicePaymentMethod(this.invoice.id, wallet.valueStore)
+        this.status = PaymentStatus.WaitForPayment
+        this.pollStatus()
       }else{
          this.createInvoice()
       }

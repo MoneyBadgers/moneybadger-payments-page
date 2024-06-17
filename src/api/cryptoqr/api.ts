@@ -18,6 +18,8 @@ export interface Invoice {
    */
   expires_at?: string
   id?: string
+  merchant_code?: string
+  merchant_name?: string
   order_description?: string
   /** Merchant's order ID */
   order_id?: string
@@ -38,6 +40,11 @@ export interface InvoiceRequest {
   allowed_payment_methods?: string[]
   /** @format int64 */
   amount_cents: number
+  /**
+   * Automatically confirm the invoice when paid
+   * @example false
+   */
+  auto_confirm?: boolean
   /**
    * Payment request currency code. If none specified, merchant default is used, otherwise 'ZAR'
    * @example "ZAR"
@@ -60,6 +67,18 @@ export interface InvoiceStatusUpdate {
     id?: any
     order_id?: any
   }
+}
+
+export interface InvoiceUpdatePaymentMethod {
+  /** Allowed payment currencies, in order of preference. If none specified, merchant default and/or value store default is used, otherwise 'BTC'. NB: Not all value stores support multiple currencies. */
+  payment_currencies?: string[]
+  /**
+   * Payment method to use for invoice
+   * @example "lightning"
+   */
+  payment_method?: string
+  /** Transaction ID for payment method */
+  transaction_id?: string
 }
 
 export interface Merchant {
@@ -113,7 +132,8 @@ export enum InvoiceStatusEnum {
 /** Retrieve invoice by (id or orderId) */
 export enum GetInvoiceParamsByEnum {
   ID = 'ID',
-  ORDER_ID = 'ORDER_ID'
+  ORDER_ID = 'ORDER_ID',
+  LIGHTNING_INVOICE = 'LIGHTNING_INVOICE'
 }
 
 /** Retrieve invoice by (id or orderId) */
@@ -243,8 +263,8 @@ export class HttpClient<SecurityDataType = unknown> {
           property instanceof Blob
             ? property
             : typeof property === 'object' && property !== null
-              ? JSON.stringify(property)
-              : `${property}`
+            ? JSON.stringify(property)
+            : `${property}`
         )
         return formData
       }, new FormData()),
@@ -320,7 +340,7 @@ export class HttpClient<SecurityDataType = unknown> {
         body: typeof body === 'undefined' || body === null ? null : payloadFormatter(body)
       }
     ).then(async (response) => {
-      const r = response.clone() as HttpResponse<T, E>
+      const r = response as HttpResponse<T, E>
       r.data = null as unknown as T
       r.error = null as unknown as E
 
@@ -482,6 +502,30 @@ export class InvoiceApi<SecurityDataType extends unknown> extends HttpClient<Sec
         method: 'POST',
         query: query,
         secure: true,
+        format: 'json',
+        ...params
+      }),
+
+    /**
+     * No description
+     *
+     * @tags invoice
+     * @name UpdatePaymentMethod
+     * @summary Update payment method for an invoice
+     * @request POST:/invoices/{id}/payment_methods
+     * @secure
+     */
+    updatePaymentMethod: (
+      id: string,
+      body: InvoiceUpdatePaymentMethod,
+      params: RequestParams = {}
+    ) =>
+      this.request<Invoice, void>({
+        path: `/invoices/${id}/payment_methods`,
+        method: 'POST',
+        body: body,
+        secure: true,
+        type: ContentType.Json,
         format: 'json',
         ...params
       })

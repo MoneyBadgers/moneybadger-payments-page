@@ -31,20 +31,21 @@ class Wallet {
             'VALR App',
             'VALR Payment Link'
         ),
-        new Wallet(
-            'luno',
-            'Luno',
-            'https://luno.com/PAYMENT_REQUEST',
-            'Luno App',
-            'Luno Payment Link'
-        ),
-        new Wallet(
-            'binance',
-            'Binance',
-            'PAYMENT_REQUEST',
-            'Binance App',
-            'Binance Payment Link'
-        ),
+        // Hiding these until Luno and Binance deeplinks/QRs are implemented in Jumper
+        // new Wallet(
+        //     'luno',
+        //     'Luno',
+        //     'https://luno.com/PAYMENT_REQUEST',
+        //     'Luno App',
+        //     'Luno Payment Link'
+        // ),
+        // new Wallet(
+        //     'binance',
+        //     'Binance',
+        //     'PAYMENT_REQUEST',
+        //     'Binance App',
+        //     'Binance Payment Link'
+        // ),
         new Wallet(
             'lightning',
             'Lightning',

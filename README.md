@@ -14,7 +14,8 @@ This template should help get you started developing with Vue 3 in Vite.
 
 ## TODO (stack ranked)
 
-1. Add in the UI to change Wallet type
-2. Make it work on mobile (deep links)
-3. Error handling for API errors (including expired invoice)
-4. Generate
+- make QR code work for Luno
+- Error handling for API errors (including expired invoice)
+- Fix copy in various places (says Lightning, should say Binance/VALR/Luno)
+- Properly style the Wallet selection
+- Make it match the designs

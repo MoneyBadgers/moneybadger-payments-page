@@ -16,6 +16,11 @@ This template should help get you started developing with Vue 3 in Vite.
 
 - make QR code work for Luno
 - Error handling for API errors (including expired invoice)
-- Fix copy in various places (says Lightning, should say Binance/VALR/Luno)
 - Properly style the Wallet selection
-- Make it match the designs
+- Make it match the designs (header image uses wallet logo)
+- Currency selection for VALR
+- Select specific Lightning wallet
+
+## Done
+
+- Fix copy in various places (says Lightning, should say Binance/VALR/Luno)

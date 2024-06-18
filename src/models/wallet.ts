@@ -5,6 +5,8 @@ class Wallet {
         public valueStore: string,
         public name: string,
         public link: string,
+        public scanner: string,
+        public invoiceType: string
     ) {}
 
     generateLink(paymentRequest: string): string {
@@ -22,10 +24,34 @@ class Wallet {
     }
 
     static wallets = [
-        new Wallet('valr', 'VALR', 'https://valr.com/PAYMENT_REQUEST'),
-        new Wallet('luno', 'Luno', 'https://luno.com/PAYMENT_REQUEST'),
-        new Wallet('binance', 'Binance', 'PAYMENT_REQUEST'),
-        new Wallet('lightning', 'Lightning', 'lightning:PAYMENT_REQUEST'),
+        new Wallet(
+            'valr',
+            'VALR',
+            'https://valr.com/PAYMENT_REQUEST',
+            'VALR App',
+            'VALR Payment Link'
+        ),
+        new Wallet(
+            'luno',
+            'Luno',
+            'https://luno.com/PAYMENT_REQUEST',
+            'Luno App',
+            'Luno Payment Link'
+        ),
+        new Wallet(
+            'binance',
+            'Binance',
+            'PAYMENT_REQUEST',
+            'Binance App',
+            'Binance Payment Link'
+        ),
+        new Wallet(
+            'lightning',
+            'Lightning',
+            'lightning:PAYMENT_REQUEST',
+            'Lightning Wallet',
+            'Lightning Invoice (BOLT11)'
+        ),
     ]
 
     static defaultWallet = Wallet.wallets[0]

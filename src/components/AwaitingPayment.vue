@@ -3,6 +3,9 @@ import { ClipboardDocumentIcon, ClipboardDocumentCheckIcon } from '@heroicons/vu
 import LoadingSpinner from './LoadingSpinner.vue'
 import ClipboardJS from 'clipboard'
 import QrcodeVue from 'qrcode.vue'
+import type { PropType } from 'vue'
+import { Invoice } from '../api/cryptoqr/api'
+import Wallet from '../models/wallet'
 
 export default {
   name: 'AwaitingPayment',
@@ -14,9 +17,8 @@ export default {
     QrcodeVue
   },
   props: {
-    paymentRequest: { type: String },
-    paymentRequestLink: { type: String },
-    paymentRequestToCopy: { type: String, required: true }
+    invoice: { type: Object as PropType<Invoice>, required: true },
+    wallet: { type: Object as PropType<Wallet>, required: true},
   },
   data() {
     return {
@@ -25,6 +27,15 @@ export default {
     }
   },
   computed: {
+    paymentRequest(): string {
+      return this.invoice.payment_request?.data || ''
+    },
+    paymentRequestLink(): string {
+      return this.wallet.generateLink(this.paymentRequest)
+    },
+    paymentRequestToCopy(): string {
+       return this.wallet.generateCopyableRequest(this.paymentRequest)
+    }
   },
   mounted() {
     this.clipboard = new ClipboardJS('.copy-btn')
@@ -67,10 +78,10 @@ export default {
 <template>
   <div>
     <div>
-      <h4 class="text-gray-200 font-bold py-2">Scan QR code with Lightning Wallet</h4>
+      <h4 class="text-gray-200 font-bold py-2">Scan QR code with {{ wallet.scanner }}</h4>
       <h5 class="text-gray-200 font-bold py-2 text-sm" @click="copyPaymentRequest">
         <div v-if="!showCopyHint" class="flex justify-center mx-4 w-300">
-          <span class="tap-to-copy">Or tap to copy Lightning invoice (BOLT11)</span>
+          <span class="tap-to-copy">Or tap to copy {{ wallet.invoiceType }}</span>
           <ClipboardDocumentIcon class="mx-2 size-6 text-yellow-500" />
         </div>
         <div v-if="showCopyHint" class="flex justify-center mx-4 w-300">
@@ -96,6 +107,10 @@ export default {
 </template>
 
 <style scoped>
+h4 {
+  font-size: 20px;
+}
+
 .tap-to-copy {
   cursor: pointer;
   padding: 3px;
@@ -126,5 +141,6 @@ export default {
   &:hover {
     color: var(--color-amber-light);
   }
+  border: 1px solid var(--color-amber-med);
 }
 </style>

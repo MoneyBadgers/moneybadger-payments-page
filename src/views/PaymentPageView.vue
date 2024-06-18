@@ -22,6 +22,9 @@ export default {
   },
   computed: {
     ...mapStores(usePaymentStore),
+    wallet: function (): Wallet {
+      return this.paymentsStore.wallet
+    },
     status: function (): PaymentStatus {
       return this.paymentsStore.status
     },
@@ -84,7 +87,7 @@ export default {
     </div>
     <div class="container mx-auto text-center">
       <h1 class="py-4 font-bold flex justify-center items-center">
-        Lightning
+        {{ wallet.name }}
           <Logo class="mx-1 lightning-logo"/>
         Payment
       </h1>
@@ -93,9 +96,8 @@ export default {
       <WalletSelect v-if="status === Status.SelectWallet"></WalletSelect>
       <AwaitingPayment
         v-if="status === Status.WaitForPayment"
-        :paymentRequest="paymentRequest"
-        :paymentRequestLink="paymentsStore.wallet.generateLink(paymentRequest)"
-        :paymentRequestToCopy="paymentsStore.wallet.generateCopyableRequest(paymentRequest)"
+        :wallet="paymentsStore.wallet"
+        :invoice="paymentsStore.invoice"
         @change-wallet="paymentsStore.changeWallet"
       ></AwaitingPayment>
       <PaymentConfirmed

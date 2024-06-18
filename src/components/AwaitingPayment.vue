@@ -2,6 +2,7 @@
 import { ClipboardDocumentIcon, ClipboardDocumentCheckIcon } from '@heroicons/vue/24/outline'
 import LoadingSpinner from './LoadingSpinner.vue'
 import ClipboardJS from 'clipboard'
+import QrcodeVue from 'qrcode.vue'
 
 export default {
   name: 'AwaitingPayment',
@@ -9,11 +10,13 @@ export default {
   components: {
     ClipboardDocumentIcon,
     ClipboardDocumentCheckIcon,
-    LoadingSpinner
+    LoadingSpinner,
+    QrcodeVue
   },
   props: {
-    qrCodeUrl: { type: String, default: '' },
-    paymentRequest: { type: String, default: '' }
+    paymentRequest: { type: String },
+    paymentRequestLink: { type: String },
+    paymentRequestToCopy: { type: String, required: true }
   },
   data() {
     return {
@@ -22,12 +25,6 @@ export default {
     }
   },
   computed: {
-    paymentRequestLink() {
-      if (this.paymentRequest) {
-        return `lightning:${this.paymentRequest}`
-      }
-      return ''
-    }
   },
   mounted() {
     this.clipboard = new ClipboardJS('.copy-btn')
@@ -45,19 +42,13 @@ export default {
   },
   methods: {
     openWallet() {
-      if (!this.paymentRequestLink || this.paymentRequestLink === '') {
-        return
-      }
       const newWindow = window.open(this.paymentRequestLink, '_blank')
-      if (!newWindow || newWindow.closed || typeof newWindow.closed == 'undefined' || newWindow.location.href === 'about:blank') {
+      if (!newWindow || newWindow.closed || typeof newWindow.closed == 'undefined'){
         alert('Failed to open wallet. Please ensure you have a compatible lightning wallet installed.')
       }
     },
     copyPaymentRequest() {
-      if (!this.paymentRequest) {
-        return
-      }
-      navigator.clipboard.writeText(this.paymentRequest).then(() => {
+      navigator.clipboard.writeText(this.paymentRequestToCopy).then(() => {
         this.flashCopyHint()
       }).catch(err => {
         console.error('Failed to copy: ', err)
@@ -88,19 +79,16 @@ export default {
         </div>
       </h5>
     </div>
-    <div @click="copyPaymentRequest">
-      <img v-if="qrCodeUrl" class="payment-qr-code mx-auto py-2" :src="qrCodeUrl" />
-      <div v-else class="mx-auto w-10 py-2">
-        <LoadingSpinner />
-      </div>
+    <div @click="copyPaymentRequest" class="flex justify-center mx-4">
+      <qrcode-vue :value="paymentRequestLink" :size="300" :margin="3" level="L" />
     </div>
-    <div class="flex justify-center py-2 mx-4">
-      <button v-if="paymentRequestLink && paymentRequestLink !== ''" @click="openWallet"
-        class="open-wallet-btn py-2 px-4 rounded w-300">
+    <div class="flex flex-col items-center py-3 mx-4">
+      <button @click="openWallet"
+        class="open-wallet-btn py-2 px-4 rounded w-[300px]">
         Open Wallet
       </button>
       <button @click="$emit('change-wallet')"
-        class="open-wallet-btn py-2 px-4 rounded w-300">
+        class="change-wallet-btn py-2 mt-5 px-4 rounded w-[300px]">
         Change Wallet
       </button>
     </div>
@@ -125,9 +113,18 @@ export default {
   font-weight: bold;
   color: var(--color-black);
   text-align: center;
+  &:hover {
+    background-color: var(--color-amber-light);
+  }
 }
 
-button:hover {
-  background-color: var(--color-amber-light);
+.change-wallet-btn {
+  background-color: var(--color-black);
+  font-weight: bold;
+  color: var(--color-amber-med);
+  text-align: center;
+  &:hover {
+    color: var(--color-amber-light);
+  }
 }
 </style>

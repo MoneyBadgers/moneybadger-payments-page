@@ -33,7 +33,7 @@ export default {
         <div>
             <ul>
                 <li v-for="wallet in Wallet.wallets">
-                   <button @click="setWallet(wallet)">{{ wallet.name }}</button>
+                   <button class="choose-wallet-btn py-2 my-3 px-4 rounded w-[300px]" @click="setWallet(wallet)">{{ wallet.name }}</button>
                 </li>
             </ul>
         </div>
@@ -42,4 +42,13 @@ export default {
 </template>
 
 <style scoped>
+.choose-wallet-btn {
+  background-color: var(--color-amber-med);
+  font-weight: bold;
+  color: var(--color-black);
+  text-align: center;
+  &:hover {
+    background-color: var(--color-amber-light);
+  }
+}
 </style>

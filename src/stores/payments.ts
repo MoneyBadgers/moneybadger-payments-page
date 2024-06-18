@@ -1,14 +1,14 @@
 import { defineStore } from 'pinia'
 import Api from '../api/api-cryptoqr'
 import { InvoiceStatusEnum, type Invoice } from '../api/cryptoqr/api'
-import type Wallet from '../models/wallet'
+import Wallet from '../models/wallet'
 import InvoiceParameters from '../models/invoice_parameters'
 import type { LocationQuery } from "vue-router"
 import { PaymentStatus } from '../types/PaymentStatus'
 
 export const usePaymentStore = defineStore('payments', {
   state: () => ({
-    wallet: { valueStore: "lightning" } as Wallet,
+    wallet: Wallet.defaultWallet,
     invoiceParams: {} as InvoiceParameters,
     invoice: {} as Invoice,
     errors: [] as string[],
@@ -32,7 +32,8 @@ export const usePaymentStore = defineStore('payments', {
     async setWallet(wallet: Wallet) {
       this.wallet = wallet
       if(this.invoice.id) {
-        this.api.updateInvoicePaymentMethod(this.invoice.id, wallet.valueStore)
+        const resp = await this.api.updateInvoicePaymentMethod(this.invoice.id, wallet.valueStore)
+        this.invoice = resp.data
         this.status = PaymentStatus.WaitForPayment
         this.pollStatus()
       }else{
@@ -68,6 +69,7 @@ export const usePaymentStore = defineStore('payments', {
       try {
         const invoiceResponse = await this.api.fetchInvoiceStatus(this.invoiceParams.orderId)
         this.invoice = invoiceResponse.data
+        this.wallet = Wallet.wallets.find(wallet => wallet.valueStore === this.invoice.payment_request?.value_store) || Wallet.defaultWallet
         this.status = PaymentStatus.WaitForPayment
         this.pollStatus()
       } catch (error: any) {

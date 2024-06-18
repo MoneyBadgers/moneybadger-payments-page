@@ -7,6 +7,7 @@ import PaymentConfirmed from '@/components/PaymentConfirmed.vue'
 import ErrorPage from '../components/ErrorPage.vue'
 import WalletSelect from '../components/WalletSelect.vue'
 import { PaymentStatus } from '../types/PaymentStatus'
+import Wallet from '../models/wallet'
 
 export default {
   name: 'PaymentPageView',
@@ -92,8 +93,9 @@ export default {
       <WalletSelect v-if="status === Status.SelectWallet"></WalletSelect>
       <AwaitingPayment
         v-if="status === Status.WaitForPayment"
-        :qrCodeUrl="paymentQrCodeUrl"
         :paymentRequest="paymentRequest"
+        :paymentRequestLink="paymentsStore.wallet.generateLink(paymentRequest)"
+        :paymentRequestToCopy="paymentsStore.wallet.generateCopyableRequest(paymentRequest)"
         @change-wallet="paymentsStore.changeWallet"
       ></AwaitingPayment>
       <PaymentConfirmed

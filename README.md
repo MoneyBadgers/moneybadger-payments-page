@@ -15,6 +15,7 @@ This template should help get you started developing with Vue 3 in Vite.
 ## TODO (stack ranked)
 
 - make QR code work for Luno
+- Countdown to show remaining time before expiry
 - Error handling for API errors (including expired invoice)
 - Properly style the Wallet selection
 - Make it match the designs (header image uses wallet logo)

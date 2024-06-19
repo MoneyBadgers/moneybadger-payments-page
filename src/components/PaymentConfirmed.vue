@@ -13,9 +13,6 @@ export default {
     LogoCircle
   },
   computed: {
-    amountCents() {
-      return this.paymentAmount
-    },
     currency() {
       return 'R'
     },
@@ -76,7 +73,7 @@ export default {
 
 .reference-id {
   color: var(--color-green);
-  font-size: 1em;
+  font-size: 0.8em;
   font-weight: bold;
 }
 </style>

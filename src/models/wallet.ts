@@ -1,5 +1,3 @@
-import type { StringDecoder } from "string_decoder"
-
 class Wallet {
     constructor(
         public valueStore: string,

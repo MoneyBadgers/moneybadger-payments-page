@@ -4,7 +4,7 @@ import LoadingSpinner from './LoadingSpinner.vue'
 import ClipboardJS from 'clipboard'
 import QrcodeVue from 'qrcode.vue'
 import type { PropType } from 'vue'
-import { Invoice } from '../api/cryptoqr/api'
+import type { Invoice } from '../api/cryptoqr/api'
 import Wallet from '../models/wallet'
 
 export default {

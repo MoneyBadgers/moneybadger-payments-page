@@ -39,13 +39,13 @@ class Wallet {
         //     'Luno App',
         //     'Luno Payment Link'
         // ),
-        // new Wallet(
-        //     'binance',
-        //     'Binance',
-        //     'PAYMENT_REQUEST',
-        //     'Binance App',
-        //     'Binance Payment Link'
-        // ),
+        new Wallet(
+            'binance',
+            'Binance',
+            'PAYMENT_REQUEST',
+            'Binance App',
+            'Binance Payment Link'
+        ),
         new Wallet(
             'lightning',
             'Lightning',

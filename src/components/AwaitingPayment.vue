@@ -30,12 +30,18 @@ export default {
     paymentRequest(): string {
       return this.invoice.payment_request?.data || ''
     },
-    paymentRequestLink(): string {
+    paymentRequestQrData(): string {
+      if(this.invoice.payment_request?.qr_code_content) {
+        return this.invoice.payment_request.qr_code_content
+      }
+      return this.wallet.generateCopyableRequest(this.paymentRequest)
+    },
+    paymentRequestDeepLink(): string {
+      if(this.invoice.payment_request?.deeplink) {
+        return this.invoice.payment_request.deeplink
+      }
       return this.wallet.generateLink(this.paymentRequest)
     },
-    paymentRequestToCopy(): string {
-       return this.wallet.generateCopyableRequest(this.paymentRequest)
-    }
   },
   mounted() {
     this.clipboard = new ClipboardJS('.copy-btn')
@@ -53,13 +59,17 @@ export default {
   },
   methods: {
     openWallet() {
-      const newWindow = window.open(this.paymentRequestLink, '_blank')
+      const newWindow = window.open(this.paymentRequestDeepLink, '_blank')
       if (!newWindow || newWindow.closed || typeof newWindow.closed == 'undefined'){
         alert('Failed to open wallet. Please ensure you have a compatible lightning wallet installed.')
       }
     },
     copyPaymentRequest() {
-      navigator.clipboard.writeText(this.paymentRequestToCopy).then(() => {
+      // not really sure what makes sense to copy for Binance
+      const content = this.wallet.valueStore == 'binance' ?
+        this.paymentRequestDeepLink :
+        this.paymentRequestQrData
+      navigator.clipboard.writeText(content).then(() => {
         this.flashCopyHint()
       }).catch(err => {
         console.error('Failed to copy: ', err)
@@ -91,7 +101,7 @@ export default {
       </h5>
     </div>
     <div @click="copyPaymentRequest" class="flex justify-center mx-4">
-      <qrcode-vue :value="paymentRequestLink" :size="300" :margin="3" level="L" />
+      <qrcode-vue :value="paymentRequestQrData" :size="300" :margin="3" level="L" />
     </div>
     <div class="flex flex-col items-center py-3 mx-4">
       <button @click="openWallet"

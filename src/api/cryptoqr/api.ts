@@ -95,6 +95,8 @@ export interface PaymentRequest {
   currency?: string
   /** encoded data for use by app/value store. e.g. lightning invoice, deeplink, etc. */
   data?: string
+  /** deeplink for app to open and complete payment */
+  deeplink?: string
   /** @example "sats" */
   denomination?: string
   /**
@@ -113,6 +115,8 @@ export interface PaymentRequest {
    * @example {"luno|XBT":"currency=xbt&amount=0.013"}
    */
   payment_methods?: Record<string, object>
+  /** QR code content (string, usually a URL or encoded data) */
+  qr_code_content?: string
   /** Url for QR code representation of encoded data (for use in webpage) */
   qr_code_url?: string
   /** @example "binance" */

@@ -1,4 +1,4 @@
-import { InvoiceApi, type ApiConfig } from './cryptoqr/api'
+import { InvoiceApi, type ApiConfig, type InvoiceUpdatePaymentMethod } from './cryptoqr/api'
 import type { Currency } from '../types/Currency'
 import { usePaymentStore } from '../stores/payments';
 
@@ -6,12 +6,20 @@ const host = import.meta.env.VITE_HOST
 const basePath = '/api/v2'
 
 export default class Api {
+  updateInvoicePaymentMethod(id: string, valueStore: string) {
+    const body: InvoiceUpdatePaymentMethod = {
+      payment_method: valueStore,
+      transaction_id: id,
+      payment_currencies: ['BTC'],
+    }
+    return this._invoiceApi.invoices.updatePaymentMethod(id, body)
+  }
 
   private fetchWithMerchantCode = async (url: URL | RequestInfo, init?: RequestInit | undefined): Promise<Response> => {
     init = init || {}
     init.headers = {
       ...init.headers,
-      'x-merchant-code': usePaymentStore().merchantCode,
+      'x-merchant-code': usePaymentStore().invoiceParams.merchantCode,
     };
     return fetch(url, init)
   }
@@ -32,16 +40,17 @@ export default class Api {
     orderDescription: string | undefined,
     orderId: string,
     statusWebhookUrl: string | undefined,
-    timeoutInSeconds: number
+    timeoutInSeconds: number,
+    paymentMethod: string
   ) {
    return this._invoiceApi.invoice.requestInvoice({
       amount_cents: amountCents,
       currency,
       order_description: orderDescription,
       order_id: orderId,
-      allowed_payment_methods: ['lightning'],
+      allowed_payment_methods: [paymentMethod],
       status_webhook_url: statusWebhookUrl,
-      timeout_in_seconds: timeoutInSeconds
+      timeout_in_seconds: timeoutInSeconds,
     })
   }
 }

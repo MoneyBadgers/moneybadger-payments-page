@@ -10,7 +10,7 @@ This template should help get you started developing with Vue 3 in Vite.
 
 ## Generate API bindings
 
-`sta -p https://api.staging.cryptoqr.co.za/api/v2/swagger.json generate-templates -o ./src/api/cryptoqr/ -n api.ts --extract-enums --api-class-name InvoiceApi`
+`sta -p https://api.staging.cryptoqr.net/api/v2/swagger.json generate-templates -o ./src/api/cryptoqr/ -n api.ts --extract-enums --api-class-name InvoiceApi`
 
 ## TODO (stack ranked)
 

@@ -11,7 +11,7 @@ jobs:
       aws-region: ${{ vars.AWS_REGION }}
       s3-bucket: ${{ vars.STAGING_S3_BUCKET }}
       cloudfront-distribution-id: ${{ vars.STAGING_CLOUDFRONT_DISTRIBUTION_ID }}
-      vite-host: 'https://api.staging.cryptoqr.co.za'
+      vite-host: 'https://api.staging.cryptoqr.net'
     secrets:
       aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
       aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}

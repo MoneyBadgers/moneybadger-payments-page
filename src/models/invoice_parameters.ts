@@ -4,6 +4,7 @@ class InvoiceParameters {
 
     constructor(
         public amountCentsAsString: string,
+        public amountRandsAsString: string,
         public currency: string = 'ZAR',
         public merchantCode: string,
         public orderDescription: string,
@@ -16,6 +17,7 @@ class InvoiceParameters {
     static createFromQueryParams(queryParams: LocationQuery) : InvoiceParameters {
         return new InvoiceParameters(
             queryParams.amountCents as string || '',
+            queryParams.amountRands as string || '',
             'ZAR',
             queryParams.merchantCode as string || '',
             queryParams.orderDescription as string || '',
@@ -32,13 +34,20 @@ class InvoiceParameters {
     }
 
     get amountCents(): number {
-        return parseInt(this.amountCentsAsString)
+        if(this.amountCentsAsString){
+            return parseInt(this.amountCentsAsString)
+        } else {
+            return Math.round(parseFloat(this.amountRandsAsString) * 100)
+        }
     }
 
     get errors(): string[] {
         const errors = []
-        if (!this.amountCentsAsString) {
+        if (!this.amountCentsAsString && !this.amountRandsAsString) {
             errors.push('Amount is required')
+        }
+        if (this.amountCentsAsString && this.amountRandsAsString) {
+            errors.push('Please specify only one of amountCents or amountRands')
         }
         if (isNaN(this.amountCents)) {
             errors.push('Amount must be a valid number')

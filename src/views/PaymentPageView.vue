@@ -35,7 +35,7 @@ export default {
       return this.paymentsStore.lnPaymentRequest || ''
     },
     amountPaid: function (): number {
-      return this.paymentsStore.amountPaid || 0
+      return this.paymentsStore.amountPaidCents / 100.0
     },
     paymentTimeStamp: function (): string {
       return this.paymentsStore.paidAt || ''

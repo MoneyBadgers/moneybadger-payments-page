@@ -200,7 +200,7 @@ export enum ContentType {
 }
 
 export class HttpClient<SecurityDataType = unknown> {
-  public baseUrl: string = 'http://api.cryptoqr.co.za/api/v2'
+  public baseUrl: string = 'http://api.cryptoqr.net/api/v2'
   private securityData: SecurityDataType | null = null
   private securityWorker?: ApiConfig<SecurityDataType>['securityWorker']
   private abortControllers = new Map<CancelToken, AbortController>()

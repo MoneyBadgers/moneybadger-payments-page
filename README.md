@@ -21,6 +21,7 @@ This template should help get you started developing with Vue 3 in Vite.
 - Make it match the designs (header image uses wallet logo)
 - Currency selection for VALR
 - Select specific Lightning wallet
+- Make a light mode, selected by URL param
 
 ## Done
 

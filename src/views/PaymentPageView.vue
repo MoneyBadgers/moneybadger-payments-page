@@ -125,21 +125,9 @@ export default {
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  width: 30%;
   margin: 0 auto;
 }
 
-@media (max-width: 600px) {
-  .container {
-    width: 100%;
-  }
-}
-
-@media (max-width: 992px) {
-  .container {
-    width: 60%;
-  }
-}
 .status-bar, .status-bar .text {
   background-color: var(--color-amber-med);
   font-weight: bold;

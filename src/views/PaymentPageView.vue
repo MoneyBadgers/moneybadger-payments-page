@@ -86,7 +86,7 @@ export default {
       <span class="text" :class="statusStyle">{{statusMessage}}</span>
     </div>
     <div class="container mx-auto text-center">
-      <h1 class="py-4 font-bold flex justify-center items-center">
+      <h1 class="py-2 font-bold flex justify-center items-center">
         {{ wallet.name }}
           <Logo class="mx-1 lightning-logo"/>
         Payment

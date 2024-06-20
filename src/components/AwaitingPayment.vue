@@ -88,8 +88,8 @@ export default {
 <template>
   <div>
     <div>
-      <h4 class="text-gray-200 font-bold py-2">Scan QR code with {{ wallet.scanner }}</h4>
-      <h5 class="text-gray-200 font-bold py-2 text-sm" @click="copyPaymentRequest">
+      <h4 class="text-gray-200 font-bold">Scan QR code with {{ wallet.scanner }}</h4>
+      <h5 class="text-gray-200 font-bold py-1 text-sm" @click="copyPaymentRequest">
         <div v-if="!showCopyHint" class="flex justify-center mx-4 w-300">
           <span class="tap-to-copy">Or tap to copy {{ wallet.invoiceType }}</span>
           <ClipboardDocumentIcon class="mx-2 size-6 text-yellow-500" />

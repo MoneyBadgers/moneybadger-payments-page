@@ -23,13 +23,20 @@ class Wallet {
 
     static wallets = [
         new Wallet(
+            'lightning',
+            'Lightning',
+            'lightning:PAYMENT_REQUEST',
+            'Lightning Wallet',
+            'Lightning Invoice (BOLT11)'
+        ),
+        new Wallet(
             'valr',
             'VALR',
             'https://valr.com/PAYMENT_REQUEST',
             'VALR App',
             'VALR Payment Link'
         ),
-        // Hiding these until Luno and Binance deeplinks/QRs are implemented in Jumper
+        // Hiding these until Luno deeplinks/QRs are implemented in Jumper
         // new Wallet(
         //     'luno',
         //     'Luno',
@@ -43,13 +50,6 @@ class Wallet {
             'PAYMENT_REQUEST',
             'Binance App',
             'Binance Payment Link'
-        ),
-        new Wallet(
-            'lightning',
-            'Lightning',
-            'lightning:PAYMENT_REQUEST',
-            'Lightning Wallet',
-            'Lightning Invoice (BOLT11)'
         ),
     ]
 

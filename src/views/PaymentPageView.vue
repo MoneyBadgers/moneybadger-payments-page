@@ -5,6 +5,7 @@ import AwaitingPayment from '@/components/AwaitingPayment.vue'
 import Logo from '@/components/Logo.vue'
 import PaymentConfirmed from '@/components/PaymentConfirmed.vue'
 import ErrorPage from '../components/ErrorPage.vue'
+import Expired from '../components/Expired.vue'
 import WalletSelect from '../components/WalletSelect.vue'
 import { PaymentStatus } from '../types/PaymentStatus'
 import Wallet from '../models/wallet'
@@ -17,6 +18,7 @@ export default {
     Logo,
     PaymentConfirmed,
     ErrorPage,
+    Expired,
   },
   methods: {
   },
@@ -26,6 +28,9 @@ export default {
       return this.paymentsStore.wallet
     },
     status: function (): PaymentStatus {
+      if(this.expired){
+        return PaymentStatus.Expired
+      }
       return this.paymentsStore.status
     },
     paymentQrCodeUrl: function (): string {
@@ -42,6 +47,10 @@ export default {
     },
     referenceId: function (): string {
       return this.paymentsStore.referenceId || ''
+    },
+    expired: function (): boolean {
+      if(this.paymentsStore.invoice.expires_at == null) return false
+      return new Date(this.paymentsStore.invoice.expires_at) < new Date()
     },
     statusMessage: function (): string {
       if (this.paymentsStore.errors.length > 0) {
@@ -92,6 +101,7 @@ export default {
         Payment
       </h1>
       <ErrorPage v-if="status === Status.Error" :errors="paymentsStore.errors"></ErrorPage>
+      <Expired v-if="status === Status.Expired" :errors="paymentsStore.errors"></Expired>
       <p v-if="status === Status.Loading">Loading</p>
       <WalletSelect v-if="status === Status.SelectWallet"></WalletSelect>
       <AwaitingPayment

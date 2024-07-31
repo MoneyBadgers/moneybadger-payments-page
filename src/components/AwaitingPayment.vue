@@ -6,6 +6,7 @@ import QrcodeVue from 'qrcode.vue'
 import type { PropType } from 'vue'
 import type { Invoice } from '../api/cryptoqr/api'
 import Wallet from '../models/wallet'
+import { formatDistanceStrict } from 'date-fns'
 
 export default {
   name: 'AwaitingPayment',
@@ -42,6 +43,11 @@ export default {
       }
       return this.wallet.generateLink(this.paymentRequest)
     },
+    expiresIn(): string {
+      const expires = new Date(this.invoice.expires_at ?? 0);
+      const now = new Date();
+      return formatDistanceStrict(expires, new Date(), { addSuffix: true, includeSeconds: true })
+    }
   },
   mounted() {
     this.clipboard = new ClipboardJS('.copy-btn')
@@ -103,6 +109,7 @@ export default {
     <div @click="copyPaymentRequest" class="flex justify-center mx-4">
       <qrcode-vue :value="paymentRequestQrData" :size="300" :margin="3" level="L" />
     </div>
+    <p>Expires {{ expiresIn }}</p>
     <div class="flex flex-col items-center py-3 mx-4">
       <button @click="openWallet"
         class="open-wallet-btn py-2 px-4 rounded w-[300px]">

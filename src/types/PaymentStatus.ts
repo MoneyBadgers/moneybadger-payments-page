@@ -5,4 +5,5 @@ export enum PaymentStatus {
   WaitForPayment,
   Successful,
   Error,
+  Expired,
 }

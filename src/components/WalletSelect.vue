@@ -61,7 +61,7 @@ export default {
 <style scoped>
 .choose-wallet-btn {
   height: 70px;
-  width: 100%;
+  width: 300px;
   font-weight: bold;
   color: var(--color-black);
   text-align: center;
@@ -71,14 +71,26 @@ export default {
 }
 .luno {
   background-color: #051478;
+  &:hover {
+    border: 2px solid #1127b4;
+  }
 }
 .valr {
   background-color: #1123dc;
+  &:hover {
+    border: 2px solid #3645f1;
+  }
 }
 .binance {
   background-color: #eeb80d;
+  &:hover {
+    border: 2px solid #fadc7a;
+  }
 }
 .lightning {
-  background-color: darkslategrey;
+  background-color: #4a4a4a;
+  &:hover {
+    border: 2px solid #6b6b6b;
+  }
 }
 </style>

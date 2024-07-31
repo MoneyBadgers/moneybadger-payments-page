@@ -32,8 +32,25 @@ export default {
         <p>Choose a wallet to pay with</p>
         <div>
             <ul>
-                <li v-for="wallet in Wallet.wallets">
-                   <button class="choose-wallet-btn py-2 my-3 px-4 rounded w-[300px]" @click="setWallet(wallet)">{{ wallet.name }}</button>
+              <li>
+                   <button class="choose-wallet-btn lightning my-3 py-2 rounded w-[300px]" @click="setWallet(Wallet.wallets['lightning'])">
+                      <img src="@/assets/wallets/lightning.png" class="object-contain w-full h-full"></img>
+                   </button>
+                </li>
+                <li>
+                   <button class="choose-wallet-btn luno my-3 rounded w-[300px]" @click="setWallet(Wallet.wallets['luno'])">
+                      <img src="@/assets/wallets/luno.png" class="object-contain w-full h-full"></img>
+                   </button>
+                </li>
+                <li>
+                   <button class="choose-wallet-btn valr my-3 rounded w-[300px]" @click="setWallet(Wallet.wallets['valr'])">
+                      <img src="@/assets/wallets/valr.png" class="object-contain w-full h-full"></img>
+                   </button>
+                </li>
+                <li>
+                   <button class="choose-wallet-btn binance my-3 rounded w-[300px]" @click="setWallet(Wallet.wallets['binance'])">
+                      <img src="@/assets/wallets/binance.png" class="object-contain w-full h-full"></img>
+                   </button>
                 </li>
             </ul>
         </div>
@@ -43,12 +60,26 @@ export default {
 
 <style scoped>
 .choose-wallet-btn {
-  background-color: var(--color-amber-med);
+  height: 70px;
+  width: 100%;
   font-weight: bold;
   color: var(--color-black);
   text-align: center;
   &:hover {
-    background-color: var(--color-amber-light);
+    transform: translateX(10px);
   }
+}
+.luno {
+  background-color: #051478;
+}
+.valr {
+  background-color: #1123dc;
+}
+.binance {
+  background-color: #eeb80d;
+}
+.lightning {
+  background-color: black;
+  border: 1px solid white;
 }
 </style>

@@ -38,7 +38,7 @@ export default {
       <LogoCircle class="payment-success-logo" />
     </div>
     <div>
-      <h1 class="payment-amount">{{currency}} {{paymentAmount}}</h1>
+      <h1 class="payment-amount">{{currency}} {{paymentAmount?.toFixed(2)}}</h1>
       <h4 class="time-stamp">{{timeStamp ? formatTime(timeStamp) : ''}}</h4>
       <h4 class="reference-id">{{ referenceId }}</h4>
     </div>

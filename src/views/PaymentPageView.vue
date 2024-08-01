@@ -9,11 +9,13 @@ import Expired from '../components/Expired.vue'
 import WalletSelect from '../components/WalletSelect.vue'
 import { PaymentStatus } from '../types/PaymentStatus'
 import Wallet from '../models/wallet'
+import LoadingSpinner from '../components/LoadingSpinner.vue'
 
 export default {
   name: 'PaymentPageView',
   components: {
     WalletSelect,
+    LoadingSpinner,
     AwaitingPayment,
     Logo,
     PaymentConfirmed,
@@ -102,7 +104,7 @@ export default {
       </h1>
       <ErrorPage v-if="status === Status.Error" :errors="paymentsStore.errors"></ErrorPage>
       <Expired v-if="status === Status.Expired" :errors="paymentsStore.errors"></Expired>
-      <p v-if="status === Status.Loading">Loading</p>
+      <LoadingSpinner v-if="status === Status.Loading"/>
       <WalletSelect v-if="status === Status.SelectWallet"></WalletSelect>
       <AwaitingPayment
         v-if="status === Status.WaitForPayment"

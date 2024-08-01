@@ -37,6 +37,7 @@ export const usePaymentStore = defineStore('payments', {
     },
     async setWallet(wallet: Wallet) {
       this.wallet = wallet
+      this.status = PaymentStatus.Loading
       if(this.invoice.id) {
         const resp = await this.api.updateInvoicePaymentMethod(this.invoice.id, wallet.valueStore)
         this.invoice = resp.data

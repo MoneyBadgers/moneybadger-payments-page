@@ -21,38 +21,38 @@ class Wallet {
         return this.generateLink(paymentRequest)
     }
 
-    static wallets = [
-        new Wallet(
+    static wallets = {
+        lightning: new Wallet(
             'lightning',
             'Lightning',
             'lightning:PAYMENT_REQUEST',
             'Lightning Wallet',
             'Lightning Invoice (BOLT11)'
         ),
-        new Wallet(
+        binance: new Wallet(
             'binance',
             'Binance',
             'PAYMENT_REQUEST',
             'Binance App',
             'Binance Payment Link'
         ),
-        new Wallet(
+        luno: new Wallet(
             'luno',
             'Luno',
             'PAYMENT_REQUEST',
             'Luno App',
             'Luno Payment Link'
         ),
-        new Wallet(
+        valr: new Wallet(
             'valr',
             'VALR',
             'https://valr.com/PAYMENT_REQUEST',
             'VALR App',
             'VALR Payment Link'
         ),
-    ]
+    }
 
-    static defaultWallet = Wallet.wallets[0]
+    static defaultWallet = Wallet.wallets['lightning']
 }
 
 export default Wallet

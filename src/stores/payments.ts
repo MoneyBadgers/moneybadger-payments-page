@@ -80,7 +80,7 @@ export const usePaymentStore = defineStore('payments', {
           this.status = PaymentStatus.Successful
           return
         }
-        this.wallet = Wallet.wallets.find(wallet => wallet.valueStore === this.invoice.payment_request?.value_store) || Wallet.defaultWallet
+        this.wallet = Wallet.wallets[this.invoice.payment_request?.value_store || ''] || Wallet.defaultWallet
         this.status = PaymentStatus.WaitForPayment
         this.pollStatus()
       } catch (error: any) {

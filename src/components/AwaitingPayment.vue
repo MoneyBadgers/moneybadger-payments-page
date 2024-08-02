@@ -1,6 +1,5 @@
 <script lang="ts">
 import { ClipboardDocumentIcon, ClipboardDocumentCheckIcon } from '@heroicons/vue/24/outline'
-import LoadingSpinner from './LoadingSpinner.vue'
 import ClipboardJS from 'clipboard'
 import QrcodeVue from 'qrcode.vue'
 import type { PropType } from 'vue'
@@ -14,7 +13,6 @@ export default {
   components: {
     ClipboardDocumentIcon,
     ClipboardDocumentCheckIcon,
-    LoadingSpinner,
     QrcodeVue
   },
   props: {
@@ -46,7 +44,7 @@ export default {
     expiresIn(): string {
       const expires = new Date(this.invoice.expires_at ?? 0);
       const now = new Date();
-      return formatDistanceStrict(expires, new Date(), { addSuffix: true, includeSeconds: true })
+      return formatDistanceStrict(expires, new Date(), { addSuffix: true })
     }
   },
   mounted() {

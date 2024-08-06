@@ -6,6 +6,7 @@ import type { PropType } from 'vue'
 import type { Invoice } from '../api/cryptoqr/api'
 import Wallet from '../models/wallet'
 import { formatDistanceStrict } from 'date-fns'
+import LoadingSpinner from './LoadingSpinner.vue'
 
 export default {
   name: 'AwaitingPayment',
@@ -13,7 +14,8 @@ export default {
   components: {
     ClipboardDocumentIcon,
     ClipboardDocumentCheckIcon,
-    QrcodeVue
+    QrcodeVue,
+    LoadingSpinner
   },
   props: {
     invoice: { type: Object as PropType<Invoice>, required: true },
@@ -22,7 +24,9 @@ export default {
   data() {
     return {
       showCopyHint: false,
-      clipboard: null as any
+      clipboard: null as any,
+      qrLoading: true,
+      qrLoadError: false,
     }
   },
   computed: {
@@ -94,6 +98,12 @@ export default {
       setTimeout(() => {
         this.showCopyHint = false
       }, 3000)
+    },
+    onQrLoad() {
+      this.qrLoading = false
+    },
+    onQrLoadError() {
+      this.qrLoadError = true
     }
   }
 }
@@ -115,8 +125,16 @@ export default {
       </h5>
     </div>
     <div @click="copyPaymentRequest" class="flex justify-center mx-4">
-      <div v-if="paymentRequestQrUrl">
-        <img :src="paymentRequestQrUrl" alt="Payment Request QR Code" class="payment-qr-code" />
+      <div v-if="paymentRequestQrUrl && !qrLoadError">
+        <LoadingSpinner v-if="qrLoading" />
+        <img
+          :src="paymentRequestQrUrl"
+          alt="Payment Request QR Code"
+          class="payment-qr-code"
+          @load="onQrLoad"
+          @error="onQrLoadError"
+          :class="{ hidden: qrLoading }"
+        />
       </div>
       <div v-else>
         <qrcode-vue :value="paymentRequestQrData" :size="300" :margin="3" level="L" />
@@ -149,6 +167,10 @@ h4 {
 .payment-qr-code {
   cursor: pointer;
   max-width: 300px;
+}
+
+.payment-qr-code.hidden {
+  display: none;
 }
 
 .status-bar,

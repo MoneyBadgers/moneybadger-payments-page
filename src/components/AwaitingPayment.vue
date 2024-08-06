@@ -29,6 +29,16 @@ export default {
     paymentRequest(): string {
       return this.invoice.payment_request?.data || ''
     },
+    paymentRequestQrUrl(): string | null {
+      // Only return custom QR code URL for Luno and Binance invoices
+      if (this.wallet.valueStore != 'luno' && this.wallet.valueStore != 'binance') {
+        return null
+      }
+      if (this.invoice.payment_request?.qr_code_url) {
+        return this.invoice.payment_request.qr_code_url
+      }
+      return null
+    },
     paymentRequestQrData(): string {
       if(this.invoice.payment_request?.qr_code_content) {
         return this.invoice.payment_request.qr_code_content
@@ -105,7 +115,12 @@ export default {
       </h5>
     </div>
     <div @click="copyPaymentRequest" class="flex justify-center mx-4">
-      <qrcode-vue :value="paymentRequestQrData" :size="300" :margin="3" level="L" />
+      <div v-if="paymentRequestQrUrl">
+        <img :src="paymentRequestQrUrl" alt="Payment Request QR Code" class="payment-qr-code" />
+      </div>
+      <div v-else>
+        <qrcode-vue :value="paymentRequestQrData" :size="300" :margin="3" level="L" />
+      </div>
     </div>
     <p>Expires {{ expiresIn }}</p>
     <div class="flex flex-col items-center py-3 mx-4">

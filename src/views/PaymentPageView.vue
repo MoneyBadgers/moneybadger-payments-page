@@ -118,7 +118,7 @@ export default {
         :paymentAmount="amountPaid"
         :referenceId="referenceId"
       ></PaymentConfirmed>
-      <div class="secure-payment-logo">
+      <div class="secure-payment-logo px-16">
         <img src="@/assets/secure-payment-money-badger.png" alt="Secure Payment" class="mx-auto py-4"/>
       </div>
     </div>

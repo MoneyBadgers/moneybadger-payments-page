@@ -35,6 +35,11 @@ export default {
                    </button>
                 </li>
                 <li>
+                   <button class="choose-wallet-btn binance my-3 py-3 px-4 rounded w-[300px]" @click="setWallet(Wallet.wallets['binance'])">
+                      <img src="@/assets/wallets/binance.png" class="object-contain w-full h-full"></img>
+                   </button>
+                </li>
+                <li>
                    <button class="choose-wallet-btn luno my-3 py-2 rounded w-[300px]" @click="setWallet(Wallet.wallets['luno'])">
                       <img src="@/assets/wallets/luno.png" class="object-contain w-full h-full"></img>
                    </button>
@@ -42,11 +47,6 @@ export default {
                 <li>
                    <button class="choose-wallet-btn valr my-3 py-3 rounded w-[300px]" @click="setWallet(Wallet.wallets['valr'])">
                       <img src="@/assets/wallets/valr.png" class="object-contain w-full h-full"></img>
-                   </button>
-                </li>
-                <li>
-                   <button class="choose-wallet-btn binance my-3 py-3 px-4 rounded w-[300px]" @click="setWallet(Wallet.wallets['binance'])">
-                      <img src="@/assets/wallets/binance.png" class="object-contain w-full h-full"></img>
                    </button>
                 </li>
             </ul>

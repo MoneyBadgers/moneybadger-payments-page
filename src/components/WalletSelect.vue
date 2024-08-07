@@ -26,10 +26,7 @@ export default {
 <template>
   <div>
     <div>
-      <h4 class="font-bold">Select Wallet</h4>
-    </div>
-    <div>
-        <p>Choose a wallet to pay with</p>
+        <p>Choose the wallet you want to pay with</p>
         <div>
             <ul>
               <li>

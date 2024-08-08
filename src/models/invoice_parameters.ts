@@ -30,7 +30,7 @@ class InvoiceParameters {
 
     get timeoutInSeconds(): number {
         const timeout = parseInt(this.timeoutInSecondsString)
-        return isNaN(timeout) ? 60 : timeout
+        return isNaN(timeout) ? 180 : timeout
     }
 
     get amountCents(): number {

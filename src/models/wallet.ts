@@ -54,7 +54,14 @@ class Wallet {
         ),
     }
 
-    static defaultWallet = Wallet.wallets['lightning']
+    // This wallet should not get used but is here as a placeholder.
+    static defaultWallet = new Wallet(
+        'lightning',
+        'Crypto',
+        'lightning:PAYMENT_REQUEST',
+        'Lightning Wallet',
+        'Lightning Invoice (BOLT11)'
+    )
 }
 
 export default Wallet

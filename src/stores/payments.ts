@@ -13,6 +13,7 @@ export const usePaymentStore = defineStore('payments', {
     invoice: {} as Invoice,
     errors: [] as string[],
     status: PaymentStatus.Loading,
+    enabledWallets: ['lightning', 'valr'] as string[],
   }),
   getters: {
     paidAt: (state): string => state.invoice.paid_at || '',
@@ -33,6 +34,11 @@ export const usePaymentStore = defineStore('payments', {
       if (this.invoiceParams.errors.length > 0) {
         this.errors = this.invoiceParams.errors
         this.status = PaymentStatus.Error
+      }
+      // TODO: replace this with server-side configuration (get from API)
+      if(this.invoiceParams.merchantCode !== 'geewiz'){
+        this.enabledWallets.push('binance')
+        this.enabledWallets.push('luno')
       }
     },
     async setWallet(wallet: Wallet) {

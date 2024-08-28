@@ -76,12 +76,12 @@ export default {
     </div>
     <transition name="fade">
       <div v-if="valrSelected" class="fixed inset-0 modal-bg flex items-center justify-center">
-        <div class="w-1/2 h-4/5 overflow-y-auto p-6 rounded-lg shadow-lg justify-center">
+        <div class="w-1/2 h-[100%] overflow-y-auto p-6 rounded-lg shadow-lg justify-center">
           <img src="@/assets/wallets/valr.png" class="w-40 mx-auto"></img>
-          <h2 class="text-xl font-semibold mb-4">Choose Currency</h2>
-          <div class="grid grid-cols-1 gap-4">
+          <p class="font-semibold mb-4">Please choose the currency you want to pay with:</p>
+          <div class="grid grid-cols-1 gap-3">
             <button v-for="currency in valrCurrencies" :key="currency"
-              class="px-4 py-2 rounded choose-currency-btn"
+              class="mx-auto px-4 py-1 w-[10rem] rounded choose-currency-btn"
              @click="setValr(currency)">
               {{ currency }}
             </button>

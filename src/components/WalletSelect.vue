@@ -75,8 +75,8 @@ export default {
         </div>
     </div>
     <transition name="fade">
-      <div v-if="valrSelected" class="fixed inset-0 bg-gray-900 flex items-center justify-center">
-        <div class="bg-black w-1/2 h-4/5 overflow-y-auto p-6 rounded-lg shadow-lg justify-center">
+      <div v-if="valrSelected" class="fixed inset-0 modal-bg flex items-center justify-center">
+        <div class="w-1/2 h-4/5 overflow-y-auto p-6 rounded-lg shadow-lg justify-center">
           <img src="@/assets/wallets/valr.png" class="w-40 mx-auto"></img>
           <h2 class="text-xl font-semibold mb-4">Choose Currency</h2>
           <div class="grid grid-cols-1 gap-4">
@@ -93,6 +93,9 @@ export default {
 </template>
 
 <style scoped>
+.modal-bg {
+  background-color: var(--color-background);
+}
 .choose-wallet-btn {
   height: 70px;
   width: 300px;

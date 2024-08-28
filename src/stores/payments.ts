@@ -9,6 +9,7 @@ import { PaymentStatus } from '../types/PaymentStatus'
 export const usePaymentStore = defineStore('payments', {
   state: () => ({
     wallet: Wallet.defaultWallet,
+    paymentCurrencies: [] as string[],
     invoiceParams: {} as InvoiceParameters,
     invoice: {} as Invoice,
     errors: [] as string[],
@@ -26,7 +27,8 @@ export const usePaymentStore = defineStore('payments', {
     },
     referenceId: (state): string => state.invoice.id || '',
     lnPaymentRequest: (state): string => state.invoice.payment_request?.data || '',
-    api: (state): Api =>  new Api()
+    api: (state): Api =>  new Api(),
+    getPaymentCurrency: (state) => state.paymentCurrencies[0],
   },
   actions: {
     initialiseFromQueryParams(queryParams: LocationQuery) {
@@ -45,13 +47,20 @@ export const usePaymentStore = defineStore('payments', {
       this.wallet = wallet
       this.status = PaymentStatus.Loading
       if(this.invoice.id) {
-        const resp = await this.api.updateInvoicePaymentMethod(this.invoice.id, wallet.valueStore)
+        const resp = await this.api.updateInvoicePaymentMethod(
+          this.invoice.id,
+          wallet.valueStore,
+          this.paymentCurrencies
+        )
         this.invoice = resp.data
         this.status = PaymentStatus.WaitForPayment
         this.pollStatus()
       }else{
          this.createInvoice()
       }
+    },
+    async setPaymentCurrency(currency: string) {
+      this.paymentCurrencies = [currency]
     },
     async changeWallet() {
       this.status = PaymentStatus.SelectWallet
@@ -107,7 +116,8 @@ export const usePaymentStore = defineStore('payments', {
           this.invoiceParams.orderId,
           this.invoiceParams.statusWebhookUrl,
           this.invoiceParams.timeoutInSeconds,
-          this.wallet.valueStore
+          this.wallet.valueStore,
+          this.paymentCurrencies,
         )
         this.invoice = newInvoiceResponse.data
         this.status = PaymentStatus.WaitForPayment

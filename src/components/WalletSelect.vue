@@ -23,12 +23,22 @@ export default {
     setWallet(wallet: Wallet) {
       this.paymentsStore.setWallet(wallet)
     },
+    chooseValr() {
+      this.valrSelected = true
+    },
+    setValr(currency: string) {
+      this.paymentsStore.setPaymentCurrency(currency)
+      this.paymentsStore.setWallet(Wallet.wallets['valr'])
+    },
   },
   data() {
     return {
-        Wallet: Wallet
+        valrSelected: false,
+        Wallet: Wallet,
+        valrCurrencies: ["BTC","AVAX", "BNB", "ETH", "EURC", "PYUSD", "SHIB", "SOL", "USDC", "USDT", "XRP"],
+
     }
-  }
+  },
 }
 </script>
 
@@ -44,7 +54,7 @@ export default {
                    </button>
                 </li>
                 <li>
-                   <button class="choose-wallet-btn valr my-3 py-3 rounded w-[300px]" @click="setWallet(Wallet.wallets['valr'])" :disabled="valrDisabled">
+                   <button class="choose-wallet-btn valr my-3 py-3 rounded w-[300px]" @click="chooseValr()" :disabled="valrDisabled">
                       <img src="@/assets/wallets/valr.png" class="object-contain w-full h-full"></img>
                    </button>
                    <div v-if="valrDisabled" class="overlay">Coming Soon</div>
@@ -64,6 +74,21 @@ export default {
             </ul>
         </div>
     </div>
+    <transition name="fade">
+      <div v-if="valrSelected" class="fixed inset-0 bg-gray-900 flex items-center justify-center">
+        <div class="bg-black w-1/2 h-4/5 overflow-y-auto p-6 rounded-lg shadow-lg justify-center">
+          <img src="@/assets/wallets/valr.png" class="w-40 mx-auto"></img>
+          <h2 class="text-xl font-semibold mb-4">Choose Currency</h2>
+          <div class="grid grid-cols-1 gap-4">
+            <button v-for="currency in valrCurrencies" :key="currency"
+              class="px-4 py-2 rounded choose-currency-btn"
+             @click="setValr(currency)">
+              {{ currency }}
+            </button>
+          </div>
+        </div>
+      </div>
+    </transition>
   </div>
 </template>
 
@@ -77,6 +102,16 @@ export default {
   &:hover {
     transform: translateX(10px);
   }
+}
+.choose-currency-btn {
+  background-color: var(--color-black);
+  font-weight: bold;
+  color: var(--color-light-grey);
+  text-align: center;
+  &:hover {
+    color: var(--color-amber-light);
+  }
+  border: 1px solid var(--color-light-grey);
 }
 .luno {
   background-color: #051478;
@@ -119,7 +154,6 @@ button:disabled {
   }
 }
 
-
 .overlay {
     opacity: 1;
     position: absolute;
@@ -134,5 +168,12 @@ button:disabled {
     font-size: 12px;
     text-align: center;
     pointer-events: none; /* Allows clicks to pass through the overlay */
+}
+
+.fade-enter-active, .fade-leave-active {
+  transition: opacity 0.5s;
+}
+.fade-enter, .fade-leave-to {
+  opacity: 0;
 }
 </style>

@@ -7,6 +7,8 @@ import type { Invoice } from '../api/cryptoqr/api'
 import Wallet from '../models/wallet'
 import { formatDistanceStrict } from 'date-fns'
 import LoadingSpinner from './LoadingSpinner.vue'
+import { mapStores } from 'pinia'
+import { usePaymentStore } from '../stores/payments'
 
 export default {
   name: 'AwaitingPayment',
@@ -30,6 +32,7 @@ export default {
     }
   },
   computed: {
+    ...mapStores(usePaymentStore),
     paymentRequest(): string {
       return this.invoice.payment_request?.data || ''
     },
@@ -46,6 +49,15 @@ export default {
     paymentRequestQrData(): string {
       if(this.invoice.payment_request?.qr_code_content) {
         return this.invoice.payment_request.qr_code_content
+      }
+      // if this is VALR and we have defined a payment currency to use,
+      // then select the payment data for that currency
+      if(this.wallet.valueStore === 'valr' && this.paymentsStore.getPaymentCurrency){
+          let key = `valr|${this.paymentsStore.getPaymentCurrency}`
+          let pm = this.invoice.payment_request?.payment_methods
+          if(pm && pm[key]){
+            return this.wallet.generateCopyableRequest(pm[key] as unknown as string)
+          }
       }
       return this.wallet.generateCopyableRequest(this.paymentRequest)
     },

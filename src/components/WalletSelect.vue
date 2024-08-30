@@ -35,7 +35,7 @@ export default {
     return {
         valrSelected: false,
         Wallet: Wallet,
-        valrCurrencies: ["BTC","AVAX", "BNB", "ETH", "EURC", "PYUSD", "SHIB", "SOL", "USDC", "USDT", "XRP"],
+        valrCurrencies: ["BTC","AVAX", "BNB", "ETH", "EURC", "PYUSD", "SHIB", "SOL", "USDC", "USDT", "XRP", "ZAR"],
 
     }
   },

@@ -35,7 +35,8 @@ export default {
     return {
         valrSelected: false,
         Wallet: Wallet,
-        // These are all the VALR currencies that have ZAR markets. Sorted alphabetically but with BTC first.
+        // These are all the VALR currencies that have ZAR markets. Sorted alphabetically but with BTC first and ZAR added
+        // curl -s https://api.valr.com/v1/public/pairs | jq -r '.[] | select(.quoteCurrency == "ZAR" and .currencyPairType == "SPOT") | .baseCurrency' | sort
         valrCurrencies: ["BTC","AVAX", "BNB", "ETH", "EURC", "PYUSD", "SHIB", "SOL", "USDC", "USDT", "XRP", "ZAR"],
 
     }

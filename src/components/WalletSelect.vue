@@ -35,6 +35,7 @@ export default {
     return {
         valrSelected: false,
         Wallet: Wallet,
+        // These are all the VALR currencies that have ZAR markets. Sorted alphabetically but with BTC first.
         valrCurrencies: ["BTC","AVAX", "BNB", "ETH", "EURC", "PYUSD", "SHIB", "SOL", "USDC", "USDT", "XRP", "ZAR"],
 
     }

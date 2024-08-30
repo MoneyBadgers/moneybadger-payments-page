@@ -6,11 +6,11 @@ const host = import.meta.env.VITE_HOST
 const basePath = '/api/v2'
 
 export default class Api {
-  updateInvoicePaymentMethod(id: string, valueStore: string) {
+  updateInvoicePaymentMethod(id: string, valueStore: string, paymentCurrencies: string[] = [],) {
     const body: InvoiceUpdatePaymentMethod = {
       payment_method: valueStore,
       transaction_id: id,
-      payment_currencies: ['BTC'],
+      payment_currencies: paymentCurrencies,
     }
     return this._invoiceApi.invoices.updatePaymentMethod(id, body)
   }
@@ -41,7 +41,8 @@ export default class Api {
     orderId: string,
     statusWebhookUrl: string | undefined,
     timeoutInSeconds: number,
-    paymentMethod: string
+    paymentMethod: string,
+    paymentCurrencies: string[] = [],
   ) {
    return this._invoiceApi.invoice.requestInvoice({
       amount_cents: amountCents,
@@ -51,6 +52,7 @@ export default class Api {
       allowed_payment_methods: [paymentMethod],
       status_webhook_url: statusWebhookUrl,
       timeout_in_seconds: timeoutInSeconds,
+      payment_currencies: paymentCurrencies,
     })
   }
 }

@@ -23,12 +23,24 @@ export default {
     setWallet(wallet: Wallet) {
       this.paymentsStore.setWallet(wallet)
     },
+    chooseValr() {
+      this.valrSelected = true
+    },
+    setValr(currency: string) {
+      this.paymentsStore.setPaymentCurrency(currency)
+      this.paymentsStore.setWallet(Wallet.wallets['valr'])
+    },
   },
   data() {
     return {
-        Wallet: Wallet
+        valrSelected: false,
+        Wallet: Wallet,
+        // These are all the VALR currencies that have ZAR markets. Sorted alphabetically but with BTC first and ZAR added
+        // curl -s https://api.valr.com/v1/public/pairs | jq -r '.[] | select(.quoteCurrency == "ZAR" and .currencyPairType == "SPOT") | .baseCurrency' | sort
+        valrCurrencies: ["BTC","AVAX", "BNB", "ETH", "EURC", "PYUSD", "SHIB", "SOL", "USDC", "USDT", "XRP", "ZAR"],
+
     }
-  }
+  },
 }
 </script>
 
@@ -44,7 +56,7 @@ export default {
                    </button>
                 </li>
                 <li>
-                   <button class="choose-wallet-btn valr my-3 py-3 rounded w-[300px]" @click="setWallet(Wallet.wallets['valr'])" :disabled="valrDisabled">
+                   <button class="choose-wallet-btn valr my-3 py-3 rounded w-[300px]" @click="chooseValr()" :disabled="valrDisabled">
                       <img src="@/assets/wallets/valr.png" class="object-contain w-full h-full"></img>
                    </button>
                    <div v-if="valrDisabled" class="overlay">Coming Soon</div>
@@ -64,10 +76,28 @@ export default {
             </ul>
         </div>
     </div>
+    <transition name="fade">
+      <div v-if="valrSelected" class="fixed inset-0 modal-bg flex items-center justify-center">
+        <div class="w-1/2 h-[100%] overflow-y-auto p-6 rounded-lg shadow-lg justify-center">
+          <img src="@/assets/wallets/valr.png" class="w-40 mx-auto"></img>
+          <p class="font-semibold mb-4">Please choose the currency you want to pay with:</p>
+          <div class="grid grid-cols-1 gap-3">
+            <button v-for="currency in valrCurrencies" :key="currency"
+              class="mx-auto px-4 py-1 w-[10rem] rounded choose-currency-btn"
+             @click="setValr(currency)">
+              {{ currency }}
+            </button>
+          </div>
+        </div>
+      </div>
+    </transition>
   </div>
 </template>
 
 <style scoped>
+.modal-bg {
+  background-color: var(--color-background);
+}
 .choose-wallet-btn {
   height: 70px;
   width: 300px;
@@ -77,6 +107,16 @@ export default {
   &:hover {
     transform: translateX(10px);
   }
+}
+.choose-currency-btn {
+  background-color: var(--color-black);
+  font-weight: bold;
+  color: var(--color-light-grey);
+  text-align: center;
+  &:hover {
+    color: var(--color-amber-light);
+  }
+  border: 1px solid var(--color-light-grey);
 }
 .luno {
   background-color: #051478;
@@ -119,7 +159,6 @@ button:disabled {
   }
 }
 
-
 .overlay {
     opacity: 1;
     position: absolute;
@@ -134,5 +173,12 @@ button:disabled {
     font-size: 12px;
     text-align: center;
     pointer-events: none; /* Allows clicks to pass through the overlay */
+}
+
+.fade-enter-active, .fade-leave-active {
+  transition: opacity 0.5s;
+}
+.fade-enter, .fade-leave-to {
+  opacity: 0;
 }
 </style>

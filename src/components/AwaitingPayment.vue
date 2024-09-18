@@ -65,6 +65,16 @@ export default {
       if(this.invoice.payment_request?.deeplink) {
         return this.invoice.payment_request.deeplink
       }
+      // if this is VALR and we have defined a payment currency to use,
+      // then select the payment data for that currency
+      if(this.wallet.valueStore === 'valr' && this.paymentsStore.getPaymentCurrency){
+        let key = `valr|${this.paymentsStore.getPaymentCurrency}`
+          let pm = this.invoice.payment_request?.payment_methods
+          if(pm && pm[key]){
+            let link = this.wallet.generateLink(pm[key] as unknown as string)
+            return link
+          }
+      }
       return this.wallet.generateLink(this.paymentRequest)
     },
     expiresIn(): string {

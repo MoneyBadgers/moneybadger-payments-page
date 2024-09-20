@@ -77,6 +77,7 @@ export default {
   },
   data() {
     return {
+      Return: '',
       Status: PaymentStatus
     }
   },
@@ -86,6 +87,7 @@ export default {
       // don't try creating an invoice if we have errors
       return
     }
+    this.Return = this.$route.query.return as string
     this.paymentsStore.checkForExistingInvoice()
 }
 }
@@ -117,6 +119,7 @@ export default {
         :timeStamp="paymentTimeStamp"
         :paymentAmount="amountPaid"
         :referenceId="referenceId"
+        :returnUrl="Return"
       ></PaymentConfirmed>
       <div class="secure-payment-logo px-16">
         <img src="@/assets/secure-payment-money-badger.png" alt="Secure Payment" class="mx-auto py-4"/>

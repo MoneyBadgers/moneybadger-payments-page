@@ -52,7 +52,7 @@ export default {
       <h4 class="reference-id">{{ referenceId }}</h4>
     </div>
     <div>
-      <button @click="redirectToReturnUrl" class="done-btn py-2 mt-5 px-4 rounded w-[300px]">Done</button>
+      <button @click="redirectToReturnUrl" v-if="returnUrl" class="done-btn py-2 mt-5 px-4 rounded w-[300px]">Done</button>
     </div>
   </div>
 </template>

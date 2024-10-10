@@ -8,6 +8,7 @@ export default {
     paymentAmount: Number,
     referenceId: String,
     timeStamp: String,
+    returnUrl: String,
   },
   components: {
     LogoCircle
@@ -18,12 +19,20 @@ export default {
     },
     paidAt() {
       return this.timeStamp
+    },
+    returnUrl(): string {
+      return this.returnUrl
     }
   },
   methods: {
     formatTime(timeString: String) {
       const timeStamp = new Date(timeString.toString())
       return format(timeStamp, 'HH:mm MMM dd, yyyy')
+    },
+    redirectToReturnUrl() {
+      if (this.returnUrl) {
+        window.location.href = this.returnUrl
+      }
     }
   }
 }
@@ -41,6 +50,9 @@ export default {
       <h1 class="payment-amount">{{currency}} {{paymentAmount?.toFixed(2)}}</h1>
       <h4 class="time-stamp">{{timeStamp ? formatTime(timeStamp) : ''}}</h4>
       <h4 class="reference-id">{{ referenceId }}</h4>
+    </div>
+    <div>
+      <button @click="redirectToReturnUrl" v-if="returnUrl" class="done-btn py-2 mt-5 px-4 rounded w-[300px]">Done</button>
     </div>
   </div>
 </template>
@@ -76,4 +88,15 @@ export default {
   font-size: 0.8em;
   font-weight: bold;
 }
+
+.done-btn {
+  background-color: var(--color-amber-med);
+  font-weight: bold;
+  color: var(--color-black);
+  text-align: center;
+  &:hover {
+    background-color: var(--color-amber-light);
+  }
+}
 </style>
+

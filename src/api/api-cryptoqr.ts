@@ -30,8 +30,8 @@ export default class Api {
   }
   private _invoiceApi = new InvoiceApi(this.config)
 
-  fetchInvoiceStatus(invoiceId: string){
-    return this._invoiceApi.invoices.getInvoice(invoiceId)
+  fetchInvoiceStatus(invoiceId: string, wait?: number) {
+    return this._invoiceApi.invoices.getInvoice(invoiceId, { wait: wait })
   }
 
   requestInvoice(

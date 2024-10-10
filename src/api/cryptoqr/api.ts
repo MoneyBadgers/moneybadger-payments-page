@@ -375,14 +375,14 @@ export class HttpClient<SecurityDataType = unknown> {
 }
 
 /**
- * @title CryptoConvert Payments API
+ * @title MoneyBadger Payments API
  * @version 2.0.0
- * @license CryptoConvert (https://cryptoconvert.co.za/license)
- * @termsOfService https://cryptoconvert.co.za/terms
- * @baseUrl http://api.cryptoqr.co.za/api/v2
- * @contact <info@cryptoconvert.co.za>
+ * @license MoneyBadger (https://moneybadger.co.za/license)
+ * @termsOfService https://moneybadger.co.za/terms
+ * @baseUrl http://api.cryptoqr.net/api/v2
+ * @contact <info@moneybadger.co.za>
  *
- * CryptoConvert Payments API
+ * MoneyBadger Payments API
  */
 export class InvoiceApi<SecurityDataType extends unknown> extends HttpClient<SecurityDataType> {
   health = {
@@ -446,6 +446,12 @@ export class InvoiceApi<SecurityDataType extends unknown> extends HttpClient<Sec
       query?: {
         /** Retrieve invoice by (id or orderId) */
         by?: GetInvoiceParamsByEnum
+        /**
+         * wait the specified number of seconds until invoice state changes ( max 10 seconds. The current invoice record will be returned once the 'wait' timeout has expired. ).
+         * @min 1
+         * @max 10
+         */
+        wait?: number
       },
       params: RequestParams = {}
     ) =>

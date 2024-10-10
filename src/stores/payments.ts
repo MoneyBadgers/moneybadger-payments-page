@@ -80,14 +80,11 @@ export const usePaymentStore = defineStore('payments', {
       }
     },
     async pollStatus() {
-        await this.refreshInvoice(10)
-        // if still waiting for payment we can poll again immediately, since the API call introduces a delay
-        if (this.status === PaymentStatus.WaitForPayment){
-          this.pollStatus()
-        } else if (this.status === PaymentStatus.Successful) {
-          // payment has been confirmed, no need to poll anymore
-          return
-        }else{
+      await this.refreshInvoice(10)
+      if (this.status === PaymentStatus.Successful) {
+        // payment has been confirmed, no need to poll anymore
+        return
+      }else{
         // invoice is in some other state, so wait before polling again
         setTimeout(async () => {
           this.pollStatus()

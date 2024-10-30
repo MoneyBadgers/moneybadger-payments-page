@@ -12,6 +12,7 @@ class InvoiceParameters {
         public statusWebhookUrl: string,
         public timeoutInSecondsString: string,
         public autoConfirm: boolean = false,
+        public reset: boolean = false,
     ){}
 
     static createFromQueryParams(queryParams: LocationQuery) : InvoiceParameters {
@@ -25,6 +26,7 @@ class InvoiceParameters {
             queryParams.statusWebhookUrl as string || '',
             queryParams.timeoutInSeconds as string || '',
             queryParams.autoConfirm === 'true',
+            queryParams.reset === 'true',
         )
     }
 

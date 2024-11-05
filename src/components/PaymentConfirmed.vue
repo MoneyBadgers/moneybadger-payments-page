@@ -1,6 +1,7 @@
 <script lang="ts">
 import { format } from 'date-fns'
 import LogoCircle from '@/components/LogoCircle.vue'
+import { peachComplete } from '../partner/peach'
 
 export default {
   name: 'PaymentConfirmed',
@@ -33,7 +34,19 @@ export default {
       if (this.returnUrl) {
         window.location.href = this.returnUrl
       }
+    },
+    autoRedirect() {
+      if (this.returnUrl) {
+        peachComplete(this.returnUrl) // this is a peach-specific function, but unless there's a listener, it will just be a nop
+        setTimeout(() => {
+          this.redirectToReturnUrl()
+        }, 3000)
+      }
     }
+  },
+  // automatically call redirect to returnUrl after a small delay
+  mounted() {
+    this.autoRedirect()
   }
 }
 </script>
@@ -47,18 +60,18 @@ export default {
       <LogoCircle class="payment-success-logo" />
     </div>
     <div>
-      <h1 class="payment-amount">{{currency}} {{paymentAmount?.toFixed(2)}}</h1>
-      <h4 class="time-stamp">{{timeStamp ? formatTime(timeStamp) : ''}}</h4>
+      <h1 class="payment-amount">{{ currency }} {{ paymentAmount?.toFixed(2) }}</h1>
+      <h4 class="time-stamp">{{ timeStamp ? formatTime(timeStamp) : '' }}</h4>
       <h4 class="reference-id">{{ referenceId }}</h4>
     </div>
     <div>
-      <button @click="redirectToReturnUrl" v-if="returnUrl" class="done-btn py-2 mt-5 px-4 rounded w-[300px]">Done</button>
+      <button @click="redirectToReturnUrl" v-if="returnUrl"
+        class="done-btn py-2 mt-5 px-4 rounded w-[300px]">Done</button>
     </div>
   </div>
 </template>
 
 <style scoped>
-
 .logo-circle {
   display: flex;
   justify-content: center;
@@ -70,7 +83,8 @@ export default {
   height: auto;
 }
 
-.payment-amount, .time-stamp {
+.payment-amount,
+.time-stamp {
   color: var(--color-text);
   font-weight: bold;
 }
@@ -94,9 +108,9 @@ export default {
   font-weight: bold;
   color: var(--color-black);
   text-align: center;
+
   &:hover {
     background-color: var(--color-amber-light);
   }
 }
 </style>
-

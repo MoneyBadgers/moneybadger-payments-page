@@ -10,6 +10,7 @@ import WalletSelect from '../components/WalletSelect.vue'
 import { PaymentStatus } from '../types/PaymentStatus'
 import Wallet from '../models/wallet'
 import LoadingSpinner from '../components/LoadingSpinner.vue'
+import { peachInit } from '../partner/peach'
 
 export default {
   name: 'PaymentPageView',
@@ -89,7 +90,10 @@ export default {
     }
     this.Return = this.$route.query.return as string
     this.paymentsStore.checkForExistingInvoice()
-}
+  },
+  mounted() {
+    peachInit()
+  }
 }
 </script>
 

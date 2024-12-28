@@ -37,6 +37,9 @@ export const usePaymentStore = defineStore('payments', {
         this.errors = this.invoiceParams.errors
         this.status = PaymentStatus.Error
       }
+      if(this.invoiceParams.merchantCode === 'sos'){
+        this.enabledWallets = ['valr']
+      }
     },
     async setWallet(wallet: Wallet) {
       this.wallet = wallet

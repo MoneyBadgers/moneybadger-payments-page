@@ -20,7 +20,7 @@ class InvoiceParameters {
             queryParams.amountRands as string || '',
             'ZAR',
             queryParams.merchantCode as string || '',
-            queryParams.orderDescription as string || '',
+            queryParams.orderDescription as string || queryParams.description as string || '',
             queryParams.orderId as string || '',
             queryParams.statusWebhookUrl as string || '',
             queryParams.timeoutInSeconds as string || '',

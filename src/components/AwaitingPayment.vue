@@ -29,6 +29,8 @@ export default {
       clipboard: null as any,
       qrLoading: true,
       qrLoadError: false,
+      currentTime: Date.now(),
+      timer: null as any,
     }
   },
   computed: {
@@ -78,9 +80,9 @@ export default {
       return this.wallet.generateLink(this.paymentRequest)
     },
     expiresIn(): string {
+      // Use currentTime to force updates
       const expires = new Date(this.invoice.expires_at ?? 0);
-      const now = new Date();
-      return formatDistanceStrict(expires, new Date(), { addSuffix: true })
+      return formatDistanceStrict(expires, this.currentTime, { addSuffix: true })
     }
   },
   mounted() {
@@ -91,10 +93,19 @@ export default {
     this.clipboard.on('error', (e: ClipboardJS.Event) => {
       console.error('Failed to copy: ', e)
     })
+
+    // Add this interval
+    this.timer = setInterval(() => {
+      this.currentTime = Date.now()
+    }, 1000)
   },
   beforeDestroy() {
     if (this.clipboard) {
       this.clipboard.destroy()
+    }
+    // Add this cleanup
+    if (this.timer) {
+      clearInterval(this.timer)
     }
   },
   methods: {

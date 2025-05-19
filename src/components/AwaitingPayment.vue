@@ -175,13 +175,17 @@ export default {
     </div>
     <p>Expires {{ expiresIn }}</p>
     <div class="flex flex-col items-center py-3 mx-4">
-      <button @click="openWallet"
+      <a
+        :href="paymentRequestDeepLink"
         class="open-wallet-btn py-2 px-4 rounded w-[300px]"
-        :class="{ 'md:hidden': wallet.valueStore == 'binance' }">
+        :class="{ 'md:hidden': wallet.valueStore == 'binance' }"
+      >
         Open Wallet
-      </button>
-      <button @click="$emit('change-wallet')"
-        class="change-wallet-btn py-2 mt-5 px-4 rounded w-[300px]">
+      </a>
+      <button
+        @click="$emit('change-wallet')"
+        class="change-wallet-btn py-2 mt-5 px-4 rounded w-[300px]"
+      >
         Change Wallet
       </button>
     </div>

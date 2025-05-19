@@ -177,6 +177,7 @@ export default {
     <div class="flex flex-col items-center py-3 mx-4">
       <a
         :href="paymentRequestDeepLink"
+        target="_blank"
         class="open-wallet-btn py-2 px-4 rounded w-[300px]"
         :class="{ 'md:hidden': wallet.valueStore == 'binance' }"
       >

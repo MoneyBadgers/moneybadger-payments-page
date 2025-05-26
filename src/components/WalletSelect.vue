@@ -99,9 +99,8 @@ export default {
             <input type="checkbox" id="terms-checkbox" :checked="termsAccepted" @click="toggleTerms">
             <span class="checkmark"></span>
           </label>
-          I acknowledge and accept the &nbsp;
-          <a @click="openTermsModal" class="terms-link">
-            <strong>terms of use.</strong>
+          I acknowledge and accept the
+          <a @click="openTermsModal" class="terms-link ml-1"><strong>terms of use.</strong>
           </a>
         </div>
         <p>Choose the wallet you want to pay with</p>
@@ -312,6 +311,7 @@ button:disabled {
 
 .terms-link {
   cursor: pointer;
+  text-decoration: underline;
   color: var(--color-amber-light);
   &:hover {
     color: var(--color-amber-light);

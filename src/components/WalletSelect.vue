@@ -49,7 +49,13 @@ export default {
     },
     acceptTerms() {
       this.termsAccepted = true
+      this.acceptTermsChanged()
       this.closeTermsModal()
+    },
+    acceptTermsChanged() {
+      if (this.termsAccepted) {
+        localStorage.setItem('termsAccepted', 'true')
+      }
     },
     highlightTerms() {
       // wobble the terms container
@@ -68,7 +74,7 @@ export default {
         // These are all the VALR currencies that have ZAR markets. Sorted alphabetically but with BTC first and ZAR added
         // curl -s https://api.valr.com/v1/public/pairs | jq -r '.[] | select(.quoteCurrency == "ZAR" and .currencyPairType == "SPOT") | .baseCurrency' | sort
         valrCurrencies: ["BTC","AVAX", "BNB", "ETH", "EURC", "PYUSD", "SHIB", "SOL", "USDC", "USDT", "XRP", "ZAR"],
-        termsAccepted: false,
+        termsAccepted: localStorage.getItem('termsAccepted') === 'true',
     }
   },
 }
@@ -108,12 +114,12 @@ export default {
         </div>
         <div id="terms-container" class="flex justify-center my-5">
           <label class="custom-checkbox">
-            <input type="checkbox" id="terms-checkbox" v-model="termsAccepted">
+            <input type="checkbox" id="terms-checkbox" v-model="termsAccepted" @change="acceptTermsChanged">
             <span class="checkmark"></span>
           </label>
-          I accept the &nbsp
+          I acknowledge and accept the &nbsp;
           <a @click="openTermsModal" class="terms-link">
-            <strong>Crypto Payment Terms</strong>
+            <strong>terms of use.</strong>
           </a>
         </div>
     </div>

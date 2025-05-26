@@ -147,7 +147,7 @@ export default {
             <li class="mb-2">
               <strong>Volatility Risks:</strong>
               <ol class="list-decimal pl-6 mb-4">
-                <li>Crypto assets carry a risk due to its high volatility which may affect the value of capital fluctuating from time of checkout to conclusion of payment;</li>
+                <li>Crypto assets carry a risk due to its high volatility which may affect the value of price fluctuating from time of checkout to conclusion of payment;</li>
                 <li>Past performance relating to the value of the crypto asset is not an indicator of future value;</li>
                 <li>The customer understands the risks involved in using crypto assets as a payment method. They acknowledge that the value of the crypto asset converted to ZAR may vary from the time of the original transaction until the processing of a refund.
                 </li>

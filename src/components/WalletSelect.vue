@@ -7,6 +7,12 @@ export default {
   name: 'WalletSelect',
   components: {
   },
+  props: {
+    requireTermsAccepted: {
+      type: Boolean,
+      default: false,
+    },
+  },
   computed: {
     ...mapStores(usePaymentStore),
     lunoDisabled() {
@@ -23,15 +29,21 @@ export default {
     },
   },
   methods: {
+    checkTermsAccepted() {
+      if (!this.requireTermsAccepted) {
+        return true
+      }
+      return this.termsAccepted
+    },
     setWallet(wallet: Wallet) {
-      if (!this.termsAccepted) {
+      if (!this.checkTermsAccepted()) {
         this.highlightTerms()
         return
       }
       this.paymentsStore.setWallet(wallet)
     },
     chooseValr() {
-      if (!this.termsAccepted) {
+      if (!this.checkTermsAccepted()) {
         this.highlightTerms()
         return
       }
@@ -49,13 +61,12 @@ export default {
     },
     acceptTerms() {
       this.termsAccepted = true
-      this.acceptTermsChanged()
+      localStorage.setItem('termsAccepted', 'true')
       this.closeTermsModal()
     },
-    acceptTermsChanged() {
-      if (this.termsAccepted) {
-        localStorage.setItem('termsAccepted', 'true')
-      }
+    toggleTerms() {
+      this.termsAccepted = !this.termsAccepted
+      localStorage.setItem('termsAccepted', 'true')
     },
     highlightTerms() {
       // wobble the terms container
@@ -83,6 +94,16 @@ export default {
 <template>
   <div>
     <div>
+      <div id="terms-container" class="flex justify-center my-5" v-if="requireTermsAccepted" @click="toggleTerms">
+          <label class="custom-checkbox">
+            <input type="checkbox" id="terms-checkbox" :checked="termsAccepted" @click="toggleTerms">
+            <span class="checkmark"></span>
+          </label>
+          I acknowledge and accept the &nbsp;
+          <a @click="openTermsModal" class="terms-link">
+            <strong>terms of use.</strong>
+          </a>
+        </div>
         <p>Choose the wallet you want to pay with</p>
         <div>
             <ul class="available-wallets">
@@ -111,16 +132,6 @@ export default {
                    <div v-if="lunoDisabled" class="overlay">Not available</div>
                 </li>
             </ul>
-        </div>
-        <div id="terms-container" class="flex justify-center my-5">
-          <label class="custom-checkbox">
-            <input type="checkbox" id="terms-checkbox" v-model="termsAccepted" @change="acceptTermsChanged">
-            <span class="checkmark"></span>
-          </label>
-          I acknowledge and accept the &nbsp;
-          <a @click="openTermsModal" class="terms-link">
-            <strong>terms of use.</strong>
-          </a>
         </div>
     </div>
     <transition name="fade">

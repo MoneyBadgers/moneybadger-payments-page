@@ -32,7 +32,7 @@ export default {
     },
     redirectToReturnUrl() {
       if (this.returnUrl) {
-        window.location.href = this.returnUrl
+        window.location.href = decodeURIComponent(this.returnUrl)
       }
     },
     autoRedirect() {

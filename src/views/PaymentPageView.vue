@@ -111,7 +111,7 @@ export default {
       <ErrorPage v-if="status === Status.Error" :errors="paymentsStore.errors"></ErrorPage>
       <Expired v-if="status === Status.Expired" :errors="paymentsStore.errors"></Expired>
       <LoadingSpinner v-if="status === Status.Loading"/>
-      <WalletSelect v-if="status === Status.SelectWallet"></WalletSelect>
+      <WalletSelect v-if="status === Status.SelectWallet" :requireTermsAccepted="paymentsStore.requireTermsAccepted"></WalletSelect>
       <AwaitingPayment
         v-if="status === Status.WaitForPayment"
         :wallet="paymentsStore.wallet"

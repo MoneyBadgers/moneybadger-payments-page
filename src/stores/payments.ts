@@ -14,7 +14,7 @@ export const usePaymentStore = defineStore('payments', {
     invoice: {} as Invoice,
     errors: [] as string[],
     status: PaymentStatus.Loading,
-    enabledWallets: ['lightning', 'valr'] as string[],
+    enabledWallets: ['lightning', 'valr', 'binance', 'luno'] as string[],
   }),
   getters: {
     paidAt: (state): string => state.invoice.paid_at || '',
@@ -29,6 +29,7 @@ export const usePaymentStore = defineStore('payments', {
     lnPaymentRequest: (state): string => state.invoice.payment_request?.data || '',
     api: (state): Api =>  new Api(),
     getPaymentCurrency: (state) => state.paymentCurrencies[0],
+    requireTermsAccepted: (state): boolean => state.invoiceParams.requireTermsAccepted,
   },
   actions: {
     initialiseFromQueryParams(queryParams: LocationQuery) {
@@ -37,10 +38,8 @@ export const usePaymentStore = defineStore('payments', {
         this.errors = this.invoiceParams.errors
         this.status = PaymentStatus.Error
       }
-      // TODO: replace this with server-side configuration (get from API)
-      if(this.invoiceParams.merchantCode !== 'geewiz'){
-        this.enabledWallets.push('binance')
-        this.enabledWallets.push('luno')
+      if(this.invoiceParams.merchantCode === 'sos'){
+        this.enabledWallets = ['valr']
       }
     },
     async setWallet(wallet: Wallet) {

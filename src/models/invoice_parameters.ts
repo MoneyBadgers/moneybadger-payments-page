@@ -13,6 +13,7 @@ class InvoiceParameters {
         public timeoutInSecondsString: string,
         public autoConfirm: boolean = false,
         public reset: boolean = false,
+        public requireTermsAccepted: boolean = false,
     ){}
 
     static createFromQueryParams(queryParams: LocationQuery) : InvoiceParameters {
@@ -27,6 +28,7 @@ class InvoiceParameters {
             queryParams.timeoutInSeconds as string || '',
             queryParams.autoConfirm === 'true',
             queryParams.reset === 'true',
+            queryParams.requireTermsAccepted === 'true',
         )
     }
 

@@ -98,6 +98,10 @@ export const usePaymentStore = defineStore('payments', {
           this.status = PaymentStatus.Successful
           return
         }
+        if(this.invoiceParams.reset){ // allow URL parameter to force a wallet selection (e.g. if invoice was pre-created)
+          this.status = PaymentStatus.SelectWallet
+          return
+        }
         this.wallet = Wallet.wallets[this.invoice.payment_request?.value_store || ''] || Wallet.defaultWallet
         this.status = PaymentStatus.WaitForPayment
         this.pollStatus()

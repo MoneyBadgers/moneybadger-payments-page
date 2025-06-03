@@ -37,10 +37,11 @@ export default {
     },
     autoRedirect() {
       if (this.returnUrl) {
-        peachComplete(this.returnUrl) // this is a peach-specific function, but unless there's a listener, it will just be a nop
+        // Peach says that they think maybe the combination of the postmessage and the redirect is causing issues.
+        // peachComplete(this.returnUrl) // this is a peach-specific function, but unless there's a listener, it will just be a nop
         setTimeout(() => {
           this.redirectToReturnUrl()
-        }, 3000)
+        }, 2000)
       }
     }
   },

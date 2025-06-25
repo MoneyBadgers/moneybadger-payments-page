@@ -74,7 +74,10 @@ export default {
           let pm = this.invoice.payment_request?.payment_methods
           if(pm && pm[key]){
             let link = this.wallet.generateLink(pm[key] as unknown as string)
-            return link
+            // This is a workaround for VALR's deeplink format
+            // which currently does not support /en in the URL
+            let valrFixedLink = link.replace(/(valr\.com)\/en(?=\/payments)/, '$1');
+            return valrFixedLink
           }
       }
       return this.wallet.generateLink(this.paymentRequest)

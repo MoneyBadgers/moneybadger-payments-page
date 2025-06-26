@@ -35,6 +35,9 @@ export default {
   },
   computed: {
     ...mapStores(usePaymentStore),
+    isMobileDevice() {
+      return /Android|iPhone|iPad|iPod/i.test(navigator.userAgent);
+    },
     paymentRequest(): string {
       return this.invoice.payment_request?.data || ''
     },
@@ -82,6 +85,13 @@ export default {
       }
       return this.wallet.generateLink(this.paymentRequest)
     },
+    customProtocolDeeplink(): string {
+      if(this.wallet.valueStore === 'valr' && this.isMobileDevice) {
+        // VALR uses a custom protocol for deep linking
+        return this.paymentRequestDeepLink.replace('https://', 'valr://')
+      }
+      return ""
+    },
     expiresIn(): string {
       // Use currentTime to force updates
       const expires = new Date(this.invoice.expires_at ?? 0);
@@ -112,12 +122,6 @@ export default {
     }
   },
   methods: {
-    openWallet() {
-      const newWindow = window.open(this.paymentRequestDeepLink, '_blank')
-      if (!newWindow || newWindow.closed || typeof newWindow.closed == 'undefined'){
-        alert('Failed to open wallet. Please ensure you have a compatible lightning wallet installed.')
-      }
-    },
     copyPaymentRequest() {
       // not really sure what makes sense to copy for Binance
       const content = this.wallet.valueStore == 'binance' ?
@@ -140,6 +144,18 @@ export default {
     },
     onQrLoadError() {
       this.qrLoadError = true
+    },
+    onOpenWallet() {
+      // if there was a custom protocol deeplink, then that would have been used
+      // as the button href, so we need to add a fallback in case the app is not installed
+      if (this.customProtocolDeeplink) {
+        setTimeout(() => {
+          const newWindow = window.open(this.paymentRequestDeepLink, '_blank')
+          if (!newWindow || newWindow.closed || typeof newWindow.closed === 'undefined') {
+            alert('Please allow popups for this website to open your wallet.')
+          }
+        }, 1000)
+      }
     }
   }
 }
@@ -179,8 +195,9 @@ export default {
     <p>Expires {{ expiresIn }}</p>
     <div class="flex flex-col items-center py-3 mx-4">
       <a
-        :href="paymentRequestDeepLink"
+        :href="customProtocolDeeplink || paymentRequestDeepLink"
         target="_blank"
+        v-on:click="onOpenWallet"
         class="open-wallet-btn py-2 px-4 rounded w-[300px]"
         :class="{ 'md:hidden': wallet.valueStore == 'binance' }"
       >

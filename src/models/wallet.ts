@@ -52,6 +52,13 @@ class Wallet {
             'VALR App',
             'VALR Payment Link'
         ),
+        'bybit': new Wallet(
+            'bybit',
+            'Bybit',
+            'PAYMENT_REQUEST',
+            'Bybit App',
+            'Bybit Payment Link'
+        )
     }
 
     // This wallet should not get used but is here as a placeholder.

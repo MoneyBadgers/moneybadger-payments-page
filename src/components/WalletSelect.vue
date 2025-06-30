@@ -27,6 +27,9 @@ export default {
     lightningDisabled() {
       return !this.paymentsStore.enabledWallets.includes('lightning')
     },
+    bybitDisabled() {
+      return !this.paymentsStore.enabledWallets.includes('bybit')
+    },
   },
   methods: {
     checkTermsAccepted() {
@@ -108,25 +111,31 @@ export default {
             <ul class="available-wallets">
                 <li>
                    <button class="choose-wallet-btn lightning my-3 py-2 rounded w-[300px]" @click="setWallet(Wallet.wallets['lightning'])" :disabled="lightningDisabled">
-                      <img src="@/assets/wallets/lightning.png" class="object-contain w-full h-full"></img>
+                      <img src="@/assets/wallets/lightning.png" class="object-contain w-full h-full"/>
                    </button>
                    <div v-if="lightningDisabled" class="overlay">Not available</div>
                 </li>
                 <li>
                    <button class="choose-wallet-btn valr my-3 py-3 rounded w-[300px]" @click="chooseValr()" :disabled="valrDisabled">
-                      <img src="@/assets/wallets/valr.png" class="object-contain w-full h-full"></img>
+                      <img src="@/assets/wallets/valr.png" class="object-contain w-full h-full"/>
                    </button>
                    <div v-if="valrDisabled" class="overlay">Not available</div>
                 </li>
                 <li>
                    <button class="choose-wallet-btn binance my-3 py-3 px-4 rounded w-[300px]" @click="setWallet(Wallet.wallets['binance'])" :disabled="binanceDisabled">
-                      <img src="@/assets/wallets/binance.png" class="object-contain w-full h-full"></img>
+                      <img src="@/assets/wallets/binance.png" class="object-contain w-full h-full"/>
                    </button>
                    <div v-if="binanceDisabled" class="overlay">Not available</div>
                 </li>
                 <li>
+                   <button class="choose-wallet-btn bybit my-3 py-4 px-4 rounded w-[300px]" @click="setWallet(Wallet.wallets['bybit'])" :disabled="bybitDisabled">
+                      <img src="@/assets/wallets/bybit.png" class="object-contain w-full h-full"/>
+                   </button>
+                   <div v-if="bybitDisabled" class="overlay">Not available</div>
+                </li>
+                <li>
                    <button class="choose-wallet-btn luno my-3 py-2 rounded w-[300px]" @click="setWallet(Wallet.wallets['luno'])" :disabled="lunoDisabled">
-                      <img src="@/assets/wallets/luno.png" class="object-contain w-full h-full"></img>
+                      <img src="@/assets/wallets/luno.png" class="object-contain w-full h-full"/>
                    </button>
                    <div v-if="lunoDisabled" class="overlay">Not available</div>
                 </li>
@@ -136,7 +145,7 @@ export default {
     <transition name="fade">
       <div v-if="valrSelected" class="fixed inset-0 modal-bg flex items-center justify-center">
         <div class="w-1/2 h-[100%] overflow-y-auto p-6 rounded-lg shadow-lg justify-center">
-          <img src="@/assets/wallets/valr.png" class="w-40 mx-auto"></img>
+          <img src="@/assets/wallets/valr.png" class="w-40 mx-auto"/>
           <p class="font-semibold mb-4">Please choose the currency you want to pay with:</p>
           <div class="grid grid-cols-1 gap-3">
             <button v-for="currency in valrCurrencies" :key="currency"
@@ -230,6 +239,13 @@ details {
   background-color: #eeb80d;
   &:hover {
     border: 2px solid #fadc7a;
+  }
+}
+
+.bybit {
+  background-color: #fcfcfc;
+  &:hover {
+    border: 2px solid #acacac;
   }
 }
 

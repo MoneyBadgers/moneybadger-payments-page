@@ -31,15 +31,30 @@ export default {
       qrLoadError: false,
       currentTime: Date.now(),
       timer: null as any,
+      walletOpens: 0,
+      forceShowQr: false // Used to force QR code display on mobile devices
     }
   },
   computed: {
     ...mapStores(usePaymentStore),
     isMobileDevice() {
-      return /Android|iPhone|iPad|iPod/i.test(navigator.userAgent);
+      return true
+      //return /Android|iPhone|iPad|iPod/i.test(navigator.userAgent);
+    },
+    isDesktopDevice() {
+      return !this.isMobileDevice
     },
     paymentRequest(): string {
       return this.invoice.payment_request?.data || ''
+    },
+    showQr(): boolean {
+      if (this.isDesktopDevice) {
+        return true
+      }
+      if (this.forceShowQr) {
+        return true
+      }
+      return false
     },
     paymentRequestQrUrl(): string | null {
       // Only return custom QR code URL for Luno and Binance invoices
@@ -92,6 +107,16 @@ export default {
       }
       return ""
     },
+    currentDeeplink(): string {
+      let deeplinks = [
+        this.customProtocolDeeplink,
+        this.paymentRequestDeepLink
+      ]
+      // remove empty deeplinks
+      deeplinks = deeplinks.filter(link => link.length > 0)
+      // index by walletOpens to cycle through deeplinks
+      return deeplinks[this.walletOpens % deeplinks.length] || ''
+    },
     expiresIn(): string {
       // Use currentTime to force updates
       const expires = new Date(this.invoice.expires_at ?? 0);
@@ -112,7 +137,7 @@ export default {
       this.currentTime = Date.now()
     }, 1000)
   },
-  beforeDestroy() {
+  beforeUnmount() {
     if (this.clipboard) {
       this.clipboard.destroy()
     }
@@ -146,16 +171,10 @@ export default {
       this.qrLoadError = true
     },
     onOpenWallet() {
-      // if there was a custom protocol deeplink, then that would have been used
-      // as the button href, so we need to add a fallback in case the app is not installed
-      if (this.customProtocolDeeplink) {
-        setTimeout(() => {
-          const newWindow = window.open(this.paymentRequestDeepLink, '_blank')
-          if (!newWindow || newWindow.closed || typeof newWindow.closed === 'undefined') {
-            alert('Please allow popups for this website to open your wallet.')
-          }
-        }, 1000)
-      }
+      // could hook in peach payments postMessage here
+      setTimeout(() => {
+              this.walletOpens = this.walletOpens + 1
+      }, 100)
     }
   }
 }
@@ -176,41 +195,61 @@ export default {
         </div>
       </h5>
     </div>
-    <div @click="copyPaymentRequest" class="flex justify-center mx-4">
-      <div v-if="paymentRequestQrUrl && !qrLoadError">
-        <LoadingSpinner v-if="qrLoading" />
-        <img
-          :src="paymentRequestQrUrl"
-          alt="Payment Request QR Code"
-          class="payment-qr-code"
-          @load="onQrLoad"
-          @error="onQrLoadError"
-          :class="{ hidden: qrLoading }"
-        />
+    <div @click="copyPaymentRequest" class="flex flex-col justify-center mx-2">
+      <div v-if="showQr" class="w-full">
+        <div v-if="paymentRequestQrUrl && !qrLoadError">
+          <LoadingSpinner v-if="qrLoading" />
+          <img
+            :src="paymentRequestQrUrl"
+            alt="Payment Request QR Code"
+            class="payment-qr-code"
+            @load="onQrLoad"
+            @error="onQrLoadError"
+            :class="{ hidden: qrLoading }"
+          />
+        </div>
+        <div v-else>
+          <qrcode-vue :value="paymentRequestQrData" :size="300" :margin="3" level="L" />
+        </div>
       </div>
-      <div v-else>
-        <qrcode-vue :value="paymentRequestQrData" :size="300" :margin="3" level="L" />
+      <div v-else class="w-full">
+        <p class="mt-4">
+          To make payment, please click <br/> the "Open Wallet" button below.
+        </p>
+      </div>
+      <div class="w-full flex flex-col justify-center mt-4">
+        <a
+          :href="currentDeeplink"
+          target="_blank"
+          @click="onOpenWallet"
+          class="w-full open-wallet-btn py-2 rounded w-[300px]"
+          :class="{ 'md:hidden': wallet.valueStore == 'binance' }"
+        >
+          Open Wallet
+        </a>
       </div>
     </div>
-    <p>Expires {{ expiresIn }}</p>
-    <div class="flex flex-col items-center py-3 mx-4">
-      <a
-        :href="customProtocolDeeplink || paymentRequestDeepLink"
-        target="_blank"
-        v-on:click="onOpenWallet"
-        class="open-wallet-btn py-2 px-4 rounded w-[300px]"
-        :class="{ 'md:hidden': wallet.valueStore == 'binance' }"
-      >
-        Open Wallet
-      </a>
-      <button
-        @click="$emit('change-wallet')"
-        class="change-wallet-btn py-2 mt-5 px-4 rounded w-[300px]"
-      >
-        Change Wallet
-      </button>
-    </div>
+    <button
+      @click="$emit('change-wallet')"
+      class="change-wallet-btn py-2 mt-5 rounded w-[300px]"
+    >
+      Change Wallet
+    </button>
+    <a v-if="!showQr"
+      @click="forceShowQr = true"
+      class="w-full mt-4 ml-1 underline hover:text-indigo-200 transition-colors"
+    >
+      Scan a QR code instead
+    </a>
+    <p class="mt-3">This Payment Expires {{ expiresIn }}</p>
   </div>
+  <p style="display: none;">
+    <ul>
+      <li>currentDeeplink: {{ currentDeeplink }}</li>
+      <li>customProtocolDeeplink: {{ customProtocolDeeplink }}</li>
+      <li>paymentRequestDeepLink: {{ paymentRequestDeepLink }}</li>
+    </ul>
+  </p>
 </template>
 
 <style scoped>
@@ -235,9 +274,11 @@ h4 {
 .status-bar,
 .status-bar .text,
 .open-wallet-btn {
+  display: block;
   background-color: var(--color-amber-med);
   font-weight: bold;
   color: var(--color-black);
+  text-decoration: none;
   text-align: center;
   &:hover {
     background-color: var(--color-amber-light);
@@ -247,11 +288,22 @@ h4 {
 .change-wallet-btn {
   background-color: var(--color-black);
   font-weight: bold;
+  text-decoration: none;
   color: var(--color-amber-med);
   text-align: center;
   &:hover {
     color: var(--color-amber-light);
   }
   border: 1px solid var(--color-amber-med);
+}
+
+a {
+  color: var(--color-amber-med);
+  text-decoration: underline;
+  font-weight: bold;
+  &:hover {
+    color: var(--color-amber-light);
+  }
+  display: block;
 }
 </style>

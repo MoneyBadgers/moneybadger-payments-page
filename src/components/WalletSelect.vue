@@ -116,12 +116,6 @@ export default {
                    <div v-if="lightningDisabled" class="overlay">Not available</div>
                 </li>
                 <li>
-                   <button class="choose-wallet-btn valr my-3 py-3 rounded w-[300px]" @click="chooseValr()" :disabled="valrDisabled">
-                      <img src="@/assets/wallets/valr.png" class="object-contain w-full h-full"/>
-                   </button>
-                   <div v-if="valrDisabled" class="overlay">Not available</div>
-                </li>
-                <li>
                    <button class="choose-wallet-btn binance my-3 py-3 px-4 rounded w-[300px]" @click="setWallet(Wallet.wallets['binance'])" :disabled="binanceDisabled">
                       <img src="@/assets/wallets/binance.png" class="object-contain w-full h-full"/>
                    </button>
@@ -138,6 +132,12 @@ export default {
                       <img src="@/assets/wallets/luno.png" class="object-contain w-full h-full"/>
                    </button>
                    <div v-if="lunoDisabled" class="overlay">Not available</div>
+                </li>
+                <li>
+                  <button class="choose-wallet-btn valr my-3 py-3 rounded w-[300px]" @click="chooseValr()" :disabled="valrDisabled">
+                    <img src="@/assets/wallets/valr.png" class="object-contain w-full h-full"/>
+                  </button>
+                  <div v-if="valrDisabled" class="overlay">Not available</div>
                 </li>
             </ul>
         </div>

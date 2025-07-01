@@ -4,7 +4,8 @@ class Wallet {
         public name: string,
         public link: string,
         public scanner: string,
-        public invoiceType: string
+        public invoiceType: string,
+        public customQrCode: boolean = false
     ) {}
 
     generateLink(paymentRequest: string): string {
@@ -36,14 +37,16 @@ class Wallet {
             'Binance',
             'PAYMENT_REQUEST',
             'Binance App',
-            'Binance Payment Link'
+            'Binance Payment Link',
+            true   // Binance uses a custom QR code format
         ),
         'luno': new Wallet(
             'luno',
             'Luno',
             'PAYMENT_REQUEST',
             'Luno App',
-            'Luno Payment Link'
+            'Luno Payment Link',
+            true   // Luno uses a custom QR code format
         ),
         'valr': new Wallet(
             'valr',
@@ -57,7 +60,8 @@ class Wallet {
             'Bybit',
             'PAYMENT_REQUEST',
             'Bybit App',
-            'Bybit Payment Link'
+            'Bybit Payment Link',
+            true   // Bybit uses a custom QR code format
         )
     }
 

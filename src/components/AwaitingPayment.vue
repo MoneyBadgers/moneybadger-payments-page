@@ -39,8 +39,7 @@ export default {
       return this.invoice.payment_request?.data || ''
     },
     paymentRequestQrUrl(): string | null {
-      // Only return custom QR code URL for Luno and Binance invoices
-      if (this.wallet.valueStore != 'luno' && this.wallet.valueStore != 'binance' && this.wallet.valueStore != 'bybit') {
+      if (this.wallet.customQrCode != true) {
         return null
       }
       if (this.invoice.payment_request?.qr_code_url) {
@@ -99,7 +98,7 @@ export default {
       this.currentTime = Date.now()
     }, 1000)
   },
-  beforeDestroy() {
+  beforeUnmount() {
     if (this.clipboard) {
       this.clipboard.destroy()
     }

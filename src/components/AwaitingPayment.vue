@@ -38,8 +38,7 @@ export default {
   computed: {
     ...mapStores(usePaymentStore),
     isMobileDevice() {
-      return true
-      //return /Android|iPhone|iPad|iPod/i.test(navigator.userAgent);
+      return /Android|iPhone|iPad|iPod/i.test(navigator.userAgent);
     },
     isDesktopDevice() {
       return !this.isMobileDevice

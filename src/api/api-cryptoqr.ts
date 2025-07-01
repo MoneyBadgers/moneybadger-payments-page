@@ -3,7 +3,7 @@ import type { Currency } from '../types/Currency'
 import { usePaymentStore } from '../stores/payments';
 // @ts-ignore
 import { ClientJS } from 'clientjs';
-const fingerprint = new ClientJS().getFingerprint();
+const fingerprint = new ClientJS().getFingerprint().toString();
 
 const host = import.meta.env.VITE_HOST
 const basePath = '/api/v2'

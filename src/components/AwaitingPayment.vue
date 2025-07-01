@@ -40,7 +40,7 @@ export default {
     },
     paymentRequestQrUrl(): string | null {
       // Only return custom QR code URL for Luno and Binance invoices
-      if (this.wallet.valueStore != 'luno' && this.wallet.valueStore != 'binance') {
+      if (this.wallet.valueStore != 'luno' && this.wallet.valueStore != 'binance' && this.wallet.valueStore != 'bybit') {
         return null
       }
       if (this.invoice.payment_request?.qr_code_url) {

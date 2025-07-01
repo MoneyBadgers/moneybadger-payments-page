@@ -182,21 +182,9 @@ export default {
 
 <template>
   <div>
-    <div>
-      <h4 class="text-gray-200 font-bold">Scan QR code with {{ wallet.scanner }}</h4>
-      <h5 class="text-gray-200 font-bold py-1 text-sm" @click="copyPaymentRequest">
-        <div v-if="!showCopyHint" class="flex justify-center mx-4 w-300">
-          <span class="tap-to-copy">Or tap to copy {{ wallet.invoiceType }}</span>
-          <ClipboardDocumentIcon class="mx-2 size-6 text-yellow-500" />
-        </div>
-        <div v-if="showCopyHint" class="flex justify-center mx-4 w-300">
-          <span>Payment details copied to clipboard!</span>
-          <ClipboardDocumentCheckIcon class="mx-2 size-6 text-yellow-500" />
-        </div>
-      </h5>
-    </div>
     <div @click="copyPaymentRequest" class="flex flex-col justify-center mx-2">
       <div v-if="showQr" class="w-full">
+        <h4 class="text-gray-200 font-bold mb-2">Scan QR code with {{ wallet.scanner }}</h4>
         <div v-if="paymentRequestQrUrl && !qrLoadError">
           <LoadingSpinner v-if="qrLoading" />
           <img
@@ -213,10 +201,18 @@ export default {
         </div>
       </div>
       <div v-else class="w-full">
-        <p class="mt-4">
-          To make payment, please click <br/> the "Open Wallet" button below.
-        </p>
+        <h4 class="text-gray-200 font-bold mb-2">Use your {{ wallet.scanner }} to pay</h4>
       </div>
+      <h5 class="text-gray-200 font-bold py-1 text-sm" @click="copyPaymentRequest">
+        <div v-if="!showCopyHint" class="flex justify-center mx-4 w-300">
+          <span class="tap-to-copy">Or tap to copy {{ wallet.invoiceType }}</span>
+          <ClipboardDocumentIcon class="mx-2 size-6 text-yellow-500" />
+        </div>
+        <div v-if="showCopyHint" class="flex justify-center mx-4 w-300">
+          <span>Payment details copied to clipboard!</span>
+          <ClipboardDocumentCheckIcon class="mx-2 size-6 text-yellow-500" />
+        </div>
+      </h5>
       <div class="w-full flex flex-col justify-center mt-4">
         <a
           :href="currentDeeplink"
@@ -225,13 +221,13 @@ export default {
           class="w-full open-wallet-btn py-2 rounded w-[300px]"
           :class="{ 'md:hidden': wallet.valueStore == 'binance' }"
         >
-          Open Wallet
+          Open {{ wallet.scanner }}
         </a>
       </div>
     </div>
     <button
       @click="$emit('change-wallet')"
-      class="change-wallet-btn py-2 mt-5 rounded w-[300px]"
+      class="change-wallet-btn py-2 mx-2 mt-5 rounded w-[300px]"
     >
       Change Wallet
     </button>

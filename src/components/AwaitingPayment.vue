@@ -277,6 +277,7 @@ h4 {
   text-align: center;
   &:hover {
     background-color: var(--color-amber-light);
+    color: var(--color-black);
   }
 }
 

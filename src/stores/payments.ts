@@ -14,7 +14,7 @@ export const usePaymentStore = defineStore('payments', {
     invoice: {} as Invoice,
     errors: [] as string[],
     status: PaymentStatus.Loading,
-    enabledWallets: ['lightning', 'valr', 'binance', 'luno'] as string[],
+    enabledWallets: ['lightning', 'valr', 'binance', 'luno', 'bybit'] as string[],
   }),
   getters: {
     paidAt: (state): string => state.invoice.paid_at || '',

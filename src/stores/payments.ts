@@ -43,6 +43,9 @@ export const usePaymentStore = defineStore('payments', {
         this.enabledWallets = ['valr']
       }
     },
+    setRefundRecipientAddress(address: string) {
+      this.refundRecipientAddress = address
+    },
     async setWallet(wallet: Wallet) {
       this.wallet = wallet
       this.status = PaymentStatus.Loading

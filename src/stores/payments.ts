@@ -14,6 +14,7 @@ export const usePaymentStore = defineStore('payments', {
     invoice: {} as Invoice,
     errors: [] as string[],
     status: PaymentStatus.Loading,
+    refundRecipientAddress: '',
     enabledWallets: ['lightning', 'valr', 'binance', 'luno'] as string[],
   }),
   getters: {

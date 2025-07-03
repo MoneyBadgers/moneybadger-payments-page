@@ -1,4 +1,4 @@
-import { InvoiceApi, type ApiConfig, type InvoiceUpdatePaymentMethod } from './cryptoqr/api'
+import { InvoiceApi, type ApiConfig, type InvoiceUpdatePaymentMethod, type RefundRecipient } from './cryptoqr/api'
 import type { Currency } from '../types/Currency'
 import { usePaymentStore } from '../stores/payments';
 
@@ -7,10 +7,18 @@ const basePath = '/api/v2'
 
 export default class Api {
   updateInvoicePaymentMethod(id: string, valueStore: string, paymentCurrencies: string[] = [],) {
+    const recipientAddress = usePaymentStore().refundRecipientAddress
+    let refundRecipient: RefundRecipient | undefined;
+    if (recipientAddress) {
+      refundRecipient = {
+        address: recipientAddress,
+      }
+    }
     const body: InvoiceUpdatePaymentMethod = {
       payment_method: valueStore,
       transaction_id: id,
       payment_currencies: paymentCurrencies,
+      refund_recipient: refundRecipient,
     }
     return this._invoiceApi.invoices.updatePaymentMethod(id, body)
   }

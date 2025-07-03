@@ -13,6 +13,10 @@ export default {
       type: Boolean,
       default: false,
     },
+    requireRefunds: {
+      type: Boolean,
+      default: false,
+    },
   },
   computed: {
     ...mapStores(usePaymentStore),
@@ -80,6 +84,10 @@ export default {
     chooseLightning() {
       if (!this.checkTermsAccepted()) {
         this.highlightTerms()
+        return
+      }
+      if (!this.requireRefunds) {
+        this.paymentsStore.setWallet(Wallet.wallets['lightning'])  
         return
       }
       this.lightningSelected = true

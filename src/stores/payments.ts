@@ -31,6 +31,7 @@ export const usePaymentStore = defineStore('payments', {
     api: (state): Api =>  new Api(),
     getPaymentCurrency: (state) => state.paymentCurrencies[0],
     requireTermsAccepted: (state): boolean => state.invoiceParams.requireTermsAccepted,
+    requireRefunds: (state): boolean => state.invoiceParams.requireRefunds,
   },
   actions: {
     initialiseFromQueryParams(queryParams: LocationQuery) {

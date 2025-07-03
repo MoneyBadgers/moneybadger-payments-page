@@ -54,7 +54,8 @@ export const usePaymentStore = defineStore('payments', {
         const resp = await this.api.updateInvoicePaymentMethod(
           this.invoice.id,
           wallet.valueStore,
-          this.paymentCurrencies
+          this.paymentCurrencies,
+          this.refundRecipientAddress
         )
         this.invoice = resp.data
         this.status = PaymentStatus.WaitForPayment
@@ -130,6 +131,7 @@ export const usePaymentStore = defineStore('payments', {
           this.invoiceParams.timeoutInSeconds,
           this.wallet.valueStore,
           this.paymentCurrencies,
+          this.refundRecipientAddress
         )
         this.invoice = newInvoiceResponse.data
         this.status = PaymentStatus.WaitForPayment

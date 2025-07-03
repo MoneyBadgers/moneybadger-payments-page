@@ -90,7 +90,7 @@ export default {
         this.paymentsStore.setWallet(Wallet.wallets['lightning'])  
         return
       }
-      this.lightningSelected = true
+      this.lightningAddressEntry = true
     },
     setLightningAddressAndWallet(){
       this.lightningAddressError = false
@@ -98,9 +98,10 @@ export default {
       const address = new LightningAddress(this.lightningAddress)
       address.valid().then((valid) => {
         if (valid) {
-          this.cancelLightning() 
+          localStorage.setItem('RefundRecipientAddress', this.lightningAddress)
           this.paymentsStore.setRefundRecipientAddress(this.lightningAddress)
           this.paymentsStore.setWallet(Wallet.wallets['lightning'])  
+          this.cancelLightningAddressEntry() 
           return
         }else{
           this.lightningAddressError = true
@@ -113,19 +114,18 @@ export default {
         return
       })
     },
-    cancelLightning() {
-      this.lightningAddress = ''
-      this.lightningSelected = false
+    cancelLightningAddressEntry() {
+      this.lightningAddressEntry = false
       this.lightningAddressError = false
       this.verifyingLightningAddress = false
     }
   },
   data() {
     return {
-        lightningSelected: false,
+        lightningAddressEntry: false,
         verifyingLightningAddress: false,
         lightningAddressError: false,
-        lightningAddress: '', 
+        lightningAddress: localStorage.getItem('RefundRecipientAddress') || '', 
         valrSelected: false,
         termsModalOpen: false,
         Wallet: Wallet,
@@ -196,7 +196,7 @@ export default {
       </div>
     </transition>
     <transition name="fade">
-    <div v-if="lightningSelected" class="fixed inset-0 modal-bg flex items-center justify-center">
+    <div v-if="lightningAddressEntry" class="fixed inset-0 modal-bg flex items-center justify-center">
       <div class="w-200 h-[100%] overflow-y-auto p-6 rounded-lg shadow-lg justify-center">
         <img src="@/assets/wallets/lightning.png" class="w-40 mx-auto mb-4" />
         <p class="font-semibold mb-4 text-center">
@@ -216,7 +216,7 @@ export default {
           class="w-full border border-gray-300 rounded p-2 mb-4 text-black"
         />
         <div class="flex flex-column justify-end">
-          <button class="cancel-btn mr-2" @click="cancelLightning">Cancel</button>
+          <button class="cancel-btn mr-2" @click="cancelLightningAddressEntry">Cancel</button>
           <button class="confirm-btn rounded" @click="setLightningAddressAndWallet">Continue</button>
         </div>
       </div>

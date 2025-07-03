@@ -6,8 +6,7 @@ const host = import.meta.env.VITE_HOST
 const basePath = '/api/v2'
 
 export default class Api {
-  updateInvoicePaymentMethod(id: string, valueStore: string, paymentCurrencies: string[] = [],) {
-    const recipientAddress = usePaymentStore().refundRecipientAddress
+  updateInvoicePaymentMethod(id: string, valueStore: string, paymentCurrencies: string[] = [], recipientAddress?: string) {
     let refundRecipient: RefundRecipient | undefined;
     if (recipientAddress) {
       refundRecipient = {
@@ -51,8 +50,8 @@ export default class Api {
     timeoutInSeconds: number,
     paymentMethod: string,
     paymentCurrencies: string[] = [],
+    recipientAddress?: string
   ) {
-    const recipientAddress = usePaymentStore().refundRecipientAddress
     let refundRecipient: RefundRecipient | undefined;
     if (recipientAddress) {
       refundRecipient = {

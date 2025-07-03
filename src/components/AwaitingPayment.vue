@@ -31,12 +31,29 @@ export default {
       qrLoadError: false,
       currentTime: Date.now(),
       timer: null as any,
+      walletOpens: 0,
+      forceShowQr: false // Used to force QR code display on mobile devices
     }
   },
   computed: {
     ...mapStores(usePaymentStore),
+    isMobileDevice() {
+      return /Android|iPhone|iPad|iPod/i.test(navigator.userAgent);
+    },
+    isDesktopDevice() {
+      return !this.isMobileDevice
+    },
     paymentRequest(): string {
       return this.invoice.payment_request?.data || ''
+    },
+    showQr(): boolean {
+      if (this.isDesktopDevice) {
+        return true
+      }
+      if (this.forceShowQr) {
+        return true
+      }
+      return false
     },
     paymentRequestQrUrl(): string | null {
       // Only return custom QR code URL for Luno and Binance invoices
@@ -74,10 +91,30 @@ export default {
           let pm = this.invoice.payment_request?.payment_methods
           if(pm && pm[key]){
             let link = this.wallet.generateLink(pm[key] as unknown as string)
-            return link
+            // This is a workaround for VALR's deeplink format
+            // which currently does not support /en in the URL
+            let valrFixedLink = link.replace(/(valr\.com)\/en(?=\/payments)/, '$1');
+            return valrFixedLink
           }
       }
       return this.wallet.generateLink(this.paymentRequest)
+    },
+    customProtocolDeeplink(): string {
+      if(this.wallet.valueStore === 'valr' && this.isMobileDevice) {
+        // VALR uses a custom protocol for deep linking
+        return this.paymentRequestDeepLink.replace('https://', 'valr://')
+      }
+      return ""
+    },
+    currentDeeplink(): string {
+      let deeplinks = [
+        this.customProtocolDeeplink,
+        this.paymentRequestDeepLink
+      ]
+      // remove empty deeplinks
+      deeplinks = deeplinks.filter(link => link.length > 0)
+      // index by walletOpens to cycle through deeplinks
+      return deeplinks[this.walletOpens % deeplinks.length] || ''
     },
     expiresIn(): string {
       // Use currentTime to force updates
@@ -99,7 +136,7 @@ export default {
       this.currentTime = Date.now()
     }, 1000)
   },
-  beforeDestroy() {
+  beforeUnmount() {
     if (this.clipboard) {
       this.clipboard.destroy()
     }
@@ -109,12 +146,6 @@ export default {
     }
   },
   methods: {
-    openWallet() {
-      const newWindow = window.open(this.paymentRequestDeepLink, '_blank')
-      if (!newWindow || newWindow.closed || typeof newWindow.closed == 'undefined'){
-        alert('Failed to open wallet. Please ensure you have a compatible lightning wallet installed.')
-      }
-    },
     copyPaymentRequest() {
       // not really sure what makes sense to copy for Binance
       const content = this.wallet.valueStore == 'binance' ?
@@ -137,6 +168,12 @@ export default {
     },
     onQrLoadError() {
       this.qrLoadError = true
+    },
+    onOpenWallet() {
+      // could hook in peach payments postMessage here
+      setTimeout(() => {
+              this.walletOpens = this.walletOpens + 1
+      }, 100)
     }
   }
 }
@@ -144,8 +181,27 @@ export default {
 
 <template>
   <div>
-    <div>
-      <h4 class="text-gray-200 font-bold">Scan QR code with {{ wallet.scanner }}</h4>
+    <div @click="copyPaymentRequest" class="flex flex-col justify-center mx-2">
+      <div v-if="showQr" class="w-full">
+        <h4 class="text-gray-200 font-bold mb-2">Scan QR code with {{ wallet.scanner }}</h4>
+        <div v-if="paymentRequestQrUrl && !qrLoadError">
+          <LoadingSpinner v-if="qrLoading" />
+          <img
+            :src="paymentRequestQrUrl"
+            alt="Payment Request QR Code"
+            class="payment-qr-code"
+            @load="onQrLoad"
+            @error="onQrLoadError"
+            :class="{ hidden: qrLoading }"
+          />
+        </div>
+        <div v-else>
+          <qrcode-vue :value="paymentRequestQrData" :size="300" :margin="3" level="L" />
+        </div>
+      </div>
+      <div v-else class="w-full">
+        <h4 class="text-gray-200 font-bold mb-2">Use your {{ wallet.scanner }} to pay</h4>
+      </div>
       <h5 class="text-gray-200 font-bold py-1 text-sm" @click="copyPaymentRequest">
         <div v-if="!showCopyHint" class="flex justify-center mx-4 w-300">
           <span class="tap-to-copy">Or tap to copy {{ wallet.invoiceType }}</span>
@@ -156,36 +212,39 @@ export default {
           <ClipboardDocumentCheckIcon class="mx-2 size-6 text-yellow-500" />
         </div>
       </h5>
-    </div>
-    <div @click="copyPaymentRequest" class="flex justify-center mx-4">
-      <div v-if="paymentRequestQrUrl && !qrLoadError">
-        <LoadingSpinner v-if="qrLoading" />
-        <img
-          :src="paymentRequestQrUrl"
-          alt="Payment Request QR Code"
-          class="payment-qr-code"
-          @load="onQrLoad"
-          @error="onQrLoadError"
-          :class="{ hidden: qrLoading }"
-        />
-      </div>
-      <div v-else>
-        <qrcode-vue :value="paymentRequestQrData" :size="300" :margin="3" level="L" />
+      <div class="w-full flex flex-col justify-center mt-4">
+        <a
+          :href="currentDeeplink"
+          target="_blank"
+          @click="onOpenWallet"
+          class="w-full open-wallet-btn py-2 rounded w-[300px]"
+          :class="{ 'md:hidden': wallet.valueStore == 'binance' }"
+        >
+          Open {{ wallet.scanner }}
+        </a>
       </div>
     </div>
-    <p>Expires {{ expiresIn }}</p>
-    <div class="flex flex-col items-center py-3 mx-4">
-      <button @click="openWallet"
-        class="open-wallet-btn py-2 px-4 rounded w-[300px]"
-        :class="{ 'md:hidden': wallet.valueStore == 'binance' }">
-        Open Wallet
-      </button>
-      <button @click="$emit('change-wallet')"
-        class="change-wallet-btn py-2 mt-5 px-4 rounded w-[300px]">
-        Change Wallet
-      </button>
-    </div>
+    <button
+      @click="$emit('change-wallet')"
+      class="change-wallet-btn py-2 mx-2 mt-5 rounded w-[300px]"
+    >
+      Change Wallet
+    </button>
+    <a v-if="!showQr"
+      @click="forceShowQr = true"
+      class="w-full mt-4 ml-1 underline hover:text-indigo-200 transition-colors"
+    >
+      Scan a QR code instead
+    </a>
+    <p class="mt-3">This Payment Expires {{ expiresIn }}</p>
   </div>
+  <p style="display: none;">
+    <ul>
+      <li>currentDeeplink: {{ currentDeeplink }}</li>
+      <li>customProtocolDeeplink: {{ customProtocolDeeplink }}</li>
+      <li>paymentRequestDeepLink: {{ paymentRequestDeepLink }}</li>
+    </ul>
+  </p>
 </template>
 
 <style scoped>
@@ -210,23 +269,37 @@ h4 {
 .status-bar,
 .status-bar .text,
 .open-wallet-btn {
+  display: block;
   background-color: var(--color-amber-med);
   font-weight: bold;
   color: var(--color-black);
+  text-decoration: none;
   text-align: center;
   &:hover {
     background-color: var(--color-amber-light);
+    color: var(--color-black);
   }
 }
 
 .change-wallet-btn {
   background-color: var(--color-black);
   font-weight: bold;
+  text-decoration: none;
   color: var(--color-amber-med);
   text-align: center;
   &:hover {
     color: var(--color-amber-light);
   }
   border: 1px solid var(--color-amber-med);
+}
+
+a {
+  color: var(--color-amber-med);
+  text-decoration: underline;
+  font-weight: bold;
+  &:hover {
+    color: var(--color-amber-light);
+  }
+  display: block;
 }
 </style>

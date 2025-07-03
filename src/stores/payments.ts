@@ -14,6 +14,7 @@ export const usePaymentStore = defineStore('payments', {
     invoice: {} as Invoice,
     errors: [] as string[],
     status: PaymentStatus.Loading,
+    refundRecipientAddress: '',
     enabledWallets: ['lightning', 'valr', 'binance', 'luno'] as string[],
   }),
   getters: {
@@ -30,6 +31,7 @@ export const usePaymentStore = defineStore('payments', {
     api: (state): Api =>  new Api(),
     getPaymentCurrency: (state) => state.paymentCurrencies[0],
     requireTermsAccepted: (state): boolean => state.invoiceParams.requireTermsAccepted,
+    requireRefunds: (state): boolean => state.invoiceParams.requireRefunds,
   },
   actions: {
     initialiseFromQueryParams(queryParams: LocationQuery) {
@@ -42,6 +44,9 @@ export const usePaymentStore = defineStore('payments', {
         this.enabledWallets = ['valr']
       }
     },
+    setRefundRecipientAddress(address: string) {
+      this.refundRecipientAddress = address
+    },
     async setWallet(wallet: Wallet) {
       this.wallet = wallet
       this.status = PaymentStatus.Loading
@@ -49,7 +54,8 @@ export const usePaymentStore = defineStore('payments', {
         const resp = await this.api.updateInvoicePaymentMethod(
           this.invoice.id,
           wallet.valueStore,
-          this.paymentCurrencies
+          this.paymentCurrencies,
+          this.refundRecipientAddress
         )
         this.invoice = resp.data
         this.status = PaymentStatus.WaitForPayment
@@ -125,6 +131,7 @@ export const usePaymentStore = defineStore('payments', {
           this.invoiceParams.timeoutInSeconds,
           this.wallet.valueStore,
           this.paymentCurrencies,
+          this.refundRecipientAddress
         )
         this.invoice = newInvoiceResponse.data
         this.status = PaymentStatus.WaitForPayment

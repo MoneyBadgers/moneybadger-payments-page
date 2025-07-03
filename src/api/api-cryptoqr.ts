@@ -52,6 +52,13 @@ export default class Api {
     paymentMethod: string,
     paymentCurrencies: string[] = [],
   ) {
+    const recipientAddress = usePaymentStore().refundRecipientAddress
+    let refundRecipient: RefundRecipient | undefined;
+    if (recipientAddress) {
+      refundRecipient = {
+        address: recipientAddress,
+      }
+    }
    return this._invoiceApi.invoice.requestInvoice({
       amount_cents: amountCents,
       currency,
@@ -61,6 +68,7 @@ export default class Api {
       status_webhook_url: statusWebhookUrl,
       timeout_in_seconds: timeoutInSeconds,
       payment_currencies: paymentCurrencies,
+      refund_recipient: refundRecipient,
     })
   }
 }

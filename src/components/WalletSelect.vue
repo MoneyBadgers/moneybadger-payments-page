@@ -2,6 +2,7 @@
 import Wallet from "../models/wallet"
 import { mapStores } from 'pinia'
 import { usePaymentStore } from '../stores/payments'
+import LightningAddress from '../models/lightning_address'
 
 export default {
   name: 'WalletSelect',
@@ -9,6 +10,10 @@ export default {
   },
   props: {
     requireTermsAccepted: {
+      type: Boolean,
+      default: false,
+    },
+    requireRefunds: {
       type: Boolean,
       default: false,
     },
@@ -76,9 +81,51 @@ export default {
         termsContainer?.classList.remove('highlight')
       }, 500)
     },
+    chooseLightning() {
+      if (!this.checkTermsAccepted()) {
+        this.highlightTerms()
+        return
+      }
+      if (!this.requireRefunds) {
+        this.paymentsStore.setWallet(Wallet.wallets['lightning'])  
+        return
+      }
+      this.lightningAddressEntry = true
+    },
+    setLightningAddressAndWallet(){
+      this.lightningAddressError = false
+      this.verifyingLightningAddress = true
+      const address = new LightningAddress(this.lightningAddress)
+      address.valid().then((valid) => {
+        if (valid) {
+          localStorage.setItem('RefundRecipientAddress', this.lightningAddress)
+          this.paymentsStore.setRefundRecipientAddress(this.lightningAddress)
+          this.paymentsStore.setWallet(Wallet.wallets['lightning'])  
+          this.cancelLightningAddressEntry() 
+          return
+        }else{
+          this.lightningAddressError = true
+          this.verifyingLightningAddress = false
+          return
+        }
+      }).catch(() => {
+        this.lightningAddressError = true
+        this.verifyingLightningAddress = false
+        return
+      })
+    },
+    cancelLightningAddressEntry() {
+      this.lightningAddressEntry = false
+      this.lightningAddressError = false
+      this.verifyingLightningAddress = false
+    }
   },
   data() {
     return {
+        lightningAddressEntry: false,
+        verifyingLightningAddress: false,
+        lightningAddressError: false,
+        lightningAddress: localStorage.getItem('RefundRecipientAddress') || '', 
         valrSelected: false,
         termsModalOpen: false,
         Wallet: Wallet,
@@ -107,7 +154,7 @@ export default {
         <div>
             <ul class="available-wallets">
                 <li>
-                   <button class="choose-wallet-btn lightning my-3 py-2 rounded w-[300px]" @click="setWallet(Wallet.wallets['lightning'])" :disabled="lightningDisabled">
+                   <button class="choose-wallet-btn lightning my-3 py-2 rounded w-[300px]" @click="chooseLightning()" :disabled="lightningDisabled">
                       <img src="@/assets/wallets/lightning.png" class="object-contain w-full h-full"></img>
                    </button>
                    <div v-if="lightningDisabled" class="overlay">Not available</div>
@@ -149,8 +196,35 @@ export default {
       </div>
     </transition>
     <transition name="fade">
+    <div v-if="lightningAddressEntry" class="fixed inset-0 modal-bg flex items-center justify-center">
+      <div class="w-200 h-[100%] overflow-y-auto p-6 rounded-lg shadow-lg justify-center">
+        <img src="@/assets/wallets/lightning.png" class="w-40 mx-auto mb-4" />
+        <p class="font-semibold mb-4 text-center">
+          To process a refund later (if needed), we require your <strong>Lightning Address</strong>.
+        </p>
+       <div v-if="verifyingLightningAddress" class="text-center mb-4 info flex items-center justify-center">
+          <div class="spinner mr-4" role="status" aria-label="Loading"></div>
+          <p class="m-0">Verifying your Lightning Address...</p>
+        </div>
+        <div v-if="lightningAddressError" class="text-center mb-4 error">
+          <p>That doesn't seem to be a valid Lightning Address.</p>
+        </div>
+        <input
+          v-model="lightningAddress"
+          type="email"
+          placeholder="e.g. satoshi@wallet.co"
+          class="w-full border border-gray-300 rounded p-2 mb-4 text-black"
+        />
+        <div class="flex flex-column justify-end">
+          <button class="cancel-btn mr-2" @click="cancelLightningAddressEntry">Cancel</button>
+          <button class="confirm-btn rounded" @click="setLightningAddressAndWallet">Continue</button>
+        </div>
+      </div>
+    </div>
+  </transition>
+    <transition name="fade">
       <div v-if="termsModalOpen" class="terms-modal fixed inset-0 modal-bg flex items-center justify-center">
-        <div class="w-1/2 h-[100%] overflow-y-auto p-6 rounded-lg shadow-lg">
+        <div class="w-200 h-[100%] overflow-y-auto p-6 rounded-lg shadow-lg">
           <h2 class="text-xl font-bold mb-4">Crypto Payment Terms</h2>
           <p class=""><strong>By selecting MoneyBadger, you acknowledge and accept:</strong></p>
           <ol class="list-decimal pl-6 mb-4">
@@ -172,8 +246,8 @@ export default {
             </li>
           </ol>
           <div class="flex justify-end">
-            <button class="close-modal-btn" @click="closeTermsModal">Close</button>
-            <button class="accept-terms-btn close-modal-btn mr-2" @click="acceptTerms">Accept and Continue</button>
+            <button class="cancel-btn mr-2" @click="closeTermsModal">Close</button>
+            <button class="confirm-btn rounded" @click="acceptTerms">Accept and Continue</button>
           </div>
         </div>
       </div>
@@ -288,23 +362,28 @@ button:disabled {
   padding: 0;
 }
 
-.close-modal-btn {
+.cancel-btn {
   background-color: var(--color-black);
   color: var(--color-light-grey);
-  padding: 0.5rem 1rem;
-  border-radius: 0.25rem;
-  font-weight: bold;
   &:hover {
     color: var(--color-amber-light);
   }
 }
-.accept-terms-btn {
-  background-color: var(--color-amber-light);
+.confirm-btn {
+  display: block;
+  background-color: var(--color-amber-med);
+  font-weight: bold;
   color: var(--color-black);
+  padding: 0.5rem 1rem;
+  text-decoration: none;
+  text-align: center;
+  border-radius: ;
   &:hover {
     background-color: var(--color-amber-light);
+    color: var(--color-black);
   }
 }
+
 .terms-modal {
   text-align: left;
 }

@@ -181,10 +181,10 @@ export default {
 
 <template>
   <div>
-    <div @click="copyPaymentRequest" class="flex flex-col justify-center mx-2">
-      <div v-if="showQr" class="w-full">
+    <div @click="copyPaymentRequest" class="justify-center">
+      <div v-if="showQr" class="w-full flex flex-col justify-center items-center">
         <h4 class="text-gray-200 font-bold mb-2">Scan QR code with {{ wallet.scanner }}</h4>
-        <div v-if="paymentRequestQrUrl && !qrLoadError">
+        <div v-if="paymentRequestQrUrl && !qrLoadError" class="center">
           <LoadingSpinner v-if="qrLoading" />
           <img
             :src="paymentRequestQrUrl"
@@ -212,12 +212,12 @@ export default {
           <ClipboardDocumentCheckIcon class="mx-2 size-6 text-yellow-500" />
         </div>
       </h5>
-      <div class="w-full flex flex-col justify-center mt-4">
+      <div class="w-full flex flex-col justify-center items-center mt-4">
         <a
           :href="currentDeeplink"
           target="_blank"
           @click="onOpenWallet"
-          class="w-full open-wallet-btn py-2 rounded w-[300px]"
+          class="open-wallet-btn py-2 rounded w-[300px]"
           :class="{ 'md:hidden': wallet.valueStore == 'binance' }"
         >
           Open {{ wallet.scanner }}
@@ -226,7 +226,7 @@ export default {
     </div>
     <button
       @click="$emit('change-wallet')"
-      class="change-wallet-btn py-2 mx-2 mt-5 rounded w-[300px]"
+      class="change-wallet-btn py-2 mt-5 rounded w-[300px]"
     >
       Change Wallet
     </button>

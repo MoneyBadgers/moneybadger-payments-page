@@ -114,6 +114,10 @@ export default {
         return
       })
     },
+    skipLightningAddressEntry() {
+      this.paymentsStore.setWallet(Wallet.wallets['lightning'])
+      this.cancelLightningAddressEntry()
+    },
     cancelLightningAddressEntry() {
       this.lightningAddressEntry = false
       this.lightningAddressError = false
@@ -215,9 +219,12 @@ export default {
           placeholder="e.g. satoshi@wallet.co"
           class="w-full border border-gray-300 rounded p-2 mb-4 text-black"
         />
-        <div class="flex flex-column justify-end">
+        <div class="flex justify-between items-center">
           <button class="cancel-btn mr-2" @click="cancelLightningAddressEntry">Cancel</button>
-          <button class="confirm-btn rounded" @click="setLightningAddressAndWallet">Continue</button>
+          <div class="flex">
+            <button class="skip-btn mr-2 rounded" @click="skipLightningAddressEntry">Skip</button>
+            <button class="confirm-btn rounded" @click="setLightningAddressAndWallet">Continue</button>
+          </div>
         </div>
       </div>
     </div>
@@ -369,6 +376,18 @@ button:disabled {
     color: var(--color-amber-light);
   }
 }
+.skip-btn {
+  background-color: var(--color-black);
+  color: var(--color-amber-light);
+  border: 1px solid var(--color-amber-light);
+  font-weight: bold;
+  padding: 0.5rem 2rem;
+  &:hover {
+    color: var(--color-amber-med);
+    border: 1px solid var(--color-amber-med);
+  }
+}
+
 .confirm-btn {
   display: block;
   background-color: var(--color-amber-med);

@@ -1,0 +1,15 @@
+export enum AnalyticsEvent {
+  ViewPaymentsPage = 'View Payments Page',
+  WalletSelected = 'Wallet Selected',
+  WalletSelectedBeforeTerms = 'Tried selecting Wallet before Terms',
+  TermsAccepted = 'Accepted Terms',
+  ValrCurrencySelected = 'VALR: Currency Selected',
+  LightningSetRecipient = 'Lightning: Set Recipient',
+  RecipientSet = 'Recipient Set',
+  WaitingForPayment = 'Waiting for Payment',
+  WaitingForPaymentWithQr = 'Waiting for Payment: QR Code Shown',
+  WaitingForPaymentWithButton = 'Waiting for Payment: Payment Button Shown',
+  TimedOut = 'Timed Out',
+  PaymentSuccess = 'Payment Success',
+  PaymentFailure = 'Payment Failure',
+}

@@ -3,6 +3,8 @@ import Wallet from "../models/wallet"
 import { mapStores } from 'pinia'
 import { usePaymentStore } from '../stores/payments'
 import LightningAddress from '../models/lightning_address'
+import { AnalyticsEvent } from "../types/analytics_events"
+import { defaultAnalyticproperties } from "../types/analytics_default_properties"
 
 export default {
   name: 'WalletSelect',
@@ -38,13 +40,22 @@ export default {
       if (!this.requireTermsAccepted) {
         return true
       }
+
+      this.trackanalytics(AnalyticsEvent.TermsAccepted)
+      
       return this.termsAccepted
     },
     setWallet(wallet: Wallet) {
       if (!this.checkTermsAccepted()) {
         this.highlightTerms()
+        
+        this.trackanalytics(AnalyticsEvent.WalletSelectedBeforeTerms)
+
         return
       }
+
+      this.trackanalytics(AnalyticsEvent.WalletSelected)
+
       this.paymentsStore.setWallet(wallet)
     },
     chooseValr() {
@@ -57,6 +68,8 @@ export default {
     setValr(currency: string) {
       this.paymentsStore.setPaymentCurrency(currency)
       this.paymentsStore.setWallet(Wallet.wallets['valr'])
+
+      this.trackanalytics(AnalyticsEvent.ValrCurrencySelected)
     },
     openTermsModal() {
       this.termsModalOpen = true
@@ -102,6 +115,9 @@ export default {
           this.paymentsStore.setRefundRecipientAddress(this.lightningAddress)
           this.paymentsStore.setWallet(Wallet.wallets['lightning'])  
           this.cancelLightningAddressEntry() 
+
+          this.trackanalytics(AnalyticsEvent.LightningSetRecipient)
+
           return
         }else{
           this.lightningAddressError = true
@@ -122,6 +138,17 @@ export default {
       this.lightningAddressEntry = false
       this.lightningAddressError = false
       this.verifyingLightningAddress = false
+    },
+    trackanalytics(event: AnalyticsEvent) {
+      console.log(event)
+      console.log(this.paymentsStore.invoice)
+
+      this.$mixpanel.trackEvent(event, defaultAnalyticproperties({
+        wallet: this.$data.Wallet.name,
+        amount: this.paymentsStore.invoice.amount_cents,
+        merchant: this.paymentsStore.invoice.merchant_name,
+        currency: this.paymentsStore.invoice.currency,
+      }))
     }
   },
   data() {

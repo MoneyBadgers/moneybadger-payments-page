@@ -9,6 +9,8 @@ import { formatDistanceStrict } from 'date-fns'
 import LoadingSpinner from './LoadingSpinner.vue'
 import { mapStores } from 'pinia'
 import { usePaymentStore } from '../stores/payments'
+import { AnalyticsEvent } from '../types/analytics_events'
+import { defaultAnalyticproperties } from '../types/analytics_default_properties'
 
 export default {
   name: 'AwaitingPayment',
@@ -48,11 +50,16 @@ export default {
     },
     showQr(): boolean {
       if (this.isDesktopDevice) {
+        this.trackAnalytics(AnalyticsEvent.WaitingForPaymentWithQr)
         return true
       }
       if (this.forceShowQr) {
+        this.trackAnalytics(AnalyticsEvent.WaitingForPaymentWithQr)
         return true
       }
+
+      // there is no logic for the button as it is always visible
+      this.trackAnalytics(AnalyticsEvent.WaitingForPaymentWithButton)
       return false
     },
     paymentRequestQrUrl(): string | null {
@@ -135,6 +142,9 @@ export default {
     this.timer = setInterval(() => {
       this.currentTime = Date.now()
     }, 1000)
+
+    if (this.showQr) this.trackAnalytics(AnalyticsEvent.WaitingForPaymentWithQr)
+    else  this.trackAnalytics(AnalyticsEvent.WaitingForPaymentWithButton)
   },
   beforeUnmount() {
     if (this.clipboard) {
@@ -174,6 +184,14 @@ export default {
       setTimeout(() => {
               this.walletOpens = this.walletOpens + 1
       }, 100)
+    },
+    trackAnalytics(event: AnalyticsEvent) {
+      this.$mixpanel.trackEvent(event, defaultAnalyticproperties({
+        wallet: this.$props.wallet.name,
+        currency: this.$props.invoice.currency,
+        merchant: this.$props.invoice.merchant_name,
+        amount: this.$props.invoice.amount_cents,
+      }))
     }
   }
 }

@@ -6,9 +6,9 @@ const router = createRouter({
     {
       path: '/',
       name: 'awaiting-payment',
-      component: () => import('../views/PaymentPageView.vue')
+      component: () => import('../views/PaymentPageView.vue'),
     },
-  ]
+  ],
 })
 
 export default router

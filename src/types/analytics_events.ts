@@ -6,7 +6,6 @@ export enum AnalyticsEvent {
   ValrCurrencySelected = 'VALR: Currency Selected',
   LightningSetRecipient = 'Lightning: Set Recipient',
   LightningSetRecipientSkipped = 'Lightning: Set Recipient Skipped',
-  RecipientSet = 'Recipient Set',
   WaitingForPayment = 'Waiting for Payment',
   ShowQrCodeButtonClicked = 'Show QR Code Button Clicked',
   TimedOut = 'Timed Out',

@@ -41,20 +41,16 @@ export default {
         return true
       }
 
-      this.trackanalytics(AnalyticsEvent.TermsAccepted)
-      
       return this.termsAccepted
     },
     setWallet(wallet: Wallet) {
       if (!this.checkTermsAccepted()) {
         this.highlightTerms()
         
-        this.trackanalytics(AnalyticsEvent.WalletSelectedBeforeTerms)
-
         return
       }
 
-      this.trackanalytics(AnalyticsEvent.WalletSelected)
+      this.trackAnalytics(AnalyticsEvent.WalletSelected)
 
       this.paymentsStore.setWallet(wallet)
     },
@@ -69,7 +65,7 @@ export default {
       this.paymentsStore.setPaymentCurrency(currency)
       this.paymentsStore.setWallet(Wallet.wallets['valr'])
 
-      this.trackanalytics(AnalyticsEvent.ValrCurrencySelected)
+      this.trackAnalytics(AnalyticsEvent.ValrCurrencySelected)
     },
     openTermsModal() {
       this.termsModalOpen = true
@@ -85,8 +81,13 @@ export default {
     toggleTerms() {
       this.termsAccepted = !this.termsAccepted
       localStorage.setItem('termsAccepted', 'true')
+      this.trackAnalytics(AnalyticsEvent.TermsAccepted, {
+        "termsAccepted": this.termsAccepted
+      })
     },
     highlightTerms() {
+      this.trackAnalytics(AnalyticsEvent.WalletSelectedBeforeTerms)
+
       // wobble the terms container
       const termsContainer = document.getElementById('terms-container')
       termsContainer?.classList.add('highlight')
@@ -116,7 +117,7 @@ export default {
           this.paymentsStore.setWallet(Wallet.wallets['lightning'])  
           this.cancelLightningAddressEntry() 
 
-          this.trackanalytics(AnalyticsEvent.LightningSetRecipient)
+          this.trackAnalytics(AnalyticsEvent.LightningSetRecipient)
 
           return
         }else{
@@ -132,6 +133,9 @@ export default {
     },
     skipLightningAddressEntry() {
       this.paymentsStore.setWallet(Wallet.wallets['lightning'])
+      this.trackAnalytics(AnalyticsEvent.LightningSetRecipientSkipped, {
+        'Wallet': this.paymentsStore.wallet.name,
+      })
       this.cancelLightningAddressEntry()
     },
     cancelLightningAddressEntry() {
@@ -139,16 +143,13 @@ export default {
       this.lightningAddressError = false
       this.verifyingLightningAddress = false
     },
-    trackanalytics(event: AnalyticsEvent) {
-      console.log(event)
-      console.log(this.paymentsStore.invoice)
-
-      this.$mixpanel.trackEvent(event, defaultAnalyticproperties({
-        wallet: this.$data.Wallet.name,
+    trackAnalytics(event: AnalyticsEvent, additionalProps?: Record<string, any>) {
+      this.$mixpanel.trackEvent(event, {...defaultAnalyticproperties({
+        wallet: this.paymentsStore.wallet.name,
         amount: this.paymentsStore.invoice.amount_cents,
         merchant: this.paymentsStore.invoice.merchant_name,
         currency: this.paymentsStore.invoice.currency,
-      }))
+      }), ...additionalProps})
     }
   },
   data() {

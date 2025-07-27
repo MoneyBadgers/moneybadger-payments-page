@@ -50,16 +50,13 @@ export default {
     },
     showQr(): boolean {
       if (this.isDesktopDevice) {
-        this.trackAnalytics(AnalyticsEvent.WaitingForPaymentWithQr)
         return true
       }
       if (this.forceShowQr) {
-        this.trackAnalytics(AnalyticsEvent.WaitingForPaymentWithQr)
         return true
       }
 
       // there is no logic for the button as it is always visible
-      this.trackAnalytics(AnalyticsEvent.WaitingForPaymentWithButton)
       return false
     },
     paymentRequestQrUrl(): string | null {
@@ -138,13 +135,16 @@ export default {
       console.error('Failed to copy: ', e)
     })
 
+    this.trackAnalytics(AnalyticsEvent.WaitingForPayment, {
+        'isDesktopDevice': this.isDesktopDevice,
+        'qrVisible': this.showQr,
+        'forceShowQr': this.forceShowQr,
+      })
+
     // Add this interval
     this.timer = setInterval(() => {
       this.currentTime = Date.now()
     }, 1000)
-
-    if (this.showQr) this.trackAnalytics(AnalyticsEvent.WaitingForPaymentWithQr)
-    else  this.trackAnalytics(AnalyticsEvent.WaitingForPaymentWithButton)
   },
   beforeUnmount() {
     if (this.clipboard) {
@@ -185,13 +185,21 @@ export default {
               this.walletOpens = this.walletOpens + 1
       }, 100)
     },
-    trackAnalytics(event: AnalyticsEvent) {
-      this.$mixpanel.trackEvent(event, defaultAnalyticproperties({
+    trackAnalytics(event: AnalyticsEvent, additionalProps?: Record<string, any>) {
+      this.$mixpanel.trackEvent(event, {...defaultAnalyticproperties({
         wallet: this.$props.wallet.name,
         currency: this.$props.invoice.currency,
         merchant: this.$props.invoice.merchant_name,
         amount: this.$props.invoice.amount_cents,
-      }))
+      }), ...additionalProps})
+    },
+    forceShowQrCode() {
+      this.forceShowQr = true
+      this.trackAnalytics(AnalyticsEvent.ShowQrCodeButtonClicked)
+    },
+    changeWallet() {
+      this.trackAnalytics(AnalyticsEvent.ChangeWallet)
+      this.$emit('change-wallet')
     }
   }
 }
@@ -243,13 +251,13 @@ export default {
       </div>
     </div>
     <button
-      @click="$emit('change-wallet')"
+      @click="changeWallet"
       class="change-wallet-btn py-2 mt-5 rounded w-[300px]"
     >
       Change Wallet
     </button>
     <a v-if="!showQr"
-      @click="forceShowQr = true"
+      @click="forceShowQrCode"
       class="w-full mt-4 ml-1 underline hover:text-indigo-200 transition-colors"
     >
       Scan a QR code instead

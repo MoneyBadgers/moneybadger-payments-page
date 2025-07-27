@@ -106,7 +106,7 @@ export default {
     this.paymentsStore.checkForExistingInvoice()
   },
   mounted() {
-    this.$mixpanel.trackEvent(AnalyticsEvent.ViewPaymentsPage)
+    this.trackAnalytics(AnalyticsEvent.ViewPaymentsPage, defaultAnalyticproperties())
     peachInit()
   }
 }

@@ -41,7 +41,6 @@ export const MixpanelPlugin = {
     // Mixpanel methods
     const mixpanelMethods: MixpanelMethods = {
       trackEvent(eventName: string, properties: Record<string, any> = {}) {
-        console.log(eventName, properties)
 
         if (!mixpanel.get_config) {
           console.warn('Mixpanel not initialized.');

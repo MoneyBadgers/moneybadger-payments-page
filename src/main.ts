@@ -10,13 +10,10 @@ import router from './router'
 
 const app = createApp(App)
 
-console.log(import.meta.env)
-console.log(import.meta.env.VITE_MIXPANEL_PROJECT_TOKEN)
-
 app.use(createPinia())
 app.use(router)
 app.use(MixpanelPlugin, {
-  token: import.meta.env.VITE_MIXPANEL_PROJECT_TOKEN,
+  token: "54c90b6336e7bc3c325cfad1afb0da6e",
   debug: process.env.NODE_ENV !== 'production',
 })
 

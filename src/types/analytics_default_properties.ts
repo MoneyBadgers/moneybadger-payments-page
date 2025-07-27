@@ -6,12 +6,13 @@ type properties = {
   amount?: number | undefined
 }
 
-export const defaultAnalyticproperties = (properties: properties) => {
+export const defaultAnalyticproperties = (properties?: properties) => {
   return {
-    'Wallet': properties.wallet,
-    'Currency': properties.currency,
-    'Merchant': properties.merchant,
-    'Merchant Code': properties.merchant,
-    'Amount': properties.amount
+    'Host': window.location.host,
+    'Wallet': properties?.wallet,
+    'Currency': properties?.currency,
+    'Merchant': properties?.merchant,
+    'Merchant Code': properties?.merchant,
+    'Amount': properties?.amount
   }
 }

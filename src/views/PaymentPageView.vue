@@ -11,6 +11,8 @@ import { PaymentStatus } from '../types/PaymentStatus'
 import Wallet from '../models/wallet'
 import LoadingSpinner from '../components/LoadingSpinner.vue'
 import { peachInit } from '../partner/peach'
+import { AnalyticsEvent } from '../types/analytics_events'
+import { defaultAnalyticproperties } from '../types/analytics_default_properties'
 
 export default {
   name: 'PaymentPageView',
@@ -24,6 +26,16 @@ export default {
     Expired,
   },
   methods: {
+    trackAnalytics(event: AnalyticsEvent, additionalProps?: Record<string, any>) {
+      this.$mixpanel.trackEvent(event, {
+        ...defaultAnalyticproperties({
+        wallet: this.paymentsStore.wallet.name,
+        currency: this.paymentsStore.invoice.currency,
+        merchant: this.paymentsStore.invoice.merchant_name,
+        amount: this.paymentsStore.invoice.amount_cents,
+      }), ...additionalProps
+      })
+    }
   },
   computed: {
     ...mapStores(usePaymentStore),
@@ -57,8 +69,10 @@ export default {
     },
     statusMessage: function (): string {
       if (this.paymentsStore.errors.length > 0) {
+        this.trackAnalytics(AnalyticsEvent.PaymentFailure, {error: this.paymentsStore.errors[0]})
         return this.paymentsStore.errors[0]
       } else if (this.paymentsStore.status === PaymentStatus.Successful) {
+        this.trackAnalytics(AnalyticsEvent.PaymentSuccess)
         return 'Payment Successful'
       } else if (this.paymentsStore.status === PaymentStatus.SelectWallet) {
         return 'Select Wallet'
@@ -92,6 +106,7 @@ export default {
     this.paymentsStore.checkForExistingInvoice()
   },
   mounted() {
+    this.trackAnalytics(AnalyticsEvent.ViewPaymentsPage, defaultAnalyticproperties())
     peachInit()
   }
 }

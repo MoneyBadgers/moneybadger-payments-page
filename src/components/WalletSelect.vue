@@ -3,6 +3,8 @@ import Wallet from "../models/wallet"
 import { mapStores } from 'pinia'
 import { usePaymentStore } from '../stores/payments'
 import LightningAddress from '../models/lightning_address'
+import { AnalyticsEvent } from "../types/analytics_events"
+import { defaultAnalyticproperties } from "../types/analytics_default_properties"
 
 export default {
   name: 'WalletSelect',
@@ -38,13 +40,18 @@ export default {
       if (!this.requireTermsAccepted) {
         return true
       }
+
       return this.termsAccepted
     },
     setWallet(wallet: Wallet) {
       if (!this.checkTermsAccepted()) {
         this.highlightTerms()
+        
         return
       }
+
+      this.trackAnalytics(AnalyticsEvent.WalletSelected)
+
       this.paymentsStore.setWallet(wallet)
     },
     chooseValr() {
@@ -57,6 +64,8 @@ export default {
     setValr(currency: string) {
       this.paymentsStore.setPaymentCurrency(currency)
       this.paymentsStore.setWallet(Wallet.wallets['valr'])
+
+      this.trackAnalytics(AnalyticsEvent.ValrCurrencySelected)
     },
     openTermsModal() {
       this.termsModalOpen = true
@@ -72,8 +81,13 @@ export default {
     toggleTerms() {
       this.termsAccepted = !this.termsAccepted
       localStorage.setItem('termsAccepted', 'true')
+      this.trackAnalytics(AnalyticsEvent.TermsAccepted, {
+        "termsAccepted": this.termsAccepted
+      })
     },
     highlightTerms() {
+      this.trackAnalytics(AnalyticsEvent.WalletSelectedBeforeTerms)
+
       // wobble the terms container
       const termsContainer = document.getElementById('terms-container')
       termsContainer?.classList.add('highlight')
@@ -102,6 +116,9 @@ export default {
           this.paymentsStore.setRefundRecipientAddress(this.lightningAddress)
           this.paymentsStore.setWallet(Wallet.wallets['lightning'])  
           this.cancelLightningAddressEntry() 
+
+          this.trackAnalytics(AnalyticsEvent.LightningSetRecipient)
+
           return
         }else{
           this.lightningAddressError = true
@@ -116,12 +133,23 @@ export default {
     },
     skipLightningAddressEntry() {
       this.paymentsStore.setWallet(Wallet.wallets['lightning'])
+      this.trackAnalytics(AnalyticsEvent.LightningSetRecipientSkipped, {
+        'Wallet': this.paymentsStore.wallet.name,
+      })
       this.cancelLightningAddressEntry()
     },
     cancelLightningAddressEntry() {
       this.lightningAddressEntry = false
       this.lightningAddressError = false
       this.verifyingLightningAddress = false
+    },
+    trackAnalytics(event: AnalyticsEvent, additionalProps?: Record<string, any>) {
+      this.$mixpanel.trackEvent(event, {...defaultAnalyticproperties({
+        wallet: this.paymentsStore.wallet.name,
+        amount: this.paymentsStore.invoice.amount_cents,
+        merchant: this.paymentsStore.invoice.merchant_name,
+        currency: this.paymentsStore.invoice.currency,
+      }), ...additionalProps})
     }
   },
   data() {

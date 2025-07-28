@@ -9,6 +9,8 @@ import { formatDistanceStrict } from 'date-fns'
 import LoadingSpinner from './LoadingSpinner.vue'
 import { mapStores } from 'pinia'
 import { usePaymentStore } from '../stores/payments'
+import { AnalyticsEvent } from '../types/analytics_events'
+import { defaultAnalyticproperties } from '../types/analytics_default_properties'
 
 export default {
   name: 'AwaitingPayment',
@@ -53,6 +55,8 @@ export default {
       if (this.forceShowQr) {
         return true
       }
+
+      // there is no logic for the button as it is always visible
       return false
     },
     paymentRequestQrUrl(): string | null {
@@ -131,6 +135,12 @@ export default {
       console.error('Failed to copy: ', e)
     })
 
+    this.trackAnalytics(AnalyticsEvent.WaitingForPayment, {
+        'isDesktopDevice': this.isDesktopDevice,
+        'qrVisible': this.showQr,
+        'forceShowQr': this.forceShowQr,
+      })
+
     // Add this interval
     this.timer = setInterval(() => {
       this.currentTime = Date.now()
@@ -174,6 +184,22 @@ export default {
       setTimeout(() => {
               this.walletOpens = this.walletOpens + 1
       }, 100)
+    },
+    trackAnalytics(event: AnalyticsEvent, additionalProps?: Record<string, any>) {
+      this.$mixpanel.trackEvent(event, {...defaultAnalyticproperties({
+        wallet: this.$props.wallet.name,
+        currency: this.$props.invoice.currency,
+        merchant: this.$props.invoice.merchant_name,
+        amount: this.$props.invoice.amount_cents,
+      }), ...additionalProps})
+    },
+    forceShowQrCode() {
+      this.forceShowQr = true
+      this.trackAnalytics(AnalyticsEvent.ShowQrCodeButtonClicked)
+    },
+    changeWallet() {
+      this.trackAnalytics(AnalyticsEvent.ChangeWallet)
+      this.$emit('change-wallet')
     }
   }
 }
@@ -225,13 +251,13 @@ export default {
       </div>
     </div>
     <button
-      @click="$emit('change-wallet')"
+      @click="changeWallet"
       class="change-wallet-btn py-2 mt-5 rounded w-[300px]"
     >
       Change Wallet
     </button>
     <a v-if="!showQr"
-      @click="forceShowQr = true"
+      @click="forceShowQrCode"
       class="w-full mt-4 ml-1 underline hover:text-indigo-200 transition-colors"
     >
       Scan a QR code instead

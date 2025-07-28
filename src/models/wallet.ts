@@ -33,10 +33,10 @@ class Wallet {
         ),
         'binance': new Wallet(
             'binance',
-            'Binance',
+            'Binance Pay',
             'PAYMENT_REQUEST',
             'Binance App',
-            'Binance Payment Link'
+            'Binance Pay Link'
         ),
         'luno': new Wallet(
             'luno',

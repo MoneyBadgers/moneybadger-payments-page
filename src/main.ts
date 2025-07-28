@@ -14,7 +14,7 @@ app.use(createPinia())
 app.use(router)
 app.use(MixpanelPlugin, {
   token: "54c90b6336e7bc3c325cfad1afb0da6e",
-  debug: process.env.NODE_ENV !== 'production',
+  debug: import.meta.env.MODE !== 'production',
 })
 
 app.mount('#app')

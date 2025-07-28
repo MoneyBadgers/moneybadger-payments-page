@@ -1,6 +1,7 @@
 import type { App } from 'vue';
 import mixpanel from 'mixpanel-browser';
 import { defaultAnalyticproperties } from '../types/analytics_default_properties';
+import type { Plugin } from 'vue';
 
 // Define the Mixpanel configuration options
 interface MixpanelConfig {
@@ -23,7 +24,7 @@ interface MixpanelPluginOptions {
   config?: MixpanelConfig;
 }
 
-export const MixpanelPlugin = {
+export const MixpanelPlugin: Plugin = {
   install(app: App, options: MixpanelPluginOptions = { token: '' }) {
     const { token, config = {} } = options;
 
@@ -34,7 +35,7 @@ export const MixpanelPlugin = {
 
     // Initialize Mixpanel
     mixpanel.init(token, {
-      debug: process.env.NODE_ENV !== 'production',
+      debug: import.meta.env.MODE !== 'production',
       ...config,
     });
 

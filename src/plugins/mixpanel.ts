@@ -35,7 +35,7 @@ export const MixpanelPlugin: Plugin = {
 
     // Initialize Mixpanel
     mixpanel.init(token, {
-      debug: import.meta.env.MODE !== 'production',
+      debug: false,
       ...config,
     });
 

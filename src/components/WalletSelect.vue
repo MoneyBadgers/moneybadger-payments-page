@@ -284,10 +284,6 @@ export default {
               </ol>
             </li>
           </ol>
-          <div class="flex my-2">
-            <button class="confirm-btn rounded basis-3/4" @click="acceptTerms">Accept and Continue</button>
-            <button class="cancel-btn ml-2 basis-1/4" @click="closeTermsModal()">Cancel</button>
-          </div>
         </div>
       </div>
     </transition>

@@ -45,7 +45,7 @@ export default {
     },
     setWallet(wallet: Wallet) {
       if (!this.checkTermsAccepted()) {
-        this.highlightTerms()
+        this.highlightTerms(()=> this.setWallet(wallet))
         
         return
       }
@@ -56,7 +56,7 @@ export default {
     },
     chooseValr() {
       if (!this.checkTermsAccepted()) {
-        this.highlightTerms()
+        this.highlightTerms(this.chooseValr)
         return
       }
       this.valrSelected = true
@@ -70,13 +70,17 @@ export default {
     openTermsModal() {
       this.termsModalOpen = true
     },
-    closeTermsModal() {
+    closeTermsModal(invokeCallback = false) {
+      if (invokeCallback && this.termsCallback) {
+        this.termsCallback()
+        this.termsCallback = ()=>{}
+      }
       this.termsModalOpen = false
     },
     acceptTerms() {
       this.termsAccepted = true
       localStorage.setItem('termsAccepted', 'true')
-      this.closeTermsModal()
+      this.closeTermsModal(true)
     },
     toggleTerms() {
       this.termsAccepted = !this.termsAccepted
@@ -85,9 +89,10 @@ export default {
         "termsAccepted": this.termsAccepted
       })
     },
-    highlightTerms() {
+    highlightTerms(callback: () => void) {
       this.trackAnalytics(AnalyticsEvent.WalletSelectedBeforeTerms)
-
+      this.termsCallback = callback
+      this.openTermsModal()
       // wobble the terms container
       const termsContainer = document.getElementById('terms-container')
       termsContainer?.classList.add('highlight')
@@ -97,7 +102,7 @@ export default {
     },
     chooseLightning() {
       if (!this.checkTermsAccepted()) {
-        this.highlightTerms()
+        this.highlightTerms(this.chooseLightning)
         return
       }
       if (!this.requireRefunds) {
@@ -165,6 +170,7 @@ export default {
         // curl -s https://api.valr.com/v1/public/pairs | jq -r '.[] | select(.quoteCurrency == "ZAR" and .currencyPairType == "SPOT") | .baseCurrency' | sort
         valrCurrencies: ["BTC","AVAX", "BNB", "ETH", "EURC", "PYUSD", "SHIB", "SOL", "USDC", "USDT", "XRP", "ZAR"],
         termsAccepted: localStorage.getItem('termsAccepted') === 'true',
+        termsCallback: ()=>{},
     }
   },
 }
@@ -261,7 +267,11 @@ export default {
       <div v-if="termsModalOpen" class="terms-modal fixed inset-0 modal-bg flex items-center justify-center">
         <div class="w-200 h-[100%] overflow-y-auto p-6 rounded-lg shadow-lg">
           <h2 class="text-xl font-bold mb-4">Crypto Payment Terms</h2>
-          <p class=""><strong>By selecting MoneyBadger, you acknowledge and accept:</strong></p>
+          <p class=""><strong>By selecting MoneyBadger, you acknowledge and accept the terms and conditions below.</strong></p>
+          <div class="flex my-2">
+            <button class="confirm-btn rounded basis-3/4" @click="acceptTerms">Accept and Continue</button>
+            <button class="cancel-btn ml-2 basis-1/4" @click="closeTermsModal">Cancel</button>
+          </div>
           <ol class="list-decimal pl-6 mb-4">
             <li class="mb-2">
               <strong>Volatility Risks:</strong>
@@ -280,9 +290,9 @@ export default {
               </ol>
             </li>
           </ol>
-          <div class="flex justify-end">
-            <button class="cancel-btn mr-2" @click="closeTermsModal">Close</button>
-            <button class="confirm-btn rounded" @click="acceptTerms">Accept and Continue</button>
+          <div class="flex my-2">
+            <button class="confirm-btn rounded basis-3/4" @click="acceptTerms">Accept and Continue</button>
+            <button class="cancel-btn ml-2 basis-1/4" @click="closeTermsModal">Cancel</button>
           </div>
         </div>
       </div>
@@ -399,11 +409,13 @@ button:disabled {
 
 .cancel-btn {
   background-color: var(--color-black);
+  text-decoration: underline;
   color: var(--color-light-grey);
   &:hover {
     color: var(--color-amber-light);
   }
 }
+
 .skip-btn {
   background-color: var(--color-black);
   color: var(--color-amber-light);

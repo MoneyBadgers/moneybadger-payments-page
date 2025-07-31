@@ -49,10 +49,8 @@ export default {
         
         return
       }
-
-      this.trackAnalytics(AnalyticsEvent.WalletSelected)
-
       this.paymentsStore.setWallet(wallet)
+      this.trackAnalytics(AnalyticsEvent.WalletSelected)
     },
     chooseValr() {
       if (!this.checkTermsAccepted()) {

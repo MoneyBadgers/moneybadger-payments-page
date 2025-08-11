@@ -161,6 +161,9 @@ export default {
       const content = this.wallet.valueStore == 'binance' ?
         this.paymentRequestDeepLink :
         this.paymentRequestQrData
+      this.trackAnalytics(AnalyticsEvent.CopyPaymentRequest, {
+        'content': content,
+      })
       navigator.clipboard.writeText(content).then(() => {
         this.flashCopyHint()
       }).catch(err => {
@@ -180,6 +183,10 @@ export default {
       this.qrLoadError = true
     },
     onOpenWallet() {
+      this.trackAnalytics(AnalyticsEvent.OpenWalletButtonClicked, {
+        'walletOpens': this.walletOpens,
+        'deeplink': this.currentDeeplink,
+      })
       // could hook in peach payments postMessage here
       setTimeout(() => {
               this.walletOpens = this.walletOpens + 1

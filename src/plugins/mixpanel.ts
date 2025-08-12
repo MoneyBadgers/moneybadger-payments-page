@@ -16,6 +16,7 @@ interface MixpanelMethods {
   setUserProperties: (properties: Record<string, any>) => void;
   reset: () => void;
   isInitialized: () => boolean;
+  startSessionRecording: () => void;
 }
 
 // Define the plugin options interface
@@ -36,6 +37,10 @@ export const MixpanelPlugin: Plugin = {
     // Initialize Mixpanel
     mixpanel.init(token, {
       debug: false,
+      record_sessions_percent: 100,
+      record_mask_text_selector: '', //unmask all text elements
+      record_block_selector: '', //unmask images and videos
+      record_heatmap_data: true,
       ...config,
     });
 
@@ -77,6 +82,14 @@ export const MixpanelPlugin: Plugin = {
 
       isInitialized() {
         return !!mixpanel.get_config;
+      },
+
+      startSessionRecording() {
+        if (!mixpanel.get_config) {
+          console.warn('Mixpanel not initialized.');
+          return;
+        }
+        mixpanel.start_session_recording();
       },
     };
 

@@ -36,7 +36,7 @@ export default {
     },
   },
   methods: {
-    checkTermsAccepted() {
+   checkTermsAccepted() {
       if (!this.requireTermsAccepted) {
         return true
       }
@@ -44,6 +44,8 @@ export default {
       return this.termsAccepted
     },
     setWallet(wallet: Wallet) {
+      // force session recording to start when wallet is set
+      this.$mixpanel.startSessionRecording()
       if (!this.checkTermsAccepted()) {
         this.highlightTerms(()=> this.setWallet(wallet))
         
@@ -53,6 +55,8 @@ export default {
       this.trackAnalytics(AnalyticsEvent.WalletSelected)
     },
     chooseValr() {
+      // force session recording to start when wallet is set
+      this.$mixpanel.startSessionRecording()
       if (!this.checkTermsAccepted()) {
         this.highlightTerms(this.chooseValr)
         return
@@ -93,6 +97,8 @@ export default {
       this.openTermsModal()
     },
     chooseLightning() {
+      // force session recording to start when wallet is set
+      this.$mixpanel.startSessionRecording()
       if (!this.checkTermsAccepted()) {
         this.highlightTerms(this.chooseLightning)
         return
@@ -185,25 +191,25 @@ export default {
             <ul class="available-wallets">
                 <li>
                    <button class="choose-wallet-btn lightning my-3 py-2 rounded w-[300px]" @click="chooseLightning()" :disabled="lightningDisabled">
-                      <img src="@/assets/wallets/lightning.png" class="object-contain w-full h-full"></img>
+                      <img src="@/assets/wallets/lightning.png" class="object-contain w-full h-full" />
                    </button>
                    <div v-if="lightningDisabled" class="overlay">Not available</div>
                 </li>
                 <li>
                    <button class="choose-wallet-btn valr my-3 py-3 rounded w-[300px]" @click="chooseValr()" :disabled="valrDisabled">
-                      <img src="@/assets/wallets/valr.png" class="object-contain w-full h-full"></img>
+                      <img src="@/assets/wallets/valr.png" class="object-contain w-full h-full" />
                    </button>
                    <div v-if="valrDisabled" class="overlay">Not available</div>
                 </li>
                 <li>
                    <button class="choose-wallet-btn binance my-3 py-5 px-4 rounded w-[300px]" @click="setWallet(Wallet.wallets['binance'])" :disabled="binanceDisabled">
-                      <img src="@/assets/wallets/binance.png" class="object-contain w-full h-full"></img>
+                      <img src="@/assets/wallets/binance.png" class="object-contain w-full h-full" />
                    </button>
                    <div v-if="binanceDisabled" class="overlay">Not available</div>
                 </li>
                 <li>
                    <button class="choose-wallet-btn luno my-3 py-2 rounded w-[300px]" @click="setWallet(Wallet.wallets['luno'])" :disabled="lunoDisabled">
-                      <img src="@/assets/wallets/luno.png" class="object-contain w-full h-full"></img>
+                      <img src="@/assets/wallets/luno.png" class="object-contain w-full h-full" />
                    </button>
                    <div v-if="lunoDisabled" class="overlay">Not available</div>
                 </li>

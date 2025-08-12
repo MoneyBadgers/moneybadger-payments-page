@@ -40,7 +40,7 @@ export const MixpanelPlugin: Plugin = {
       record_sessions_percent: 100,
       record_mask_text_selector: '', //unmask all text elements
       record_block_selector: '', //unmask images and videos
-      record_heatmap_data: true,
+      // record_heatmap_data: true, - not available in the latest Mixpanel version yet: https://github.com/mixpanel/mixpanel-js/pull/500
       ...config,
     });
 

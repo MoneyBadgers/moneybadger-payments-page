@@ -202,8 +202,8 @@ export default {
                    <div v-if="valrDisabled" class="overlay">Not available</div>
                 </li>
                 <li>
-                   <button class="choose-wallet-btn binance my-3 py-5 px-4 rounded w-[300px]" @click="setWallet(Wallet.wallets['binance'])" :disabled="binanceDisabled">
-                      <img src="@/assets/wallets/binance.png" class="object-contain w-full h-full" />
+                   <button class="choose-wallet-btn binance my-3 py-4 px-10 rounded w-[300px]" @click="setWallet(Wallet.wallets['binance'])" :disabled="binanceDisabled">
+                      <img src="@/assets/wallets/binance-promo.png" class="object-contain w-full" />
                    </button>
                    <div v-if="binanceDisabled" class="overlay">Not available</div>
                 </li>

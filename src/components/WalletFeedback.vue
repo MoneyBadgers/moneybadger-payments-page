@@ -1,6 +1,10 @@
 <!-- WalletFeedback.vue -->
 <script lang="ts">
-import { AnalyticsEvent } from '../types/analytics_events'
+import { FeedbackService, FeedbackType } from '../api/feedback'
+import { mapStores } from 'pinia'
+import { usePaymentStore } from '../stores/payments'
+
+const feedbackService = new FeedbackService();
 
 export default {
   name: 'WalletFeedback',
@@ -12,10 +16,12 @@ export default {
     return {
       message: '',
       error: '',
+      outcome: '',
       sent: false,
     }
   },
   computed: {
+    ...mapStores(usePaymentStore),
     charsLeft(): number {
       return this.maxLength - this.message.length
     },
@@ -31,19 +37,23 @@ export default {
       return trimmed.slice(0, this.maxLength)
     },
     async submit() {
+      this.outcome = ''
+      this.error = ''
+      this.sent = true
       try {
         const safeMessage = this.sanitize(this.message)
-
-        const props: Record<string, any> = {
+        await feedbackService.submitFeedback({
+          feedbackType: FeedbackType.WALLET_NOT_SUPPORTED,
           message: safeMessage,
-        }
-
-        this.$mixpanel.trackEvent(AnalyticsEvent.WalletFeedback, props)
+          orderId: this.paymentsStore.invoice.order_id || this.paymentsStore.invoiceParams.orderId || 'unknown',
+          merchantCode: this.paymentsStore.invoice.merchant_code || this.paymentsStore.invoiceParams.merchantCode || 'unknown',
+        })
+        this.outcome = 'Thank you for your feedback!'
         this.$emit('submitted')
       } catch (e: any) {
-        this.error = e?.message || 'Failed to send feedback'
+        this.error = e?.message || 'Something went wrong, please try again.'
       } finally {
-        this.sent = true
+        this.sent = false
       }
     },
   },
@@ -72,8 +82,8 @@ export default {
     </div>
 
     <div class="mt-3 flex flex-col items-center gap-2">
-        <div v-if="sent" class="text-green-400 text-sm w-full text-center">
-            Thanks! We’ve logged this feedback.
+        <div v-if="outcome" class="text-green-400 text-sm w-full text-center">
+            {{ outcome }}
         </div>
         <div v-if="error" class="text-red-400 text-sm w-full text-center">
             {{ error }}

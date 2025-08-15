@@ -216,7 +216,7 @@ export default {
   <div>
     <div @click="copyPaymentRequest" class="justify-center">
       <div v-if="showQr" class="w-full flex flex-col justify-center items-center">
-        <h4 class="text-gray-200 font-bold mb-2">Scan QR code with {{ wallet.scanner }}</h4>
+        <h4 class="text-gray-500 font-bold mb-2">Scan QR code with {{ wallet.scanner }}</h4>
         <div v-if="paymentRequestQrUrl && !qrLoadError" class="center">
           <LoadingSpinner v-if="qrLoading" />
           <img
@@ -235,14 +235,14 @@ export default {
       <div v-else class="w-full">
         <h4 class="text-gray-200 font-bold mb-2">Use your {{ wallet.scanner }} to pay</h4>
       </div>
-      <h5 class="text-gray-200 font-bold py-1 text-sm" @click="copyPaymentRequest">
+      <h5 class="text-gray-500 font-bold py-1 text-sm" @click="copyPaymentRequest">
         <div v-if="!showCopyHint" class="flex justify-center mx-4 w-300">
           <span class="tap-to-copy">Or tap to copy {{ wallet.invoiceType }}</span>
-          <ClipboardDocumentIcon class="mx-2 size-6 text-yellow-500" />
+          <ClipboardDocumentIcon class="mx-2 size-6 primary-accent" />
         </div>
         <div v-if="showCopyHint" class="flex justify-center mx-4 w-300">
           <span>Payment details copied to clipboard!</span>
-          <ClipboardDocumentCheckIcon class="mx-2 size-6 text-yellow-500" />
+          <ClipboardDocumentCheckIcon class="mx-2 size-6 primary-accent" />
         </div>
       </h5>
       <div class="w-full flex flex-col justify-center items-center mt-4">
@@ -250,7 +250,7 @@ export default {
           :href="currentDeeplink"
           target="_blank"
           @click="onOpenWallet"
-          class="open-wallet-btn py-2 rounded w-[300px]"
+          class="button primary py-2 rounded w-[300px]"
           :class="{ 'md:hidden': wallet.valueStore == 'binance' }"
         >
           Open {{ wallet.scanner }}
@@ -259,7 +259,7 @@ export default {
     </div>
     <button
       @click="changeWallet"
-      class="change-wallet-btn py-2 mt-5 rounded w-[300px]"
+      class="secondary py-2 mt-5 rounded w-[300px]"
     >
       Change Wallet
     </button>
@@ -298,10 +298,10 @@ h4 {
 .payment-qr-code.hidden {
   display: none;
 }
-
+/*
 .status-bar,
 .status-bar .text,
-.open-wallet-btn {
+ .open-wallet-btn {
   display: block;
   background-color: var(--color-amber-med);
   font-weight: bold;
@@ -324,15 +324,15 @@ h4 {
     color: var(--color-amber-light);
   }
   border: 1px solid var(--color-amber-med);
-}
+} */
 
-a {
+/* a {
   color: var(--color-amber-med);
   text-decoration: underline;
   font-weight: bold;
   &:hover {
     color: var(--color-amber-light);
   }
-  display: block;
-}
+  display: block; 
+}*/
 </style>

@@ -141,7 +141,7 @@ export default {
         :returnUrl="Return"
       ></PaymentConfirmed>
       <div class="secure-payment-logo px-16">
-        <img src="@/assets/secure-payment-money-badger.png" alt="Secure Payment" class="mx-auto py-4"/>
+        <img src="@/assets/partners/default/secure-payment-money-badger-dark.png" alt="Secure Payment" class="mx-auto py-4"/>
       </div>
     </div>
   </div>
@@ -163,12 +163,12 @@ export default {
 }
 
 .status-bar, .status-bar .text {
-  background-color: var(--color-amber-med);
+  background-color: var(--info);
   font-weight: bold;
-  color: var(--color-black);
+  color: var(--info-text);
   text-align: center;
   &.bg-red-500 {
-    background-color: var(--color-red);
+    background-color: var(--error);
   }
 }
 

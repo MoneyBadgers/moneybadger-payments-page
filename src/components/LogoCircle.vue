@@ -10,15 +10,15 @@
 
 <style scoped>
 .cls-1 {
-  fill: var(--color-white);
+  fill: var(--secondary);
 }
 
 .cls-2 {
-  fill: var(--color-green);
+  fill: var(--secondary-accent);
 }
 
 .cls-3 {
-  fill: var(--color-black);
+  fill: var(--primary-accent);
 }
 
 .cls-4 {

@@ -223,7 +223,7 @@ export default {
           <p class="font-semibold mb-4">Please choose the currency you want to pay with:</p>
           <div class="grid grid-cols-1 gap-3">
             <button v-for="currency in valrCurrencies" :key="currency"
-              class="mx-auto px-4 py-1 w-[10rem] rounded choose-currency-btn"
+              class="mx-auto px-4 py-1 w-[10rem] rounded secondary"
              @click="setValr(currency)">
               {{ currency }}
             </button>
@@ -240,10 +240,10 @@ export default {
         </p>
        <div v-if="verifyingLightningAddress" class="text-center mb-4 info flex items-center justify-center">
           <div class="spinner mr-4" role="status" aria-label="Loading"></div>
-          <p class="m-0">Verifying your Lightning Address...</p>
+          <p class="m-0 info">Verifying your Lightning Address...</p>
         </div>
-        <div v-if="lightningAddressError" class="text-center mb-4 error">
-          <p>That doesn't seem to be a valid Lightning Address.</p>
+        <div v-if="lightningAddressError" class="text-center mb-4">
+          <p class="error">That doesn't seem to be a valid Lightning Address.</p>
         </div>
         <input
           v-model="lightningAddress"
@@ -252,10 +252,10 @@ export default {
           class="w-full border border-gray-300 rounded p-2 mb-4 text-black"
         />
         <div class="flex justify-between items-center">
-          <button class="cancel-btn mr-2" @click="cancelLightningAddressEntry">Cancel</button>
+          <button class="text mr-2" @click="cancelLightningAddressEntry">Cancel</button>
           <div class="flex">
-            <button class="skip-btn mr-2 rounded" @click="skipLightningAddressEntry">Skip</button>
-            <button class="confirm-btn rounded" @click="setLightningAddressAndWallet">Continue</button>
+            <button class="secondary mr-2 rounded" @click="skipLightningAddressEntry">Skip</button>
+            <button class="primary rounded" @click="setLightningAddressAndWallet">Continue</button>
           </div>
         </div>
       </div>
@@ -267,8 +267,8 @@ export default {
           <h2 class="text-xl font-bold mb-4">Crypto Payment Terms</h2>
           <p class=""><strong>By selecting MoneyBadger, you acknowledge and accept the terms and conditions below.</strong></p>
           <div class="flex my-2">
-            <button class="confirm-btn rounded basis-3/4" @click="acceptTerms">Accept and Continue</button>
-            <button class="cancel-btn ml-2 basis-1/4" @click="closeTermsModal()">Cancel</button>
+            <button class="primary rounded basis-3/4" @click="acceptTerms">Accept and Continue</button>
+            <button class="secondary ml-2 basis-1/4" @click="closeTermsModal()">Cancel</button>
           </div>
           <ol class="list-decimal pl-6 mb-4">
             <li class="mb-2">
@@ -296,7 +296,7 @@ export default {
 
 <style scoped>
 .modal-bg {
-  background-color: var(--color-background);
+  background-color: var(--secondary-bg);
 }
 details {
   width: 300px;
@@ -313,16 +313,7 @@ details {
     transform: translateX(10px);
   }
 }
-.choose-currency-btn {
-  background-color: var(--color-black);
-  font-weight: bold;
-  color: var(--color-light-grey);
-  text-align: center;
-  &:hover {
-    color: var(--color-amber-light);
-  }
-  border: 1px solid var(--color-light-grey);
-}
+
 .available-wallets {
   min-height: 30vh;
 }
@@ -390,53 +381,6 @@ button:disabled {
   opacity: 0;
 }
 
-.terms-btn {
-  width: 300px;
-  color: #ccc;
-  margin-top: 20px;
-  text-align: left;
-  background: none;
-  border: none;
-  cursor: pointer;
-  padding: 0;
-}
-
-.cancel-btn {
-  background-color: var(--color-black);
-  text-decoration: underline;
-  color: var(--color-light-grey);
-  &:hover {
-    color: var(--color-amber-light);
-  }
-}
-
-.skip-btn {
-  background-color: var(--color-black);
-  color: var(--color-amber-light);
-  border: 1px solid var(--color-amber-light);
-  font-weight: bold;
-  padding: 0.5rem 2rem;
-  &:hover {
-    color: var(--color-amber-med);
-    border: 1px solid var(--color-amber-med);
-  }
-}
-
-.confirm-btn {
-  display: block;
-  background-color: var(--color-amber-med);
-  font-weight: bold;
-  color: var(--color-black);
-  padding: 0.5rem 1rem;
-  text-decoration: none;
-  text-align: center;
-  border-radius: ;
-  &:hover {
-    background-color: var(--color-amber-light);
-    color: var(--color-black);
-  }
-}
-
 .terms-modal {
   text-align: left;
 }
@@ -444,24 +388,15 @@ button:disabled {
 .terms-link {
   cursor: pointer;
   text-decoration: underline;
-  color: var(--color-amber-light);
+  color: var(--primary-accent);
   &:hover {
-    color: var(--color-amber-light);
+    color: var(--primary-accent-hover);
   }
 }
 
 #terms-container.highlight {
-  border: 1px solid var(--color-amber-light);
+  border: 1px solid var(--primary-accent-hover);
   animation: shake 0.5s infinite;
-}
-
-@keyframes shake {
-  0% { transform: translateX(0); }
-  20% { transform: translateX(-8px); }
-  40% { transform: translateX(8px); }
-  60% { transform: translateX(-6px); }
-  80% { transform: translateX(6px); }
-  100% { transform: translateX(0); }
 }
 
 .custom-checkbox {
@@ -488,18 +423,18 @@ button:disabled {
   height: 18px;
   width: 18px;
   background-color: transparent;
-  border: 2px solid var(--color-light-grey);
+  border: 2px solid var(--border-color);
   border-radius: 4px;
   transition: all 0.2s ease;
 }
 
 .custom-checkbox:hover input ~ .checkmark {
-  border-color: var(--color-amber-light);
+  border-color: var(--primary-accent);
 }
 
 .custom-checkbox input:checked ~ .checkmark {
-  background-color: var(--color-amber-light);
-  border-color: var(--color-amber-light);
+  background-color: var(--primary-accent);
+  border-color: var(--primary-accent);
 }
 
 .checkmark:after {

@@ -116,7 +116,7 @@ export default {
   <div class="mx-auto text-center">
     <div class="top-bar"></div>
     <div class="spacer"></div>
-    <div class="container mx-auto my-4 text-center">
+    <div class="container mx-auto my-2 text-center">
       <ErrorPage v-if="status === Status.Error" :errors="paymentsStore.errors"></ErrorPage>
       <Expired v-if="status === Status.Expired" :errors="paymentsStore.errors"></Expired>
       <LoadingSpinner v-if="status === Status.Loading"/>
@@ -167,7 +167,7 @@ export default {
 }
 
 .spacer {
-  height: 32px; /* Same height as the top bar */
+  height: 24px; /* Same height as the top bar */
 }
 .secure-payment-logo {
   max-width: 300px;

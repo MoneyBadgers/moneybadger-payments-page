@@ -1,6 +1,6 @@
 <template>
   <div class="w-full flex flex-col justify-center items-center pb-6">
-    <p class="text-gray-200 font-bold mb-2">Scan QR code with {{ wallet.scanner }}</p>
+    <p class="text-gray-200 font-bold mb-2">Scan the QR code with {{ wallet.scanner }}</p>
     <div v-if="paymentRequestQrUrl && !qrLoadError" class="center">
       <LoadingSpinner v-if="qrLoading" />
       <img

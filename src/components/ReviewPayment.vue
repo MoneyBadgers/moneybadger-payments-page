@@ -1,5 +1,5 @@
 <template>
-  <div class="text-white p-4 h-full">
+  <div class="text-white px-4 h-full">
     <!-- Back Button + Header -->
     <div class="flex items-center mb-2">
       <button @click="$emit('change-wallet')" class="mr-2">

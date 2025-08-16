@@ -13,14 +13,14 @@ import LoadingSpinner from '../components/LoadingSpinner.vue'
 import { peachInit } from '../partner/peach'
 import { AnalyticsEvent } from '../types/analytics_events'
 import { defaultAnalyticproperties } from '../types/analytics_default_properties'
+import ReviewPayment from '../components/ReviewPayment.vue'
 
 export default {
   name: 'PaymentPageView',
   components: {
     WalletSelect,
     LoadingSpinner,
-    AwaitingPayment,
-    Logo,
+    ReviewPayment,
     PaymentConfirmed,
     ErrorPage,
     Expired,
@@ -114,25 +114,19 @@ export default {
 
 <template>
   <div class="mx-auto text-center">
-    <div class="status-bar py-2" :class="statusStyle">
-      <span class="text" :class="statusStyle">{{statusMessage}}</span>
-    </div>
-    <div class="container mx-auto text-center">
-      <h1 class="py-2 font-bold flex justify-center items-center">
-        {{ wallet.name }}
-          <Logo class="mx-1 lightning-logo"/>
-        Payment
-      </h1>
+    <div class="top-bar"></div>
+    <div class="spacer"></div>
+    <div class="container mx-auto my-4 text-center">
       <ErrorPage v-if="status === Status.Error" :errors="paymentsStore.errors"></ErrorPage>
       <Expired v-if="status === Status.Expired" :errors="paymentsStore.errors"></Expired>
       <LoadingSpinner v-if="status === Status.Loading"/>
       <WalletSelect v-if="status === Status.SelectWallet" :requireTermsAccepted="paymentsStore.requireTermsAccepted" :requireRefunds="paymentsStore.requireRefunds"></WalletSelect>
-      <AwaitingPayment
+      <ReviewPayment
         v-if="status === Status.WaitForPayment"
         :wallet="paymentsStore.wallet"
         :invoice="paymentsStore.invoice"
         @change-wallet="paymentsStore.changeWallet"
-      ></AwaitingPayment>
+      ></ReviewPayment>
       <PaymentConfirmed
         v-if="status === Status.Successful"
         :timeStamp="paymentTimeStamp"
@@ -162,16 +156,19 @@ export default {
   margin: 0 auto;
 }
 
-.status-bar, .status-bar .text {
-  background-color: var(--color-amber-med);
-  font-weight: bold;
-  color: var(--color-black);
-  text-align: center;
-  &.bg-red-500 {
-    background-color: var(--color-red);
-  }
+.top-bar {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 8px;
+  background: linear-gradient(to right, #f7931a, #1c1c1e);
+  z-index: 50;
 }
 
+.spacer {
+  height: 32px; /* Same height as the top bar */
+}
 .secure-payment-logo {
   max-width: 300px;
 }

@@ -32,6 +32,37 @@ export const usePaymentStore = defineStore('payments', {
     getPaymentCurrency: (state) => state.paymentCurrencies[0],
     requireTermsAccepted: (state): boolean => state.invoiceParams.requireTermsAccepted,
     requireRefunds: (state): boolean => state.invoiceParams.requireRefunds,
+    paymentRequest(state) {
+      return state.invoice?.payment_request
+    },
+    paymentRequestData(state) {
+      return state.invoice?.payment_request?.data || ''
+    },
+    paymentRequestQrUrl(state) {
+      if (
+        state.wallet.valueStore !== 'luno' &&
+        state.wallet.valueStore !== 'binance'
+      ) {
+        return null
+      }
+      return state.invoice?.payment_request?.qr_code_url || null
+    },
+    paymentRequestQrData(state) {
+      const pr = state.invoice?.payment_request
+      if (pr?.qr_code_content) {
+        return pr.qr_code_content
+      }
+
+      if (state.wallet.valueStore === 'valr' && (this as any).getPaymentCurrency) {
+        const key = `valr|${(this as any).getPaymentCurrency}`
+        const pm = pr?.payment_methods
+        if (pm && pm[key]) {
+          return state.wallet.generateCopyableRequest(String(pm[key]))
+        }
+      }
+
+      return state.wallet.generateCopyableRequest((this as any).paymentRequestData)
+    }
   },
   actions: {
     initialiseFromQueryParams(queryParams: LocationQuery) {
@@ -51,7 +82,7 @@ export const usePaymentStore = defineStore('payments', {
       this.wallet = wallet
       this.status = PaymentStatus.Loading
       if(this.invoice.id) {
-        const resp = await this.api.updateInvoicePaymentMethod(
+        const resp = await (this as any).api.updateInvoicePaymentMethod(
           this.invoice.id,
           wallet.valueStore,
           this.paymentCurrencies,
@@ -75,7 +106,7 @@ export const usePaymentStore = defineStore('payments', {
         return
       }
       try {
-        this.invoice = (await this.api.fetchInvoiceStatus(this.invoice.id, wait)).data
+        this.invoice = (await (this as any).api.fetchInvoiceStatus(this.invoice.id, wait)).data
         this.errors = []
         if (this.invoice.status === InvoiceStatusEnum.CONFIRMED) {
           this.status = PaymentStatus.Successful
@@ -98,7 +129,7 @@ export const usePaymentStore = defineStore('payments', {
     },
     async checkForExistingInvoice() {
       try {
-        const invoiceResponse = await this.api.fetchInvoiceStatus(this.invoiceParams.orderId)
+        const invoiceResponse = await (this as any).api.fetchInvoiceStatus(this.invoiceParams.orderId)
         this.invoice = invoiceResponse.data
         if(this.invoice.status === InvoiceStatusEnum.CONFIRMED){
           this.status = PaymentStatus.Successful
@@ -122,7 +153,7 @@ export const usePaymentStore = defineStore('payments', {
     },
     async createInvoice() {
       try {
-        const newInvoiceResponse = await this.api.requestInvoice(
+        const newInvoiceResponse = await (this as any).api.requestInvoice(
           this.invoiceParams.amountCents,
           'ZAR',
           this.invoiceParams.orderDescription,

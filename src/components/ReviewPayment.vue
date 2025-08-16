@@ -2,8 +2,10 @@
   <div class="text-white p-4 h-full">
     <!-- Back Button + Header -->
     <div class="flex items-center mb-2">
-      <button @click="$emit('change-wallet')" class="text-orange-500 mr-2">
-        <ChevronLeftIcon class="w-5 h-5" />
+      <button @click="$emit('change-wallet')" class="mr-2">
+        <span class="w-6 h-6 rounded-full flex items-center justify-center bg-primary-color text-bg-color">
+          <ChevronLeftIcon class="w-5 h-5 mr-0.5" />
+        </span>
       </button>
       <h2 class="text-lg font-semibold">Review your payment</h2>
     </div>
@@ -12,77 +14,67 @@
         <!-- Help Text -->
         <p class="text-sm text-gray-300">
         We will take you to your wallet to finish the payment.
-        <span class="text-orange-400 underline cursor-pointer" @click="showModal = true">Learn more</span>
+        <HowToPayModal />
         </p>
     </div>
 
-    <div class="flex flex-col items-center my-2">
-
-        <MobilePayment amount="24.43" logo="binance"/>
-        <MorePaymentOptions/>
+    <div class="flex flex-col items-center my-2 box">
+        <PaymentDetails :amountCents="invoice.amount_cents" :logo="wallet.valueStore"/>
+        <MobilePayment v-if="showDeeplinkButton" :invoice="invoice" :wallet="wallet"/>
+        <QrDisplay v-else :invoice="invoice" :wallet="wallet"/>
     </div>
 
-    <!-- Modal -->
-    <div
-      v-if="showModal"
-      class="fixed inset-0 bg-black bg-opacity-60 flex items-center justify-center z-50 text-left"
-    >
-      <div class="bg-white rounded-lg p-6 w-[90%] max-w-md shadow-lg text-black relative">
-        <button
-          class="absolute top-2 right-2 text-gray-500 hover:text-gray-700"
-          @click="showModal = false"
-        >
-          <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
-            <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
-          </svg>
-        </button>
-
-        <h3 class="text-md font-bold mb-3">How to pay</h3>
-
-        <div class="mb-4">
-          <p class="font-semibold text-sm">On mobile:</p>
-          <ul class="text-sm list-decimal ml-5 mt-1">
-            <li>Tap the button to open your wallet app.</li>
-            <li>Approve the payment in your wallet.</li>
-          </ul>
-        </div>
-
-        <div>
-          <p class="font-semibold text-sm">On desktop:</p>
-          <ul class="text-sm list-decimal ml-5 mt-1">
-            <li>Open your wallet app</li>
-            <li>Go to your wallet's QR scanner</li>
-            <li>Scan the QR code</li>
-            <li>Approve payment in your wallet</li>
-          </ul>
-        </div>
-
-        <button
-          class="mt-6 w-full bg-orange-400 hover:bg-orange-500 text-white font-medium py-2 px-4 rounded"
-          @click="showModal = false"
-        >
-          Got it
-        </button>
-      </div>
+    <div class="flex flex-col items-center my-4 box">           
+        <MorePaymentOptions @use-qr-code="viewMode = 'qr'" @use-deeplink="viewMode='deeplink'" :showingDeeplinkButton="showDeeplinkButton"/>
     </div>
   </div>
 </template>
 
-<script>
+<script lang="ts">
 import { ChevronLeftIcon } from '@heroicons/vue/24/solid'
 import MorePaymentOptions from './payment/MorePaymentOptions.vue' 
 import MobilePayment from './payment/MobilePayment.vue' 
+import PaymentDetails from './payment/PaymentDetails.vue'
+import QrDisplay from './payment/QrDisplay.vue'
+import type { PropType } from 'vue'
+import Wallet from '../models/wallet'
+import type { Invoice } from '../api/cryptoqr/api'
+import HowToPayModal from './payment/HowToPayModal.vue'
 
 export default {
-  name: 'PaymentReviewHeader',
+  name: 'ReviewPayment',
   components: {
     ChevronLeftIcon,
     MorePaymentOptions,
     MobilePayment,
+    PaymentDetails,
+    QrDisplay,
+    HowToPayModal,
+  },
+  props: {
+    invoice: { type: Object as PropType<Invoice>, required: true },
+    wallet: { type: Object as PropType<Wallet>, required: true }
+  },
+  computed: {
+    showDeeplinkButton() { 
+      if (this.viewMode === 'deeplink') {
+        return true
+      }
+      if (this.viewMode === 'qr') {
+        return false
+      }
+      return this.isMobileDevice
+    },
+    isMobileDevice() {
+        return /Android|iPhone|iPad|iPod/i.test(navigator.userAgent)
+    },
+    isDesktopDevice() {
+        return !this.isMobileDevice
+    },
   },
   data() {
     return {
-      showModal: false,
+      viewMode: '',
     }
   }
 }

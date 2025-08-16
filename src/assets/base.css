@@ -102,9 +102,21 @@ body {
   color: var(--color-black);
   text-decoration: none;
   text-align: center;
-  box-shadow: 0px 0px 2px 1px yellow;
+  box-shadow: 0px 0px 3px 0px var(--color-amber-light);
   &:hover {
     background-color: var(--color-amber-light);
     color: var(--color-black);
   }
+}
+
+.text-primary-color {
+  color: var(--color-amber-light);
+}
+
+.text-bg-color {
+  color: var(--color-black);
+}
+
+.bg-primary-color {
+  background-color: var(--color-amber-light);
 }

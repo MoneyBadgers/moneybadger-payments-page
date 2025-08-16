@@ -1,50 +1,92 @@
 <template>
-  <div class="box text-white rounded-lg w-80 p-6 text-center">
-    <!-- Logo and Brand -->
-    <div class="flex justify-center mb-4">
-      <img src="@/assets/wallets/binance-yellow.png" alt="Payment provider logo" class="h-6" />
-    </div>
-
-    <!-- Payment Message -->
-    <p class="text-sm text-gray-300 mb-1">You will be making a payment of</p>
-    <p class="text-3xl font-semibold text-white mb-6">{{ formattedAmount }}</p>
-
+  <div class="text-white rounded-lg w-80 px-6 pb-6 text-center">
     <!-- Payment Button -->
-    <button
-      class="solid-btn text-black font-medium py-2 px-4 rounded-full w-full flex items-center justify-center gap-2 transition"
+    <a
+        :href="currentDeeplink"
+        target="_blank"
+        @click="onOpenWallet"
+        class="solid-btn text-black font-bold py-2 px-4 rounded-full w-full flex items-center justify-center gap-2 transition font-bold"
     >
-      Make payment
-      <ArrowRightIcon class="w-4 h-4" />
-    </button>
+      Tap here to open the app
+      <ArrowRightIcon class="w-5 h-5" />
+  </a>
   </div>
 </template>
 
-<script>
+<script lang="ts">
 import { ArrowRightIcon } from '@heroicons/vue/24/outline'
-
+import { mapStores } from 'pinia'
+import { usePaymentStore } from '../../stores/payments'
+import { AnalyticsEvent } from '../../types/analytics_events'
+import { defaultAnalyticproperties } from '../../types/analytics_default_properties'
 export default {
   name: 'PaymentCard',
   components: {
     ArrowRightIcon
   },
-  props: {
-    logoUrl: {
-      type: String,
-      required: true
-    },
-    amount: {
-      type: Number,
-      required: true
+  data() {
+    return {
+      walletOpens: 0
     }
   },
   computed: {
-    formattedAmount() {
-      return new Intl.NumberFormat('en-ZA', {
-        style: 'currency',
-        currency: 'ZAR',
-        minimumFractionDigits: 2
-      }).format(this.amount)
-    }
+    ...mapStores(usePaymentStore),
+    paymentRequestDeepLink(): string {
+      if (this.paymentsStore.invoice.payment_request?.deeplink) {
+        return this.paymentsStore.invoice.payment_request.deeplink
+      }
+      // if this is VALR and we have defined a payment currency to use,
+      // then select the payment data for that currency
+      if (this.paymentsStore.wallet.valueStore === 'valr' && this.paymentsStore.getPaymentCurrency) {
+        let key = `valr|${this.paymentsStore.getPaymentCurrency}`
+        let pm = this.paymentsStore.invoice.payment_request?.payment_methods
+        if (pm && pm[key]) {
+          let link = this.paymentsStore.wallet.generateLink(pm[key] as unknown as string)
+          // This is a workaround for VALR's deeplink format
+          // which currently does not support /en in the URL
+          let valrFixedLink = link.replace(/(valr\.com)\/en(?=\/payments)/, '$1')
+          return valrFixedLink
+        }
+      }
+      return this.paymentsStore.wallet.generateLink(this.paymentsStore.paymentRequest)
+    },
+    customProtocolDeeplink(): string {
+      if (this.paymentsStore.wallet.valueStore === 'valr') {
+        // VALR uses a custom protocol for deep linking
+        return this.paymentRequestDeepLink.replace('https://', 'valr://')
+      }
+      return ''
+    },
+    currentDeeplink(): string {
+      let deeplinks = [this.customProtocolDeeplink, this.paymentRequestDeepLink]
+      // remove empty deeplinks
+      deeplinks = deeplinks.filter((link) => link.length > 0)
+      // index by walletOpens to cycle through deeplinks
+      return deeplinks[this.walletOpens % deeplinks.length] || ''
+    },
+  },
+  methods: {
+    onOpenWallet() {
+      this.trackAnalytics(AnalyticsEvent.OpenWalletButtonClicked, {
+        walletOpens: this.walletOpens,
+        deeplink: this.currentDeeplink
+      })
+      setTimeout(() => {
+        this.walletOpens = this.walletOpens + 1
+      }, 100)
+      return true
+    },
+    trackAnalytics(event: AnalyticsEvent, additionalProps?: Record<string, any>) {
+      this.$mixpanel.trackEvent(event, {
+        ...defaultAnalyticproperties({
+          wallet: this.paymentsStore.wallet.name,
+          currency: this.paymentsStore.invoice.currency,
+          merchant: this.paymentsStore.invoice.merchant_name,
+          amount: this.paymentsStore.invoice.amount_cents
+        }),
+        ...additionalProps
+      })
+    },
   }
 }
 </script>

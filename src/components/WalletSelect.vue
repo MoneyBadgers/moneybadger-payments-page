@@ -177,14 +177,17 @@ export default {
 <template>
   <div>
     <div>
-      <div id="terms-container" class="flex justify-center my-5" v-if="requireTermsAccepted" @click="toggleTerms">
+        <div id="terms-container" class="my-5 w-[300px] flex flex-row text-left" v-if="requireTermsAccepted" @click="toggleTerms">
           <label class="custom-checkbox">
             <input type="checkbox" id="terms-checkbox" :checked="termsAccepted" @click="toggleTerms">
             <span class="checkmark"></span>
           </label>
-          I acknowledge and accept the
-          <a @click="openTermsModal" class="terms-link ml-1"><strong>terms of use.</strong>
-          </a>
+          <div>
+            I acknowledge and accept <br/>
+            <a @click="openTermsModal" class="terms-link ml-1">
+              <strong>the terms of use.</strong>
+            </a>
+          </div>
         </div>
         <p>Choose the wallet you want to pay with</p>
         <div>

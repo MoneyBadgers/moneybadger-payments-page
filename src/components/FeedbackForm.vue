@@ -51,8 +51,14 @@ export default {
         await feedbackService.submitFeedback({
           feedbackType: this.feedbackType,
           message: safeMessage,
-          orderId: this.paymentsStore.invoice.order_id || this.paymentsStore.invoiceParams.orderId || 'unknown',
-          merchantCode: this.paymentsStore.invoice.merchant_code || this.paymentsStore.invoiceParams.merchantCode || 'unknown'
+          orderId:
+            this.paymentsStore.invoice.order_id ||
+            this.paymentsStore.invoiceParams.orderId ||
+            'unknown',
+          merchantCode:
+            this.paymentsStore.invoice.merchant_code ||
+            this.paymentsStore.invoiceParams.merchantCode ||
+            'unknown'
         })
         this.outcome = 'Thank you for your feedback!'
         this.$emit('submitted')
@@ -70,7 +76,7 @@ export default {
     close() {
       this.showing = false
     }
-  },
+  }
 }
 </script>
 
@@ -113,16 +119,10 @@ export default {
             <div v-if="error" class="text-red-400 text-sm w-full text-center">
               {{ error }}
             </div>
-            <button
-              class="feedback-btn w-full"
-              :disabled="!isValid || sent"
-              @click="submit"
-            >
+            <button class="feedback-btn w-full" :disabled="!isValid || sent" @click="submit">
               Send
             </button>
-            <button type="button" class="skip-btn w-full my-3" @click="close">
-              Cancel
-            </button>
+            <button type="button" class="skip-btn w-full my-3" @click="close">Cancel</button>
           </div>
         </div>
       </div>
@@ -176,10 +176,14 @@ export default {
 }
 
 /* fade-in/out transition */
-.fade-enter-active, .fade-leave-active {
-  transition: opacity 0.25s ease, transform 0.25s ease;
+.fade-enter-active,
+.fade-leave-active {
+  transition:
+    opacity 0.25s ease,
+    transform 0.25s ease;
 }
-.fade-enter, .fade-leave-to {
+.fade-enter,
+.fade-leave-to {
   opacity: 0;
   transform: scale(0.95);
 }

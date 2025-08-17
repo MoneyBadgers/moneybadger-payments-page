@@ -1,35 +1,26 @@
 <template>
-  <div
-    v-if="remainingSeconds <= 90"
-    class="box"
-  >
-  <div class="flex flex-col items-left text-left justify-between my-6 p-4">
-    <div class="flex items-baseline justify-between">
-        <h5 class="font-bold ">Are you stuck?</h5>
+  <div v-if="remainingSeconds <= 90" class="box">
+    <div class="flex flex-col items-left text-left justify-between my-6 p-4">
+      <div class="flex items-baseline justify-between">
+        <h5 class="font-bold">Are you stuck?</h5>
         <p class="text-sm text-right">
-            Expires in <span class="text-primary-color">{{ expiresIn }}</span>
+          Expires in <span class="text-primary-color">{{ expiresIn }}</span>
         </p>
-    </div>
+      </div>
 
-    <p class="mb-4 text-gray-300">
-      You need to make payment soon or this screen will expire.
-    </p>
+      <p class="mb-4 text-gray-300">You need to make payment soon or this screen will expire.</p>
 
-    <FeedbackForm
-    :feedbackType="FeedbackType.ISSUE"
-    walletPrompt="Are you struggling to make payment?"
-    >
-    <template #trigger>
-            <button
-        class="text-primary-color font-medium hover:underline flex items-center gap-1"
-        >
-        I need help
-        <QuestionMarkCircleIcon class="w-6 h-6" />
-        </button>
-    </template>
-    </FeedbackForm>
-
-
+      <FeedbackForm
+        :feedbackType="FeedbackType.ISSUE"
+        walletPrompt="Are you struggling to make payment?"
+      >
+        <template #trigger>
+          <button class="text-primary-color font-medium hover:underline flex items-center gap-1">
+            I need help
+            <QuestionMarkCircleIcon class="w-6 h-6" />
+          </button>
+        </template>
+      </FeedbackForm>
     </div>
   </div>
 </template>
@@ -44,7 +35,7 @@ export default {
   name: 'PaymentExpiryHelp',
   components: {
     QuestionMarkCircleIcon,
-    FeedbackForm,
+    FeedbackForm
   },
   props: {
     expiresAt: {
@@ -56,7 +47,7 @@ export default {
     return {
       currentTime: Date.now(),
       timer: null as any,
-      FeedbackType: FeedbackType,
+      FeedbackType: FeedbackType
     }
   },
   computed: {

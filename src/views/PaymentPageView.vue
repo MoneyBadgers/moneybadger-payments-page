@@ -23,17 +23,18 @@ export default {
     ReviewPayment,
     PaymentConfirmed,
     ErrorPage,
-    Expired,
+    Expired
   },
   methods: {
     trackAnalytics(event: AnalyticsEvent, additionalProps?: Record<string, any>) {
       this.$mixpanel.trackEvent(event, {
         ...defaultAnalyticproperties({
-        wallet: this.paymentsStore.wallet.name,
-        currency: this.paymentsStore.invoice.currency,
-        merchant: this.paymentsStore.invoice.merchant_name,
-        amount: this.paymentsStore.invoice.amount_cents,
-      }), ...additionalProps
+          wallet: this.paymentsStore.wallet.name,
+          currency: this.paymentsStore.invoice.currency,
+          merchant: this.paymentsStore.invoice.merchant_name,
+          amount: this.paymentsStore.invoice.amount_cents
+        }),
+        ...additionalProps
       })
     }
   },
@@ -43,7 +44,7 @@ export default {
       return this.paymentsStore.wallet
     },
     status: function (): PaymentStatus {
-      if(this.expired){
+      if (this.expired) {
         return PaymentStatus.Expired
       }
       return this.paymentsStore.status
@@ -64,12 +65,12 @@ export default {
       return (this.paymentsStore as any).referenceId || ''
     },
     expired: function (): boolean {
-      if(this.paymentsStore.invoice.expires_at == null) return false
+      if (this.paymentsStore.invoice.expires_at == null) return false
       return new Date(this.paymentsStore.invoice.expires_at) < new Date()
     },
     statusMessage: function (): string {
       if (this.paymentsStore.errors.length > 0) {
-        this.trackAnalytics(AnalyticsEvent.PaymentFailure, {error: this.paymentsStore.errors[0]})
+        this.trackAnalytics(AnalyticsEvent.PaymentFailure, { error: this.paymentsStore.errors[0] })
         return this.paymentsStore.errors[0]
       } else if (this.paymentsStore.status === PaymentStatus.Successful) {
         this.trackAnalytics(AnalyticsEvent.PaymentSuccess)
@@ -88,7 +89,7 @@ export default {
       } else {
         return ''
       }
-    },
+    }
   },
   data() {
     return {
@@ -119,10 +120,12 @@ export default {
     <div class="container mx-auto my-2 text-center">
       <ErrorPage v-if="status === Status.Error" :errors="paymentsStore.errors"></ErrorPage>
       <Expired v-if="status === Status.Expired" :errors="paymentsStore.errors"></Expired>
-      <LoadingSpinner v-if="status === Status.Loading"/>
-      <WalletSelect v-if="status === Status.SelectWallet"
+      <LoadingSpinner v-if="status === Status.Loading" />
+      <WalletSelect
+        v-if="status === Status.SelectWallet"
         :requireTermsAccepted="(paymentsStore as any).requireTermsAccepted"
-        :requireRefunds="(paymentsStore as any).requireRefunds" />
+        :requireRefunds="(paymentsStore as any).requireRefunds"
+      />
       <ReviewPayment
         v-if="status === Status.WaitForPayment"
         :wallet="paymentsStore.wallet"
@@ -137,14 +140,17 @@ export default {
         :returnUrl="Return"
       ></PaymentConfirmed>
       <div class="secure-payment-logo px-16">
-        <img src="@/assets/secure-payment-money-badger.png" alt="Secure Payment" class="mx-auto py-4"/>
+        <img
+          src="@/assets/secure-payment-money-badger.png"
+          alt="Secure Payment"
+          class="mx-auto py-4"
+        />
       </div>
     </div>
   </div>
 </template>
 
 <style scoped>
-
 .lightning-logo {
   width: 20px;
   height: auto;

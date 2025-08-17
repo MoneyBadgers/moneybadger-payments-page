@@ -2,14 +2,14 @@
   <div class="text-white rounded-lg w-80 px-6 pb-6 text-center">
     <!-- Payment Button -->
     <a
-        :href="currentDeeplink"
-        target="_blank"
-        @click="onOpenWallet"
-        class="solid-btn text-black font-bold py-2 px-4 rounded-full w-full flex items-center justify-center gap-2 transition font-bold"
+      :href="currentDeeplink"
+      target="_blank"
+      @click="onOpenWallet"
+      class="solid-btn text-black font-bold py-2 px-4 rounded-full w-full flex items-center justify-center gap-2 transition font-bold"
     >
       Tap here to open the app
       <ArrowRightIcon class="w-5 h-5" />
-  </a>
+    </a>
   </div>
 </template>
 
@@ -36,7 +36,7 @@ export default {
         return this.paymentsStore.invoice.payment_request.deeplink
       }
 
-      const ps = (this.paymentsStore as any)
+      const ps = this.paymentsStore as any
 
       // if this is VALR and we have defined a payment currency to use,
       // then select the payment data for that currency
@@ -66,7 +66,7 @@ export default {
       deeplinks = deeplinks.filter((link) => link.length > 0)
       // index by walletOpens to cycle through deeplinks
       return deeplinks[this.walletOpens % deeplinks.length] || ''
-    },
+    }
   },
   methods: {
     onOpenWallet() {
@@ -89,7 +89,7 @@ export default {
         }),
         ...additionalProps
       })
-    },
+    }
   }
 }
 </script>

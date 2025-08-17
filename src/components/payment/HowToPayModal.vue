@@ -4,7 +4,9 @@
     v-if="showModal"
     class="fixed inset-0 bg-black bg-opacity-60 flex items-center justify-center z-50 text-left"
   >
-    <div class="bg-white rounded-lg p-6 w-[90%] max-w-md shadow-lg text-black relative flex flex-col justify-center">
+    <div
+      class="bg-white rounded-lg p-6 w-[90%] max-w-md shadow-lg text-black relative flex flex-col justify-center"
+    >
       <button
         class="absolute top-2 right-2 text-gray-500 hover:text-gray-700"
         @click="showModal = false"
@@ -40,20 +42,20 @@
       >
         Got it
       </button>
-       <FeedbackForm
+      <FeedbackForm
         :feedbackType="FeedbackType.WALLET_NOT_SUPPORTED"
         walletPrompt="Tell us how we can help you"
         class="mt-4"
-        >
+      >
         <template #trigger>
           <button
             class="text-primary-color font-medium hover:underline flex items-center gap-1 mx-auto"
-            >
+          >
             I need more help
             <QuestionMarkCircleIcon class="w-6 h-6" />
           </button>
         </template>
-        </FeedbackForm>
+      </FeedbackForm>
     </div>
   </div>
 </template>
@@ -66,12 +68,12 @@ export default {
   name: 'HowToPayModal',
   components: {
     FeedbackForm: FeedbackForm,
-    QuestionMarkCircleIcon: QuestionMarkCircleIcon,
+    QuestionMarkCircleIcon: QuestionMarkCircleIcon
   },
   data() {
     return {
       showModal: false,
-      FeedbackType: FeedbackType,
+      FeedbackType: FeedbackType
     }
   }
 }

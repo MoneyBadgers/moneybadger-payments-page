@@ -35,7 +35,7 @@
           <ArrowRightIcon class="w-4 h-4 text-primary-color" />
           Open in wallet app
         </button>
-        
+
         <div v-if="showCopyHint" class="flex justify-left w-300 text-xs text-gray-300">
           <ClipboardDocumentCheckIcon class="mx-2 size-4 text-primary-color" />
           <span>Payment details copied to clipboard!</span>
@@ -54,7 +54,13 @@
 </template>
 
 <script lang="ts">
-import { ChevronUpIcon, QrCodeIcon, LinkIcon, ArrowRightIcon, ClipboardDocumentCheckIcon } from '@heroicons/vue/24/solid'
+import {
+  ChevronUpIcon,
+  QrCodeIcon,
+  LinkIcon,
+  ArrowRightIcon,
+  ClipboardDocumentCheckIcon
+} from '@heroicons/vue/24/solid'
 import { mapStores } from 'pinia'
 import { usePaymentStore } from '../../stores/payments'
 import { AnalyticsEvent } from '../../types/analytics_events'
@@ -67,21 +73,21 @@ export default {
     QrCodeIcon,
     LinkIcon,
     ArrowRightIcon,
-    ClipboardDocumentCheckIcon,
+    ClipboardDocumentCheckIcon
   },
   props: {
     showingDeeplinkButton: {
       type: Boolean,
-      default: false,
-    },
+      default: false
+    }
   },
   computed: {
-    ...mapStores(usePaymentStore),
+    ...mapStores(usePaymentStore)
   },
   data() {
     return {
       expanded: false,
-      showCopyHint: false,
+      showCopyHint: false
     }
   },
   methods: {
@@ -122,7 +128,7 @@ export default {
         }),
         ...additionalProps
       })
-    },
-  },
+    }
+  }
 }
 </script>

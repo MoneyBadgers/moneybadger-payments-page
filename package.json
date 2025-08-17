@@ -12,7 +12,8 @@
     "build-only": "vite build",
     "type-check": "vue-tsc --build --force",
     "lint": "eslint . --ext .vue,.js,.jsx,.cjs,.mjs,.ts,.tsx,.cts,.mts --fix --ignore-path .gitignore",
-    "format": "prettier --write src/"
+    "format": "prettier --write src/",
+    "format:changed": "prettier --write $(git diff --name-only --diff-filter=ACMRT master...HEAD | grep -E '\\.(js|ts|vue|json|css|scss|md)$')"
   },
   "dependencies": {
     "@heroicons/vue": "^2.2.0",

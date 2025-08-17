@@ -3,7 +3,9 @@
     <!-- Back Button + Header -->
     <div class="flex items-center mb-2">
       <button @click="$emit('change-wallet')" class="mr-2">
-        <span class="w-6 h-6 rounded-full flex items-center justify-center bg-primary-color text-bg-color">
+        <span
+          class="w-6 h-6 rounded-full flex items-center justify-center bg-primary-color text-bg-color"
+        >
           <ChevronLeftIcon class="w-5 h-5 mr-0.5" />
         </span>
       </button>
@@ -11,31 +13,35 @@
     </div>
 
     <div class="flex flex-col items-center my-2">
-        <!-- Help Text -->
-        <p class="text-sm text-gray-300">
+      <!-- Help Text -->
+      <p class="text-sm text-gray-300">
         We will take you to your wallet to finish the payment.
         <HowToPayModal />
-        </p>
+      </p>
     </div>
 
     <div class="flex flex-col items-center my-2 box">
-        <PaymentDetails :amountCents="invoice.amount_cents" :logo="wallet.valueStore"/>
-        <MobilePayment v-if="showDeeplinkButton" :invoice="invoice" :wallet="wallet"/>
-        <QrDisplay v-else :invoice="invoice" :wallet="wallet"/>
+      <PaymentDetails :amountCents="invoice.amount_cents" :logo="wallet.valueStore" />
+      <MobilePayment v-if="showDeeplinkButton" :invoice="invoice" :wallet="wallet" />
+      <QrDisplay v-else :invoice="invoice" :wallet="wallet" />
     </div>
 
     <Expiry :expiresAt="invoice.expires_at || ''" />
 
-    <div class="flex flex-col items-center my-4 box">           
-        <MorePaymentOptions @use-qr-code="viewMode = 'qr'" @use-deeplink="viewMode='deeplink'" :showingDeeplinkButton="showDeeplinkButton"/>
+    <div class="flex flex-col items-center my-4 box">
+      <MorePaymentOptions
+        @use-qr-code="viewMode = 'qr'"
+        @use-deeplink="viewMode = 'deeplink'"
+        :showingDeeplinkButton="showDeeplinkButton"
+      />
     </div>
   </div>
 </template>
 
 <script lang="ts">
 import { ChevronLeftIcon } from '@heroicons/vue/24/solid'
-import MorePaymentOptions from './payment/MorePaymentOptions.vue' 
-import MobilePayment from './payment/MobilePayment.vue' 
+import MorePaymentOptions from './payment/MorePaymentOptions.vue'
+import MobilePayment from './payment/MobilePayment.vue'
 import PaymentDetails from './payment/PaymentDetails.vue'
 import QrDisplay from './payment/QrDisplay.vue'
 import type { PropType } from 'vue'
@@ -53,14 +59,14 @@ export default {
     PaymentDetails,
     QrDisplay,
     HowToPayModal,
-    Expiry,
+    Expiry
   },
   props: {
     invoice: { type: Object as PropType<Invoice>, required: true },
     wallet: { type: Object as PropType<Wallet>, required: true }
   },
   computed: {
-    showDeeplinkButton() { 
+    showDeeplinkButton() {
       if (this.viewMode === 'deeplink') {
         return true
       }
@@ -70,15 +76,15 @@ export default {
       return this.isMobileDevice
     },
     isMobileDevice() {
-        return /Android|iPhone|iPad|iPod/i.test(navigator.userAgent)
+      return /Android|iPhone|iPad|iPod/i.test(navigator.userAgent)
     },
     isDesktopDevice() {
-        return !this.isMobileDevice
-    },
+      return !this.isMobileDevice
+    }
   },
   data() {
     return {
-      viewMode: '',
+      viewMode: ''
     }
   }
 }

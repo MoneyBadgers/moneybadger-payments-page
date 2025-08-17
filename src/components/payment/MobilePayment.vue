@@ -51,7 +51,8 @@ export default {
           return valrFixedLink
         }
       }
-      return this.paymentsStore.wallet.generateLink(ps.paymentRequest)
+      const wallet = this.paymentsStore.wallet
+      return wallet.generateLink(ps.paymentRequest.data)
     },
     customProtocolDeeplink(): string {
       if (this.paymentsStore.wallet.valueStore === 'valr') {

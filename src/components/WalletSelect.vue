@@ -5,14 +5,14 @@ import { usePaymentStore } from '../stores/payments'
 import LightningAddress from '../models/lightning_address'
 import { AnalyticsEvent } from "../types/analytics_events"
 import { defaultAnalyticproperties } from "../types/analytics_default_properties"
-import GenericFeedbackForm from './FeedbackForm.vue'
+import FeedbackForm from './FeedbackForm.vue'
 import { QuestionMarkCircleIcon } from '@heroicons/vue/24/solid'
 import { FeedbackType } from '../api/feedback'
 
 export default {
   name: 'WalletSelect',
   components: {
-    GenericFeedbackForm,
+    FeedbackForm,
     QuestionMarkCircleIcon,
   },
   props: {
@@ -230,7 +230,7 @@ export default {
                    <div v-if="lunoDisabled" class="overlay">Not available</div>
                 </li>
                 <li class="flex justify-center">
-                  <GenericFeedbackForm
+                  <FeedbackForm
                   :feedbackType="FeedbackType.WALLET_NOT_SUPPORTED"
                   walletPrompt="Which wallet would you like to use?"
                   >
@@ -242,7 +242,7 @@ export default {
                       <QuestionMarkCircleIcon class="w-6 h-6" />
                     </button>
                   </template>
-                  </GenericFeedbackForm>
+                  </FeedbackForm>
                 </li>
             </ul>
         </div>

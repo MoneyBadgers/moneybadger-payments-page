@@ -6,7 +6,7 @@ import { usePaymentStore } from '../stores/payments'
 const feedbackService = new FeedbackService()
 
 export default {
-  name: 'GenericFeedbackForm',
+  name: 'FeedbackForm',
   props: {
     feedbackType: {
       type: String as () => FeedbackType,

@@ -15,7 +15,7 @@
       You need to make payment soon or this screen will expire.
     </p>
 
-    <GenericFeedbackForm
+    <FeedbackForm
     feedbackType="ISSUE"
     walletPrompt="Are you struggling to make payment?"
     >
@@ -27,7 +27,7 @@
         <QuestionMarkCircleIcon class="w-6 h-6" />
         </button>
     </template>
-    </GenericFeedbackForm>
+    </FeedbackForm>
 
 
     </div>
@@ -37,13 +37,13 @@
 <script lang="ts">
 import { formatDistanceStrict } from 'date-fns'
 import { QuestionMarkCircleIcon } from '@heroicons/vue/24/solid'
-import GenericFeedbackForm from '../FeedbackForm.vue'
+import FeedbackForm from '../FeedbackForm.vue'
 
 export default {
   name: 'PaymentExpiryHelp',
   components: {
     QuestionMarkCircleIcon,
-    GenericFeedbackForm,
+    FeedbackForm,
   },
   props: {
     expiresAt: {

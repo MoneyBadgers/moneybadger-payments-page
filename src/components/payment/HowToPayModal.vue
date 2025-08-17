@@ -40,7 +40,7 @@
       >
         Got it
       </button>
-       <GenericFeedbackForm
+       <FeedbackForm
         :feedbackType="FeedbackType.WALLET_NOT_SUPPORTED"
         walletPrompt="Tell us how we can help you"
         class="mt-4"
@@ -53,19 +53,19 @@
             <QuestionMarkCircleIcon class="w-6 h-6" />
           </button>
         </template>
-        </GenericFeedbackForm>
+        </FeedbackForm>
     </div>
   </div>
 </template>
 
 <script lang="ts">
-import GenericFeedbackForm from '../FeedbackForm.vue'
+import FeedbackForm from '../FeedbackForm.vue'
 import { QuestionMarkCircleIcon } from '@heroicons/vue/24/solid'
 import { FeedbackType } from '../../api/feedback'
 export default {
   name: 'HowToPayModal',
   components: {
-    GenericFeedbackForm: GenericFeedbackForm,
+    FeedbackForm: FeedbackForm,
     QuestionMarkCircleIcon: QuestionMarkCircleIcon,
   },
   data() {

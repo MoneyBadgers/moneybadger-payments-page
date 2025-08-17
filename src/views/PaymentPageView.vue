@@ -52,16 +52,16 @@ export default {
       return this.paymentsStore.invoice.payment_request?.qr_code_url || '' // TODO: show an image to make it obvious this failed
     },
     paymentRequest: function (): string {
-      return this.paymentsStore.lnPaymentRequest || ''
+      return (this.paymentsStore as any).lnPaymentRequest || ''
     },
     amountPaid: function (): number {
-      return this.paymentsStore.amountPaidCents / 100.0
+      return (this.paymentsStore as any).amountPaidCents / 100.0
     },
     paymentTimeStamp: function (): string {
-      return this.paymentsStore.paidAt || ''
+      return (this.paymentsStore as any).paidAt || ''
     },
     referenceId: function (): string {
-      return this.paymentsStore.referenceId || ''
+      return (this.paymentsStore as any).referenceId || ''
     },
     expired: function (): boolean {
       if(this.paymentsStore.invoice.expires_at == null) return false
@@ -120,7 +120,9 @@ export default {
       <ErrorPage v-if="status === Status.Error" :errors="paymentsStore.errors"></ErrorPage>
       <Expired v-if="status === Status.Expired" :errors="paymentsStore.errors"></Expired>
       <LoadingSpinner v-if="status === Status.Loading"/>
-      <WalletSelect v-if="status === Status.SelectWallet" :requireTermsAccepted="paymentsStore.requireTermsAccepted" :requireRefunds="paymentsStore.requireRefunds"></WalletSelect>
+      <WalletSelect v-if="status === Status.SelectWallet"
+        :requireTermsAccepted="(paymentsStore as any).requireTermsAccepted"
+        :requireRefunds="(paymentsStore as any).requireRefunds" />
       <ReviewPayment
         v-if="status === Status.WaitForPayment"
         :wallet="paymentsStore.wallet"

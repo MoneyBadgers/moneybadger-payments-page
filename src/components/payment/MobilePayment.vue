@@ -35,10 +35,13 @@ export default {
       if (this.paymentsStore.invoice.payment_request?.deeplink) {
         return this.paymentsStore.invoice.payment_request.deeplink
       }
+
+      const ps = (this.paymentsStore as any)
+
       // if this is VALR and we have defined a payment currency to use,
       // then select the payment data for that currency
-      if (this.paymentsStore.wallet.valueStore === 'valr' && this.paymentsStore.getPaymentCurrency) {
-        let key = `valr|${this.paymentsStore.getPaymentCurrency}`
+      if (ps.wallet.valueStore === 'valr' && ps.getPaymentCurrency) {
+        let key = `valr|${ps.getPaymentCurrency}`
         let pm = this.paymentsStore.invoice.payment_request?.payment_methods
         if (pm && pm[key]) {
           let link = this.paymentsStore.wallet.generateLink(pm[key] as unknown as string)
@@ -48,7 +51,7 @@ export default {
           return valrFixedLink
         }
       }
-      return this.paymentsStore.wallet.generateLink(this.paymentsStore.paymentRequest)
+      return this.paymentsStore.wallet.generateLink(ps.paymentRequest)
     },
     customProtocolDeeplink(): string {
       if (this.paymentsStore.wallet.valueStore === 'valr') {

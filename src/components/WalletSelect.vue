@@ -222,7 +222,7 @@ export default {
     <transition name="fade">
       <div v-if="valrSelected" class="fixed inset-0 modal-bg flex items-center justify-center">
         <div class="w-1/2 h-[100%] overflow-y-auto p-6 rounded-lg shadow-lg justify-center">
-          <img src="@/assets/wallets/valr.png" class="w-40 mx-auto"></img>
+          <img src="@/assets/wallets/valr.png" class="w-40 mx-auto" />
           <p class="font-semibold mb-4">Please choose the currency you want to pay with:</p>
           <div class="grid grid-cols-1 gap-3">
             <button v-for="currency in valrCurrencies" :key="currency"
@@ -433,7 +433,6 @@ button:disabled {
   padding: 0.5rem 1rem;
   text-decoration: none;
   text-align: center;
-  border-radius: ;
   &:hover {
     background-color: var(--color-amber-light);
     color: var(--color-black);

@@ -92,8 +92,8 @@ export default {
       // not really sure what makes sense to copy for Binance
       const content =
         this.paymentsStore.wallet.valueStore == 'binance'
-          ? this.paymentsStore.paymentRequestDeepLink
-          : this.paymentsStore.paymentRequestQrData
+          ? (this.paymentsStore as any).paymentRequestDeepLink
+          : (this.paymentsStore as any).paymentRequestQrData
       this.trackAnalytics(AnalyticsEvent.CopyPaymentRequest, {
         content: content
       })

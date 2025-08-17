@@ -46,10 +46,10 @@ export default {
   computed: {
     ...mapStores(usePaymentStore),
     paymentRequestQrData(): string {
-      return this.paymentsStore.paymentRequestQrData
+      return (this.paymentsStore as any).paymentRequestQrData
     },
     paymentRequestQrUrl(): string | null {
-      return this.paymentsStore.paymentRequestQrUrl
+      return (this.paymentsStore as any).paymentRequestQrUrl
     }
   },
   methods: {

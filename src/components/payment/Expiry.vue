@@ -16,7 +16,7 @@
     </p>
 
     <FeedbackForm
-    feedbackType="ISSUE"
+    :feedbackType="FeedbackType.ISSUE"
     walletPrompt="Are you struggling to make payment?"
     >
     <template #trigger>
@@ -38,6 +38,7 @@
 import { formatDistanceStrict } from 'date-fns'
 import { QuestionMarkCircleIcon } from '@heroicons/vue/24/solid'
 import FeedbackForm from '../FeedbackForm.vue'
+import { FeedbackType } from '../../api/feedback'
 
 export default {
   name: 'PaymentExpiryHelp',
@@ -55,6 +56,7 @@ export default {
     return {
       currentTime: Date.now(),
       timer: null as any,
+      FeedbackType: FeedbackType,
     }
   },
   computed: {

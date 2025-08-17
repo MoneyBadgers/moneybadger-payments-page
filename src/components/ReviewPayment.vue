@@ -24,7 +24,7 @@
         <QrDisplay v-else :invoice="invoice" :wallet="wallet"/>
     </div>
 
-    <Expiry :expiresAt="invoice.expires_at" />
+    <Expiry :expiresAt="invoice.expires_at || ''" />
 
     <div class="flex flex-col items-center my-4 box">           
         <MorePaymentOptions @use-qr-code="viewMode = 'qr'" @use-deeplink="viewMode='deeplink'" :showingDeeplinkButton="showDeeplinkButton"/>

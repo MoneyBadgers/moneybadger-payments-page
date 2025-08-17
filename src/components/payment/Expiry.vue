@@ -1,6 +1,6 @@
 <template>
   <div
-    v-if="remainingSeconds <= 9000"
+    v-if="remainingSeconds <= 90"
     class="box"
   >
   <div class="flex flex-col items-left text-left justify-between my-6 p-4">

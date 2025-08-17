@@ -5,7 +5,6 @@ import { usePaymentStore } from '../stores/payments'
 import LightningAddress from '../models/lightning_address'
 import { AnalyticsEvent } from "../types/analytics_events"
 import { defaultAnalyticproperties } from "../types/analytics_default_properties"
-import WalletFeedback from './WalletFeedback.vue'
 import GenericFeedbackForm from './FeedbackForm.vue'
 import { QuestionMarkCircleIcon } from '@heroicons/vue/24/solid'
 import { FeedbackType } from '../api/feedback'
@@ -13,7 +12,6 @@ import { FeedbackType } from '../api/feedback'
 export default {
   name: 'WalletSelect',
   components: {
-    WalletFeedback,
     GenericFeedbackForm,
     QuestionMarkCircleIcon,
   },

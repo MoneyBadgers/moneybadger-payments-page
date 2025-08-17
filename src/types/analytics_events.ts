@@ -15,4 +15,5 @@ export enum AnalyticsEvent {
   OpenWalletButtonClicked = "OpenWalletButtonClicked",
   CopyPaymentRequest = "CopyPaymentRequest",
   ShowOpenWalletButtonClicked = "ShowOpenWalletButtonClicked",
+  WalletFeedback = "WalletFeedback",
 }

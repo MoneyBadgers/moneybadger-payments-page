@@ -24,6 +24,8 @@
         <QrDisplay v-else :invoice="invoice" :wallet="wallet"/>
     </div>
 
+    <Expiry :expiresAt="invoice.expires_at" />
+
     <div class="flex flex-col items-center my-4 box">           
         <MorePaymentOptions @use-qr-code="viewMode = 'qr'" @use-deeplink="viewMode='deeplink'" :showingDeeplinkButton="showDeeplinkButton"/>
     </div>
@@ -40,6 +42,7 @@ import type { PropType } from 'vue'
 import Wallet from '../models/wallet'
 import type { Invoice } from '../api/cryptoqr/api'
 import HowToPayModal from './payment/HowToPayModal.vue'
+import Expiry from './payment/Expiry.vue'
 
 export default {
   name: 'ReviewPayment',
@@ -50,6 +53,7 @@ export default {
     PaymentDetails,
     QrDisplay,
     HowToPayModal,
+    Expiry,
   },
   props: {
     invoice: { type: Object as PropType<Invoice>, required: true },

@@ -5,12 +5,17 @@ import { usePaymentStore } from '../stores/payments'
 import LightningAddress from '../models/lightning_address'
 import { AnalyticsEvent } from "../types/analytics_events"
 import { defaultAnalyticproperties } from "../types/analytics_default_properties"
-import WalletFeedback from '@/components/WalletFeedback.vue'
+import WalletFeedback from './WalletFeedback.vue'
+import GenericFeedbackForm from './FeedbackForm.vue'
+import { QuestionMarkCircleIcon } from '@heroicons/vue/24/solid'
+import { FeedbackType } from '../api/feedback'
 
 export default {
   name: 'WalletSelect',
   components: {
     WalletFeedback,
+    GenericFeedbackForm,
+    QuestionMarkCircleIcon,
   },
   props: {
     requireTermsAccepted: {
@@ -178,6 +183,7 @@ export default {
         termsAccepted: localStorage.getItem('termsAccepted') === 'true',
         termsCallback: ()=>{},
         wallletFeedback: false,
+        FeedbackType: FeedbackType,
     }
   },
 }
@@ -225,8 +231,20 @@ export default {
                    </button>
                    <div v-if="lunoDisabled" class="overlay">Not available</div>
                 </li>
-                <li>
-                    <button class="skip-btn py-2 rounded my-3" @click="wallletFeedback=true">Don't see your wallet in the list?</button>
+                <li class="flex justify-center">
+                  <GenericFeedbackForm
+                  :feedbackType="FeedbackType.WALLET_NOT_SUPPORTED"
+                  walletPrompt="Which wallet would you like to use?"
+                  >
+                  <template #trigger>
+                    <button
+                      class="text-primary-color font-medium hover:underline flex items-center gap-1"
+                      >
+                      My wallet is not listed
+                      <QuestionMarkCircleIcon class="w-6 h-6" />
+                    </button>
+                  </template>
+                  </GenericFeedbackForm>
                 </li>
             </ul>
         </div>

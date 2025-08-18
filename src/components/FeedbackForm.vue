@@ -88,7 +88,7 @@ export default {
 
     <transition name="fade">
       <div v-if="showing" class="modal-overlay" @click.self="close">
-        <div class="modal-box m-3">
+        <div class="box m-3 p-6 w-[90%]">
           <h5 class="font-bold mb-2 text-lg">{{ walletPrompt }}</h5>
 
           <textarea
@@ -119,10 +119,10 @@ export default {
             <div v-if="error" class="text-red-400 text-sm w-full text-center">
               {{ error }}
             </div>
-            <button class="feedback-btn w-full" :disabled="!isValid || sent" @click="submit">
+            <button class="solid-btn w-full" :disabled="!isValid || sent" @click="submit">
               Send
             </button>
-            <button type="button" class="skip-btn w-full my-3" @click="close">Cancel</button>
+            <button type="button" class="text-btn w-full my-3" @click="close">Cancel</button>
           </div>
         </div>
       </div>
@@ -131,37 +131,6 @@ export default {
 </template>
 
 <style scoped>
-.modal-overlay {
-  position: fixed;
-  inset: 0;
-  background-color: rgba(0, 0, 0, 0.8);
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  z-index: 50;
-}
-
-.modal-box {
-  background-color: #1e1e1e;
-  padding: 1.5rem;
-  border-radius: 0.5rem;
-  width: 100%;
-  max-width: 500px;
-  color: white;
-  box-shadow: 0 5px 25px rgba(0, 0, 0, 0.3);
-}
-
-.feedback-btn {
-  background-color: var(--color-amber-med);
-  color: var(--color-black);
-  font-weight: bold;
-  padding: 0.5rem 0.9rem;
-  border-radius: 0.5rem;
-}
-.feedback-btn[disabled] {
-  opacity: 0.5;
-  cursor: not-allowed;
-}
 .skip-btn {
   background-color: var(--color-black);
   color: var(--color-amber-light);

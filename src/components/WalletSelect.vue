@@ -274,7 +274,7 @@ export default {
             </button>
             <div v-if="lunoDisabled" class="overlay">Not available</div>
           </li>
-          <li class="flex justify-center">
+          <li class="flex justify-center my-4">
             <FeedbackForm
               :feedbackType="FeedbackType.WALLET_NOT_SUPPORTED"
               walletPrompt="Which wallet would you like to use?"
@@ -284,7 +284,7 @@ export default {
                   class="text-primary-color font-medium hover:underline flex items-center gap-1"
                 >
                   My wallet is not listed
-                  <QuestionMarkCircleIcon class="w-6 h-6" />
+                  <QuestionMarkCircleIcon class="w-5 h-5" />
                 </button>
               </template>
             </FeedbackForm>

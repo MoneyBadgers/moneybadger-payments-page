@@ -1,22 +1,13 @@
 <template>
-  <span class="text-orange-400 underline cursor-pointer" @click="showModal = true">Learn more</span>
+  <span class="text-primary-color underline cursor-pointer" @click="showModal = true">Learn more</span>
   <div
     v-if="showModal"
-    class="fixed inset-0 bg-black bg-opacity-60 flex items-center justify-center z-50 text-left"
+    class="modal-overlay"
   >
     <div
-      class="bg-white rounded-lg p-6 w-[90%] max-w-md shadow-lg text-black relative flex flex-col justify-center"
+      class="box p-6 w-[90%] flex flex-col justify-center"
     >
-      <button
-        class="absolute top-2 right-2 text-gray-500 hover:text-gray-700"
-        @click="showModal = false"
-      >
-        <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
-          <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
-        </svg>
-      </button>
-
-      <h3 class="text-md font-bold mb-3">How to pay</h3>
+      <h5 class="text-md font-bold mb-3">How to pay</h5>
 
       <div class="mb-4">
         <p class="font-semibold text-sm">On mobile:</p>
@@ -37,7 +28,7 @@
       </div>
 
       <button
-        class="mt-6 w-full bg-orange-400 hover:bg-orange-500 text-white font-medium py-2 px-4 rounded"
+        class="solid-btn mt-6"
         @click="showModal = false"
       >
         Got it

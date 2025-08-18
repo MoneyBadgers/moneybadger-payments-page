@@ -12,9 +12,9 @@
       <h2 class="text-lg font-semibold">Review your payment</h2>
     </div>
 
-    <div class="flex flex-col items-center my-2">
+    <div class="flex flex-col items-center my-4">
       <!-- Help Text -->
-      <p class="text-sm text-gray-300">
+      <p class="text-sm text-gray-300 text-left">
         We will take you to your wallet to finish the payment.
         <HowToPayModal />
       </p>

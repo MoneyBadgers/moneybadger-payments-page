@@ -405,14 +405,6 @@ export default {
         </div>
       </div>
     </transition>
-    <transition name="fade">
-      <div
-        v-if="wallletFeedback"
-        class="terms-modal fixed inset-0 modal-bg flex items-center justify-center"
-      >
-        <WalletFeedback @submitted="walletFeedbackSubmitted" @cancel="wallletFeedback = false" />
-      </div>
-    </transition>
   </div>
 </template>
 

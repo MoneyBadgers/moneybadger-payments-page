@@ -75,8 +75,8 @@ export default {
       }
       // if this is VALR and we have defined a payment currency to use,
       // then select the payment data for that currency
-      if(this.wallet.valueStore === 'valr' && this.paymentsStore.getPaymentCurrency){
-          let key = `valr|${this.paymentsStore.getPaymentCurrency}`
+      if(this.wallet.valueStore === 'valr' && (this.paymentsStore as any).getPaymentCurrency){
+          let key = `valr|${(this.paymentsStore as any).getPaymentCurrency}`
           let pm = this.invoice.payment_request?.payment_methods
           if(pm && pm[key]){
             return this.wallet.generateCopyableRequest(pm[key] as unknown as string)
@@ -90,8 +90,8 @@ export default {
       }
       // if this is VALR and we have defined a payment currency to use,
       // then select the payment data for that currency
-      if(this.wallet.valueStore === 'valr' && this.paymentsStore.getPaymentCurrency){
-        let key = `valr|${this.paymentsStore.getPaymentCurrency}`
+      if(this.wallet.valueStore === 'valr' && (this.paymentsStore as any).getPaymentCurrency){
+        let key = `valr|${(this.paymentsStore as any).getPaymentCurrency}`
           let pm = this.invoice.payment_request?.payment_methods
           if(pm && pm[key]){
             let link = this.wallet.generateLink(pm[key] as unknown as string)

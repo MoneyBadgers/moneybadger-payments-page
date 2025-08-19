@@ -8,7 +8,6 @@ import HoneybadgerVue from "@honeybadger-io/vue"
 
 import App from './App.vue'
 import router from './router'
-import { env } from 'process';
 
 const app = createApp(App)
 

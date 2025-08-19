@@ -1,10 +1,10 @@
 <template>
-  <div class="box text-white rounded-lg w-80 p-4">
+  <div class="box text-white rounded-lg w-full p-4">
     <!-- Toggle Header -->
-    <div class="flex justify-between items-center cursor-pointer" @click="toggle">
+    <div class="flex flex-row justify-between items-right cursor-pointer" @click="toggle">
       <span class="text-sm font-medium text-gray-300">More payment options</span>
       <ChevronUpIcon
-        class="w-4 h-4 transition-transform duration-200 primary-color"
+        class="w-6 h-6 transition-transform duration-200 text-primary-color"
         :class="{ 'rotate-180': !expanded }"
       />
     </div>

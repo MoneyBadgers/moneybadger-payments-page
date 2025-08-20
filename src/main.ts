@@ -5,6 +5,7 @@ import { createApp } from 'vue'
 import { createPinia } from 'pinia'
 import { MixpanelPlugin } from './plugins/mixpanel';
 import HoneybadgerVue from "@honeybadger-io/vue"
+import '@fontsource/manrope';
 
 import App from './App.vue'
 import router from './router'

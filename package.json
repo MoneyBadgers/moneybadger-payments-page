@@ -16,6 +16,7 @@
     "format:changed": "prettier --write $(git diff --name-only --diff-filter=ACMRT master...HEAD | grep -E '\\.(js|ts|vue|json|css|scss|md)$')"
   },
   "dependencies": {
+    "@fontsource/manrope": "^5.2.6",
     "@heroicons/vue": "^2.2.0",
     "@honeybadger-io/js": "^6.11.2",
     "@honeybadger-io/vue": "^6.2.4",

@@ -226,3 +226,65 @@ button.text {
 button.text:hover {
   color: var(--primary-accent-hover);
 }
+.primary-color {
+  color: var(--color-amber-light);
+}
+
+.box {
+  background-color: var(--color-black-mute);
+  border-radius: 12px;
+}
+
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  inset: 0;
+  background-color: rgba(0, 0, 0, 0.8);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 50;
+}
+
+.solid-btn {
+  min-height: 50px;
+  display: block;
+  background-color: var(--color-amber-med);
+  font-weight: bold;
+  color: var(--color-black);
+  text-decoration: none;
+  text-align: center;
+  border-radius: 12px;
+  &:hover {
+    background-color: var(--color-amber-light);
+    color: var(--color-black);
+  }
+}
+
+.text-btn {
+  display: block;
+  background-color: transparent;
+  font-weight: bold;
+  color: var(--color-amber-med);
+  text-decoration: none;
+  text-align: center;
+  border-radius: 12px;
+  &:hover {
+    text-decoration: underline;
+  }
+}
+
+.text-primary-color {
+  color: var(--color-amber-light);
+}
+
+.text-bg-color {
+  color: var(--color-black);
+}
+
+.bg-primary-color {
+  background-color: var(--color-amber-light);
+}

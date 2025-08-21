@@ -13,27 +13,28 @@ import LoadingSpinner from '../components/LoadingSpinner.vue'
 import { peachInit } from '../partner/peach'
 import { AnalyticsEvent } from '../types/analytics_events'
 import { defaultAnalyticproperties } from '../types/analytics_default_properties'
+import ReviewPayment from '../components/ReviewPayment.vue'
 
 export default {
   name: 'PaymentPageView',
   components: {
     WalletSelect,
     LoadingSpinner,
-    AwaitingPayment,
-    Logo,
+    ReviewPayment,
     PaymentConfirmed,
     ErrorPage,
-    Expired,
+    Expired
   },
   methods: {
     trackAnalytics(event: AnalyticsEvent, additionalProps?: Record<string, any>) {
       this.$mixpanel.trackEvent(event, {
         ...defaultAnalyticproperties({
-        wallet: this.paymentsStore.wallet.name,
-        currency: this.paymentsStore.invoice.currency,
-        merchant: this.paymentsStore.invoice.merchant_name,
-        amount: this.paymentsStore.invoice.amount_cents,
-      }), ...additionalProps
+          wallet: this.paymentsStore.wallet.name,
+          currency: this.paymentsStore.invoice.currency,
+          merchant: this.paymentsStore.invoice.merchant_name,
+          amount: this.paymentsStore.invoice.amount_cents
+        }),
+        ...additionalProps
       })
     }
   },
@@ -43,7 +44,7 @@ export default {
       return this.paymentsStore.wallet
     },
     status: function (): PaymentStatus {
-      if(this.expired){
+      if (this.expired) {
         return PaymentStatus.Expired
       }
       return this.paymentsStore.status
@@ -52,24 +53,24 @@ export default {
       return this.paymentsStore.invoice.payment_request?.qr_code_url || '' // TODO: show an image to make it obvious this failed
     },
     paymentRequest: function (): string {
-      return this.paymentsStore.lnPaymentRequest || ''
+      return (this.paymentsStore as any).lnPaymentRequest || ''
     },
     amountPaid: function (): number {
-      return this.paymentsStore.amountPaidCents / 100.0
+      return (this.paymentsStore as any).amountPaidCents / 100.0
     },
     paymentTimeStamp: function (): string {
-      return this.paymentsStore.paidAt || ''
+      return (this.paymentsStore as any).paidAt || ''
     },
     referenceId: function (): string {
-      return this.paymentsStore.referenceId || ''
+      return (this.paymentsStore as any).referenceId || ''
     },
     expired: function (): boolean {
-      if(this.paymentsStore.invoice.expires_at == null) return false
+      if (this.paymentsStore.invoice.expires_at == null) return false
       return new Date(this.paymentsStore.invoice.expires_at) < new Date()
     },
     statusMessage: function (): string {
       if (this.paymentsStore.errors.length > 0) {
-        this.trackAnalytics(AnalyticsEvent.PaymentFailure, {error: this.paymentsStore.errors[0]})
+        this.trackAnalytics(AnalyticsEvent.PaymentFailure, { error: this.paymentsStore.errors[0] })
         return this.paymentsStore.errors[0]
       } else if (this.paymentsStore.status === PaymentStatus.Successful) {
         this.trackAnalytics(AnalyticsEvent.PaymentSuccess)
@@ -88,7 +89,7 @@ export default {
       } else {
         return ''
       }
-    },
+    }
   },
   data() {
     return {
@@ -114,25 +115,23 @@ export default {
 
 <template>
   <div class="mx-auto text-center">
-    <div class="status-bar py-2" :class="statusStyle">
-      <span class="text" :class="statusStyle">{{statusMessage}}</span>
-    </div>
-    <div class="container mx-auto text-center">
-      <h1 class="py-2 font-bold flex justify-center items-center">
-        {{ wallet.name }}
-          <Logo class="mx-1 lightning-logo"/>
-        Payment
-      </h1>
+    <div class="top-bar"></div>
+    <div class="spacer"></div>
+    <div class="container mx-auto my-2 text-center">
       <ErrorPage v-if="status === Status.Error" :errors="paymentsStore.errors"></ErrorPage>
       <Expired v-if="status === Status.Expired" :errors="paymentsStore.errors"></Expired>
-      <LoadingSpinner v-if="status === Status.Loading"/>
-      <WalletSelect v-if="status === Status.SelectWallet" :requireTermsAccepted="paymentsStore.requireTermsAccepted" :requireRefunds="paymentsStore.requireRefunds"></WalletSelect>
-      <AwaitingPayment
+      <LoadingSpinner v-if="status === Status.Loading" />
+      <WalletSelect
+        v-if="status === Status.SelectWallet"
+        :requireTermsAccepted="(paymentsStore as any).requireTermsAccepted"
+        :requireRefunds="(paymentsStore as any).requireRefunds"
+      />
+      <ReviewPayment
         v-if="status === Status.WaitForPayment"
         :wallet="paymentsStore.wallet"
         :invoice="paymentsStore.invoice"
         @change-wallet="paymentsStore.changeWallet"
-      ></AwaitingPayment>
+      ></ReviewPayment>
       <PaymentConfirmed
         v-if="status === Status.Successful"
         :timeStamp="paymentTimeStamp"
@@ -141,14 +140,17 @@ export default {
         :returnUrl="Return"
       ></PaymentConfirmed>
       <div class="secure-payment-logo px-16">
-        <img src="@/assets/partners/default/secure-payment-money-badger-dark.png" alt="Secure Payment" class="mx-auto py-4"/>
+        <img
+          src="@/assets/secure-payment-money-badger-dark.png"
+          alt="Secure Payment"
+          class="mx-auto py-4"
+        />
       </div>
     </div>
   </div>
 </template>
 
 <style scoped>
-
 .lightning-logo {
   width: 20px;
   height: auto;
@@ -162,16 +164,19 @@ export default {
   margin: 0 auto;
 }
 
-.status-bar, .status-bar .text {
-  background-color: var(--info);
-  font-weight: bold;
-  color: var(--info-text);
-  text-align: center;
-  &.bg-red-500 {
-    background-color: var(--error);
-  }
+.top-bar {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 8px;
+  background: linear-gradient(to right, #f7931a, #1c1c1e);
+  z-index: 50;
 }
 
+.spacer {
+  height: 24px; /* Same height as the top bar */
+}
 .secure-payment-logo {
   max-width: 300px;
 }

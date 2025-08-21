@@ -7,7 +7,7 @@ const loadCss = async (theme: string) => {
 };
 
 onMounted(() => {
-  // loadCss('default'); // Loads dark.css dynamically
+  loadCss('default'); // Loads dark.css dynamically
 });
 </script>
 

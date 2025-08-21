@@ -281,7 +281,7 @@ export default {
             >
               <template #trigger>
                 <button
-                  class="text-primary-color font-medium hover:underline flex items-center gap-1"
+                  class="text no-underline font-medium hover:underline flex items-center gap-1"
                 >
                   My wallet is not listed
                   <QuestionMarkCircleIcon class="w-5 h-5" />
@@ -338,10 +338,10 @@ export default {
             class="w-full border border-gray-300 rounded p-2 mb-4 text-black"
           />
           <div class="flex justify-between items-center">
-            <button class="cancel-btn mr-2" @click="cancelLightningAddressEntry">Cancel</button>
+            <button class="secondary mr-2" @click="cancelLightningAddressEntry">Cancel</button>
             <div class="flex">
-              <button class="skip-btn mr-2 rounded" @click="skipLightningAddressEntry">Skip</button>
-              <button class="confirm-btn rounded" @click="setLightningAddressAndWallet">
+              <button class="secondary mr-2 rounded" @click="skipLightningAddressEntry">Skip</button>
+              <button class="primary rounded" @click="setLightningAddressAndWallet">
                 Continue
               </button>
             </div>
@@ -363,10 +363,10 @@ export default {
             >
           </p>
           <div class="flex my-2">
-            <button class="confirm-btn rounded basis-3/4" @click="acceptTerms">
+            <button class="primary rounded basis-3/4" @click="acceptTerms">
               Accept and Continue
             </button>
-            <button class="cancel-btn ml-2 basis-1/4" @click="closeTermsModal()">Cancel</button>
+            <button class="secondary ml-2 basis-1/4" @click="closeTermsModal()">Cancel</button>
           </div>
           <ol class="list-decimal pl-6 mb-4">
             <li class="mb-2">

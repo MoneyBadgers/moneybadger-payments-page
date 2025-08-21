@@ -57,60 +57,19 @@
   --section-gap: 160px;
 }
 
-:root {
-  /* Primary colors */
-  --primary-bg: #ffffff; /* Default background */
-  --primary-text: #1a202c; /* Default text color */
-  --primary-accent: #3b82f6; /* Default primary accent (e.g., primary buttons) */
-  --primary-accent-hover: #2563eb; /* Hover state for primary accent */
-
-  /* Secondary colors */
-  --secondary-bg: #f7fafc; /* Secondary background (e.g., cards) */
-  --secondary-text: #4a5568; /* Secondary text (e.g., subtitles) */
-  --secondary-accent: #6b7280; /* Default secondary accent (e.g., secondary buttons) */
-  --secondary-accent-hover: #4b5563; /* Hover state for secondary accent */
-
-  /* Utility colors */
-  --border-color: #e2e8f0; /* Default border color */
-  --shadow-color: rgba(0, 0, 0, 0.1); /* Default shadow */
-
-  /* Typography */
-  --font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-  --font-size-base: 16px;
-  --font-size-heading: 24px;
-
-  /* Spacing */
-  --spacing-unit: 8px;
-  --section-gap: 160px;
-
-  /* Status colors */
-  --info: #0284c7; /* Info background */
-  --info-hover: #026395; /* Info hover background */
-  --info-text: #ffffff; /* Info text (white for buttons, adjustable for alerts) */
-  --success: #16a34a; /* Success background */
-  --success-hover: #15803d; /* Success hover background */
-  --success-text: #ffffff; /* Success text */
-  --warning: #d97706; /* Warning background */
-  --warning-hover: #b45309; /* Warning hover background */
-  --warning-text: #ffffff; /* Warning text */
-  --error: #dc2626; /* Error background */
-  --error-hover: #b91c1c; /* Error hover background */
-  --error-text: #ffffff; /* Error text */
+.money-badger-logo {
+  background-image: url('@/assets/secure-payment-money-badger-dark.png');
+  background-size: contain;
+  width: 172px;
+  height: 47px;
 }
 
 /* Dark mode variables */
-/* @media (prefers-color-scheme: dark) {
-  :root {
-    --primary-bg: #1a202c;
-    --primary-text: #e2e8f0;
-    --primary-accent: #60a5fa;
-    --primary-accent-hover: #3b82f6;
-    --secondary-bg: #2d3748;
-    --secondary-text: #a0aec0;
-    --border-color: #4a5568;
-    --shadow-color: rgba(0, 0, 0, 0.3);
+@media (prefers-color-scheme: dark) {
+  .money-badger-logo {
+    background-image: url('@/assets/secure-payment-money-badger.png');
   }
-} */
+}
 
 *,
 *::before,
@@ -173,6 +132,7 @@ button.primary {
   cursor: pointer;
   font-size: var(--font-size-base);
   transition: background-color 0.2s ease;
+  font-weight: bold;
 }
 
 button.primary:hover {
@@ -189,6 +149,7 @@ button.secondary {
   cursor: pointer;
   font-size: var(--font-size-base);
   transition: background-color 0.2s ease;
+  font-weight: bold;
 }
 
 button.secondary:hover {
@@ -221,13 +182,18 @@ button.text {
   font-size: var(--font-size-base);
   text-decoration: underline;
   transition: color 0.2s ease;
+  font-weight: bold;
+  &.no-underline {
+    text-decoration: none;  
+  }
+  &:hover {
+    color: var(--primary-accent-hover);  
+    text-decoration: underline;
+  }
 }
 
-button.text:hover {
-  color: var(--primary-accent-hover);
-}
-.primary-color {
-  color: var(--color-amber-light);
+h2 {
+  color: var(--primary-text);
 }
 
 .box {
@@ -243,6 +209,7 @@ button.text:hover {
   bottom: 0;
   inset: 0;
   background-color: rgba(0, 0, 0, 0.8);
+  color: white;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -278,13 +245,13 @@ button.text:hover {
 }
 
 .text-primary-color {
-  color: var(--color-amber-light);
+  color: var(--primary-accent);
 }
 
 .text-bg-color {
-  color: var(--color-black);
+  color: var(--primary-text);
 }
 
 .bg-primary-color {
-  background-color: var(--color-amber-light);
+  background-color: var(--primary-accent);
 }

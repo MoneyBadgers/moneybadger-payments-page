@@ -28,7 +28,7 @@
       </div>
 
       <button
-        class="solid-btn mt-6"
+        class="primary mt-6"
         @click="showModal = false"
       >
         Got it

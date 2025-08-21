@@ -140,11 +140,7 @@ export default {
         :returnUrl="Return"
       ></PaymentConfirmed>
       <div class="secure-payment-logo px-16">
-        <img
-          src="@/assets/secure-payment-money-badger-dark.png"
-          alt="Secure Payment"
-          class="mx-auto py-4"
-        />
+        <div class="mx-auto py-4 money-badger-logo" alt="Secure Payment" role="image"></div>
       </div>
     </div>
   </div>
@@ -170,7 +166,7 @@ export default {
   left: 0;
   width: 100%;
   height: 8px;
-  background: linear-gradient(to right, #f7931a, #1c1c1e);
+  background: linear-gradient(to right, var(--primary-accent), var(--secondary-accent));
   z-index: 50;
 }
 

@@ -9,12 +9,13 @@
           <ChevronLeftIcon class="w-5 h-5 mr-0.5" />
         </span>
       </button>
-      <h2 class="text-lg font-semibold">Review your payment</h2>
+      
+      <h2 class="primary-text text-lg font-semibold">Review your payment</h2>
     </div>
 
     <div class="flex flex-col items-center my-4">
       <!-- Help Text -->
-      <p class="text-sm text-gray-300 text-left">
+      <p class="text-sm text-gray-500 text-left">
         We will take you to your wallet to finish the payment.
         <HowToPayModal />
       </p>
@@ -89,3 +90,5 @@ export default {
   }
 }
 </script>
+
+<style scoped></style>

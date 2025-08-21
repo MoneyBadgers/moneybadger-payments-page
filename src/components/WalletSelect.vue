@@ -427,6 +427,16 @@ details {
     transform: translateX(10px);
   }
 }
+.choose-currency-btn {
+  background-color: var(--color-black);
+  font-weight: bold;
+  color: var(--color-light-grey);
+  text-align: center;
+  &:hover {
+    color: var(--color-amber-light);
+  }
+  border: 1px solid var(--color-light-grey);
+}
 
 .available-wallets {
   min-height: 30vh;

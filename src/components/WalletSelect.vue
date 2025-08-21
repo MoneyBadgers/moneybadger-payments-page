@@ -428,12 +428,13 @@ details {
   }
 }
 .choose-currency-btn {
-  background-color: var(--color-black);
+  background-color: var(--primary-bg);
   font-weight: bold;
-  color: var(--color-light-grey);
+  
   text-align: center;
   &:hover {
-    color: var(--color-amber-light);
+    color: var(--primary-accent);
+    transform: translateX(2px);
   }
   border: 1px solid var(--color-light-grey);
 }

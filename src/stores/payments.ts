@@ -138,6 +138,10 @@ export const usePaymentStore = defineStore('payments', {
           this.status = PaymentStatus.SelectWallet
           return
         }
+        if (this.invoice.payment_request == null) {
+          this.status = PaymentStatus.SelectWallet
+          return
+        }
         this.wallet =
           Wallet.wallets[this.invoice.payment_request?.value_store || ''] || Wallet.defaultWallet
         this.status = PaymentStatus.WaitForPayment

@@ -89,7 +89,7 @@ export default {
     <transition name="fade">
       <div v-if="showing" class="modal-overlay" @click.self="close">
         <div class="box m-3 p-6 w-[90%]">
-          <h5 class="font-bold mb-2 text-lg">{{ walletPrompt }}</h5>
+          <h5 class="primary-text font-bold mb-2 text-lg">{{ walletPrompt }}</h5>
 
           <textarea
             class="w-full p-3 rounded border border-gray-300 text-black"
@@ -119,10 +119,10 @@ export default {
             <div v-if="error" class="text-red-400 text-sm w-full text-center">
               {{ error }}
             </div>
-            <button class="solid-btn w-full" :disabled="!isValid || sent" @click="submit">
+            <button class="primary w-full" :disabled="!isValid || sent" @click="submit">
               Send
             </button>
-            <button type="button" class="text-btn w-full my-3" @click="close">Cancel</button>
+            <button type="button" class="text no-underline w-full my-3" @click="close">Cancel</button>
           </div>
         </div>
       </div>
@@ -131,19 +131,6 @@ export default {
 </template>
 
 <style scoped>
-.skip-btn {
-  background-color: var(--color-black);
-  color: var(--color-amber-light);
-  border: 1px solid var(--color-amber-light);
-  border-radius: 0.5rem;
-  font-weight: bold;
-  padding: 0.5rem 2rem;
-}
-.skip-btn:hover {
-  color: var(--color-amber-med);
-  border-color: var(--color-amber-med);
-}
-
 /* fade-in/out transition */
 .fade-enter-active,
 .fade-leave-active {

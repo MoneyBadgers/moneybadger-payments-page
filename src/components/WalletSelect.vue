@@ -281,7 +281,7 @@ export default {
             >
               <template #trigger>
                 <button
-                  class="text-primary-color font-medium hover:underline flex items-center gap-1"
+                  class="text no-underline font-medium hover:underline flex items-center gap-1"
                 >
                   My wallet is not listed
                   <QuestionMarkCircleIcon class="w-5 h-5" />
@@ -338,10 +338,10 @@ export default {
             class="w-full border border-gray-300 rounded p-2 mb-4 text-black"
           />
           <div class="flex justify-between items-center">
-            <button class="cancel-btn mr-2" @click="cancelLightningAddressEntry">Cancel</button>
+            <button class="secondary mr-2" @click="cancelLightningAddressEntry">Cancel</button>
             <div class="flex">
-              <button class="skip-btn mr-2 rounded" @click="skipLightningAddressEntry">Skip</button>
-              <button class="confirm-btn rounded" @click="setLightningAddressAndWallet">
+              <button class="secondary mr-2 rounded" @click="skipLightningAddressEntry">Skip</button>
+              <button class="primary rounded" @click="setLightningAddressAndWallet">
                 Continue
               </button>
             </div>
@@ -363,10 +363,10 @@ export default {
             >
           </p>
           <div class="flex my-2">
-            <button class="confirm-btn rounded basis-3/4" @click="acceptTerms">
+            <button class="primary rounded basis-3/4" @click="acceptTerms">
               Accept and Continue
             </button>
-            <button class="cancel-btn ml-2 basis-1/4" @click="closeTermsModal()">Cancel</button>
+            <button class="secondary ml-2 basis-1/4" @click="closeTermsModal()">Cancel</button>
           </div>
           <ol class="list-decimal pl-6 mb-4">
             <li class="mb-2">
@@ -410,7 +410,7 @@ export default {
 
 <style scoped>
 .modal-bg {
-  background-color: var(--color-background);
+  background-color: var(--secondary-bg);
 }
 details {
   width: 300px;
@@ -428,15 +428,17 @@ details {
   }
 }
 .choose-currency-btn {
-  background-color: var(--color-black);
+  background-color: var(--primary-bg);
   font-weight: bold;
-  color: var(--color-light-grey);
+  
   text-align: center;
   &:hover {
-    color: var(--color-amber-light);
+    color: var(--primary-accent);
+    transform: translateX(2px);
   }
   border: 1px solid var(--color-light-grey);
 }
+
 .available-wallets {
   min-height: 30vh;
 }
@@ -560,14 +562,14 @@ button:disabled {
 .terms-link {
   cursor: pointer;
   text-decoration: underline;
-  color: var(--color-amber-light);
+  color: var(--primary-accent);
   &:hover {
-    color: var(--color-amber-light);
+    color: var(--primary-accent-hover);
   }
 }
 
 #terms-container.highlight {
-  border: 1px solid var(--color-amber-light);
+  border: 1px solid var(--primary-accent-hover);
   animation: shake 0.5s infinite;
 }
 
@@ -616,18 +618,18 @@ button:disabled {
   height: 18px;
   width: 18px;
   background-color: transparent;
-  border: 2px solid var(--color-light-grey);
+  border: 2px solid var(--border-color);
   border-radius: 4px;
   transition: all 0.2s ease;
 }
 
 .custom-checkbox:hover input ~ .checkmark {
-  border-color: var(--color-amber-light);
+  border-color: var(--primary-accent);
 }
 
 .custom-checkbox input:checked ~ .checkmark {
-  background-color: var(--color-amber-light);
-  border-color: var(--color-amber-light);
+  background-color: var(--primary-accent);
+  border-color: var(--primary-accent);
 }
 
 .checkmark:after {

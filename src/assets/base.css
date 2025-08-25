@@ -35,6 +35,11 @@
   --color-green: #b6d115;
 
   --color-red: #e71d24;
+
+  --color-primary: #0700d4;
+  --color-primary-light: #342dff;
+  
+  --color-secondary: #002a73;
 }
 
 /* semantic color variables for this project */
@@ -52,6 +57,20 @@
   --section-gap: 160px;
 }
 
+.money-badger-logo {
+  background-image: url('@/assets/secure-payment-money-badger-dark.png');
+  background-size: contain;
+  width: 172px;
+  height: 47px;
+}
+
+/* Dark mode variables */
+@media (prefers-color-scheme: dark) {
+  .money-badger-logo {
+    background-image: url('@/assets/secure-payment-money-badger.png');
+  }
+}
+
 *,
 *::before,
 *::after {
@@ -62,8 +81,8 @@
 
 body {
   min-height: 100vh;
-  color: var(--color-text);
-  background: var(--color-background);
+  color: var(--primary-text);
+  background: var(--primary-bg);
   transition:
     color 0.5s,
     background-color 0.5s;
@@ -87,8 +106,94 @@ body {
   -moz-osx-font-smoothing: grayscale;
 }
 
-.primary-color {
-  color: var(--color-amber-light);
+.button {
+  display: block;
+  background-color: var(--primary-accent);
+  color: #ffffff;
+  border: none;
+  padding: var(--spacing-unit) calc(var(--spacing-unit) * 2);
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: var(--font-size-base);
+  transition: background-color 0.2s ease;
+  text-decoration: none;
+
+  &:hover {
+    background-color: var(--primary-accent-hover);
+  }
+}
+
+button.primary {
+  background-color: var(--primary-accent);
+  color: #ffffff;
+  border: none;
+  padding: var(--spacing-unit) calc(var(--spacing-unit) * 2);
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: var(--font-size-base);
+  transition: background-color 0.2s ease;
+  font-weight: bold;
+}
+
+button.primary:hover {
+  background-color: var(--primary-accent-hover);
+}
+
+/* Secondary button */
+button.secondary {
+  background-color: var(--secondary-accent);
+  color: #ffffff;
+  border: none;
+  padding: var(--spacing-unit) calc(var(--spacing-unit) * 2);
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: var(--font-size-base);
+  transition: background-color 0.2s ease;
+  font-weight: bold;
+}
+
+button.secondary:hover {
+  background-color: var(--secondary-accent-hover);
+}
+
+/* Alternative secondary button (outline style, if you prefer no secondary accent) */
+button.secondary-outline {
+  background-color: transparent;
+  color: var(--primary-accent);
+  border: 1px solid var(--primary-accent);
+  padding: var(--spacing-unit) calc(var(--spacing-unit) * 2);
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: var(--font-size-base);
+  transition: background-color 0.2s ease, color 0.2s ease;
+}
+
+button.secondary-outline:hover {
+  background-color: var(--primary-accent);
+  color: #ffffff;
+}
+
+button.text {
+  background: none;
+  border: none;
+  padding: var(--spacing-unit) calc(var(--spacing-unit) * 2);
+  color: var(--primary-accent);
+  cursor: pointer;
+  font-size: var(--font-size-base);
+  text-decoration: underline;
+  transition: color 0.2s ease;
+  font-weight: bold;
+  &.no-underline {
+    text-decoration: none;  
+  }
+  &:hover {
+    color: var(--primary-accent-hover);  
+    text-decoration: underline;
+  }
+}
+
+h2 {
+  color: var(--primary-text);
 }
 
 .box {
@@ -104,6 +209,7 @@ body {
   bottom: 0;
   inset: 0;
   background-color: rgba(0, 0, 0, 0.8);
+  color: white;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -139,13 +245,13 @@ body {
 }
 
 .text-primary-color {
-  color: var(--color-amber-light);
+  color: var(--primary-accent);
 }
 
 .text-bg-color {
-  color: var(--color-black);
+  color: var(--primary-text);
 }
 
 .bg-primary-color {
-  background-color: var(--color-amber-light);
+  background-color: var(--primary-accent);
 }

@@ -1,8 +1,8 @@
 <template>
   <div class="text-white px-4 pb-4 h-full">
     <!-- Back Button + Header -->
-    <div class="flex justify-between mb-2">
-      <button @click="$emit('change-wallet')" class="top-back-button">
+    <div id="review-payment-header" class="flex items-right mb-2">
+      <button @click="$emit('change-wallet')" class="top-back-button mr-3">
         <span
           class="w-6 h-6 rounded-full flex items-center justify-center bg-primary-color"
         >

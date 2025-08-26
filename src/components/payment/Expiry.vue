@@ -8,7 +8,7 @@
         </p>
       </div>
 
-      <p class="mb-4 text-gray-300">You need to make payment soon or this screen will expire.</p>
+      <p class="mb-4">You need to make payment soon or this screen will expire.</p>
 
       <FeedbackForm
         :feedbackType="FeedbackType.ISSUE"

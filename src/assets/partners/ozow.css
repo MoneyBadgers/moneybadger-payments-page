@@ -48,6 +48,9 @@
   #step-indicator{
     display: flex;
   }
+  #review-payment-header {
+    justify-content: space-between;
+  }
   .money-badger-logo {
     background-image: url(/src/assets/secure-payment-money-badger-dark.png);
     background-size: cover;

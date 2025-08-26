@@ -11,7 +11,7 @@
       </button>
       
       <h2 class="primary-text text-lg font-semibold">Review your payment</h2>
-      <StepIndicator :currentStep="1" />
+      <StepIndicator :currentStep="1" id="step-indicator"/>
     </div>
 
     <div class="flex flex-col items-center my-4">

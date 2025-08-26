@@ -45,6 +45,9 @@
     display: block;
     color: var(--primary-text)
   }
+  #step-indicator{
+    display: flex;
+  }
   .money-badger-logo {
     background-image: url(/src/assets/secure-payment-money-badger-dark.png);
     background-size: cover;

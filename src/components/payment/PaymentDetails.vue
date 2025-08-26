@@ -2,7 +2,7 @@
   <div class="box rounded-lg w-80 px-6 mb-4 text-center">
     <!-- Logo and Brand -->
     <div class="flex justify-center my-4">
-      <div :class="`wallet-logo ${logo}`" class="my-4 h-8 w-3/4 bg-no-repeat bg-center"></div>
+      <div :class="`wallet-logo ${logo}`" class="h-12 w-3/4 bg-no-repeat bg-center"></div>
     </div>
 
     <!-- Payment Message -->

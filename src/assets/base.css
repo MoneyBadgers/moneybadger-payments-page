@@ -200,6 +200,9 @@ button.secondary:hover {
 #bottom-back-link{
   display: none
 }
+#step-indicator{
+  display: none;
+}
 
 /* Alternative secondary button (outline style, if you prefer no secondary accent) */
 button.secondary-outline {

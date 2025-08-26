@@ -5,7 +5,7 @@
       :href="currentDeeplink"
       target="_blank"
       @click="onOpenWallet"
-      class="button main primary font-bold py-2 px-4 rounded-full w-full flex items-center justify-center gap-2 transition font-bold"
+      class="button main primary font-bold py-2 px-4 w-full flex items-center justify-center gap-2 transition font-bold"
     >
       Tap here to open the app
       <ArrowRightIcon class="w-5 h-5" />

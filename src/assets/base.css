@@ -149,6 +149,7 @@ button, .button {
 
   &.main {
     min-height: 50px;
+    border-radius: 9999px;
   }
 
   &.payment-option {

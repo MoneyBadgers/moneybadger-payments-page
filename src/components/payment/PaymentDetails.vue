@@ -2,30 +2,7 @@
   <div class="box rounded-lg w-80 px-6 mb-4 text-center">
     <!-- Logo and Brand -->
     <div class="flex justify-center my-4">
-      <img
-        v-if="logo == 'binance'"
-        src="@/assets/wallets/binance-yellow.png"
-        alt="Payment provider logo"
-        class="h-10"
-      />
-      <img
-        v-if="logo == 'luno'"
-        src="@/assets/wallets/luno.png"
-        alt="Payment provider logo"
-        class="h-10"
-      />
-      <img
-        v-if="logo == 'valr'"
-        src="@/assets/wallets/valr.png"
-        alt="Payment provider logo"
-        class="h-10"
-      />
-      <img
-        v-if="logo == 'lightning'"
-        src="@/assets/wallets/lightning.png"
-        alt="Payment provider logo"
-        class="h-10"
-      />
+      <div :class="`wallet-logo ${logo}`" class="my-4 h-8 w-3/4 bg-no-repeat bg-center"></div>
     </div>
 
     <!-- Payment Message -->

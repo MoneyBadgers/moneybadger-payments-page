@@ -8,7 +8,7 @@
   /* Secondary colors */
   --secondary-bg: var(--color-background-soft); /* Secondary background (e.g., cards) */
   --secondary-text: var(--vt-c-white-soft); /* Secondary text (e.g., subtitles) */
-  --secondary-accent: var(--color-green); /* Default secondary accent (e.g., secondary buttons) */
+  --secondary-accent: var(--color-amber-light);; /* Default secondary accent (e.g., secondary buttons) */
   --secondary-accent-hover: #4b5563; /* Hover state for secondary accent */
 
   /* Spacing */

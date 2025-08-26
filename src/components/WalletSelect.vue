@@ -338,9 +338,9 @@ export default {
             class="w-full border border-gray-300 rounded p-2 mb-4 text-black"
           />
           <div class="flex justify-between items-center">
-            <button class="secondary mr-2" @click="cancelLightningAddressEntry">Cancel</button>
+            <button class="secondary-outline mr-2" @click="cancelLightningAddressEntry">Cancel</button>
             <div class="flex">
-              <button class="secondary mr-2 rounded" @click="skipLightningAddressEntry">Skip</button>
+              <button class="secondary-outline mr-2 rounded" @click="skipLightningAddressEntry">Skip</button>
               <button class="primary rounded" @click="setLightningAddressAndWallet">
                 Continue
               </button>
@@ -366,7 +366,7 @@ export default {
             <button class="primary rounded basis-3/4" @click="acceptTerms">
               Accept and Continue
             </button>
-            <button class="secondary ml-2 basis-1/4" @click="closeTermsModal()">Cancel</button>
+            <button class="secondary-outline ml-2 basis-1/4" @click="closeTermsModal()">Cancel</button>
           </div>
           <ol class="list-decimal pl-6 mb-4">
             <li class="mb-2">

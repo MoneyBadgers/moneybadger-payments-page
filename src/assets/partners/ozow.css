@@ -34,16 +34,30 @@
   --error-text: #ffffff; /* Error text */
 }
 
-/* Dark mode variables */
-@media (prefers-color-scheme: dark) {
-  :root {
-    --primary-bg: #1a202c;
-    --primary-text: #e2e8f0;
-    --primary-accent: #60a5fa;
-    --primary-accent-hover: #3b82f6;
-    --secondary-bg: #2d3748;
-    --secondary-text: #a0aec0;
-    --border-color: #4a5568;
-    --shadow-color: rgba(0, 0, 0, 0.3);
+.ozow {
+  .top-bar {
+    display: none;
+  }
+  .top-back-button {
+    display: none;
+  }
+  #bottom-back-link{
+    display: block;
+    color: var(--primary-text)
+  }
+  .money-badger-logo {
+    background-image: url(/src/assets/secure-payment-money-badger-dark.png);
+    background-size: cover;
+    width: 125px;
+    height: 10px;
+    opacity: 0.5;
+  }
+  button, .button {
+    &.main {
+      background: linear-gradient(135deg, #00E587 0%, #00B8AD 100%);
+    }
+  }
+  .go-back {
+    display: block;
   }
 }

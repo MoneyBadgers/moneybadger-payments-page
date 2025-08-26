@@ -1,8 +1,8 @@
 <template>
-  <div class="text-white px-4 h-full">
+  <div class="text-white px-4 pb-4 h-full">
     <!-- Back Button + Header -->
-    <div class="flex items-center mb-2">
-      <button @click="$emit('change-wallet')" class="mr-2">
+    <div class="flex justify-between mb-2">
+      <button @click="$emit('change-wallet')" class="top-back-button">
         <span
           class="w-6 h-6 rounded-full flex items-center justify-center bg-primary-color"
         >
@@ -11,6 +11,7 @@
       </button>
       
       <h2 class="primary-text text-lg font-semibold">Review your payment</h2>
+      <StepIndicator :currentStep="1" />
     </div>
 
     <div class="flex flex-col items-center my-4">
@@ -36,6 +37,8 @@
         :showingDeeplinkButton="showDeeplinkButton"
       />
     </div>
+
+    <a class="text-button" id="bottom-back-link" @click="$emit('change-wallet')">Go Back</a>
   </div>
 </template>
 
@@ -50,6 +53,7 @@ import Wallet from '../models/wallet'
 import type { Invoice } from '../api/cryptoqr/api'
 import HowToPayModal from './payment/HowToPayModal.vue'
 import Expiry from './payment/Expiry.vue'
+import StepIndicator from './payment/StepIndicator.vue'
 
 export default {
   name: 'ReviewPayment',
@@ -60,7 +64,8 @@ export default {
     PaymentDetails,
     QrDisplay,
     HowToPayModal,
-    Expiry
+    Expiry,
+    StepIndicator,
   },
   props: {
     invoice: { type: Object as PropType<Invoice>, required: true },

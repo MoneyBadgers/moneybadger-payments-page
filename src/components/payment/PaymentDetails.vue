@@ -1,5 +1,5 @@
 <template>
-  <div class="box text-white rounded-lg w-80 px-6 mb-4 text-center">
+  <div class="box rounded-lg w-80 px-6 mb-4 text-center">
     <!-- Logo and Brand -->
     <div class="flex justify-center my-4">
       <img
@@ -29,8 +29,8 @@
     </div>
 
     <!-- Payment Message -->
-    <p class="text-sm text-gray-300 mb-1">You will be making a payment of</p>
-    <p class="text-3xl font-semibold text-white">{{ formattedAmount }}</p>
+    <p class="text-sm mb-1">You will be making a payment of</p>
+    <p class="text-3xl font-semibold">{{ formattedAmount }}</p>
   </div>
 </template>
 

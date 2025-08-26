@@ -166,7 +166,7 @@ export default {
   left: 0;
   width: 100%;
   height: 8px;
-  background: linear-gradient(to right, var(--primary-accent), var(--secondary-accent));
+  background: linear-gradient(to right, var(--primary-accent), var(--primary-bg));
   z-index: 50;
 }
 

@@ -1,7 +1,6 @@
 <script lang="ts">
 import { format } from 'date-fns'
 import LogoCircle from '@/components/LogoCircle.vue'
-import { peachComplete } from '../partner/peach'
 
 export default {
   name: 'PaymentConfirmed',
@@ -21,9 +20,6 @@ export default {
     paidAt() {
       return this.timeStamp
     },
-    returnUrl(): string {
-      return this.returnUrl
-    }
   },
   methods: {
     formatTime(timeString: String) {
@@ -53,11 +49,11 @@ export default {
 </script>
 
 <template>
-  <div>
+  <div class="py-6">
     <div>
       <h4 class="font-bold">Payment Successful</h4>
     </div>
-    <div class="logo-circle">
+    <div class="py-6 logo-circle">
       <LogoCircle class="payment-success-logo" />
     </div>
     <div>

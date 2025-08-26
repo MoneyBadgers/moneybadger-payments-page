@@ -1,10 +1,10 @@
 <template>
-  <div class="box text-white rounded-lg w-full p-4">
+  <div class="box rounded-lg w-full p-4">
     <!-- Toggle Header -->
     <div class="flex flex-row justify-between items-right cursor-pointer" @click="toggle">
-      <span class="text-sm font-medium text-gray-300">More payment options</span>
+      <span class="text-sm font-medium">More payment options</span>
       <ChevronUpIcon
-        class="w-6 h-6 transition-transform duration-200 text-primary-color"
+        class="w-6 h-6 transition-transform duration-200 text-primary-accent"
         :class="{ 'rotate-180': !expanded }"
       />
     </div>
@@ -21,31 +21,31 @@
       <div v-show="expanded" class="overflow-hidden mt-2 space-y-4">
         <button
           v-if="showingDeeplinkButton"
-          class="w-full flex items-center gap-2 px-4 py-2 bg-[#3a3a3c] text-sm rounded mb-2"
+          class="payment-option w-full flex items-center gap-2 px-4 py-2 text-sm rounded mb-2"
           @click="$emit('use-qr-code')"
         >
-          <QrCodeIcon class="w-4 h-4 text-primary-color" />
+          <QrCodeIcon class="w-4 h-4 text-secondary-accent" />
           Use QR code
         </button>
         <button
           v-else
-          class="w-full flex items-center gap-2 px-4 py-2 bg-[#3a3a3c] text-sm rounded mb-2"
+          class="payment-option w-full flex items-center gap-2 px-4 py-2 text-sm rounded mb-2"
           @click="$emit('use-deeplink')"
         >
-          <ArrowRightIcon class="w-4 h-4 text-primary-color" />
+          <ArrowRightIcon class="w-4 h-4 text-secondary-accent" />
           Open in wallet app
         </button>
 
         <div v-if="showCopyHint" class="flex justify-left w-300 text-xs text-gray-300">
-          <ClipboardDocumentCheckIcon class="mx-2 size-4 text-primary-color" />
+          <ClipboardDocumentCheckIcon class="mx-2 size-4 text-secondary-accent" />
           <span>Payment details copied to clipboard!</span>
         </div>
 
         <button
           @click="copyPaymentRequest"
-          class="w-full flex items-center gap-2 px-4 py-2 bg-[#3a3a3c] text-sm rounded"
+          class="payment-option w-full flex items-center gap-2 px-4 py-2 text-sm rounded"
         >
-          <LinkIcon class="w-4 h-4 text-primary-color" />
+          <LinkIcon class="w-4 h-4 text-secondary-accent" />
           Copy payment link
         </button>
       </div>

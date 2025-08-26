@@ -1,49 +1,17 @@
 :root {
   /* Primary colors */
-  --primary-bg: #ffffff; /* Default background */
-  --primary-text: #1a202c; /* Default text color */
-  --primary-accent: #3b82f6; /* Default accent (e.g., buttons, links) */
-  --primary-accent-hover: #2563eb; /* Hover state for accent */
+  --primary-bg: var(--color-background); /* Default background */
+  --primary-text: var(--vt-c-white); /* Default text color */
+  --primary-accent: var(--color-amber-light); /* Default accent (e.g., buttons, links) */
+  --primary-accent-hover: var(--color-amber-dark); /* Hover state for accent */
 
   /* Secondary colors */
-  --secondary-bg: #f7fafc; /* Secondary background (e.g., cards) */
-  --secondary-text: #4a5568; /* Secondary text (e.g., subtitles) */
-  --secondary-accent: #6b7280; /* Default secondary accent (e.g., secondary buttons) */
+  --secondary-bg: var(--color-background-soft); /* Secondary background (e.g., cards) */
+  --secondary-text: var(--vt-c-white-soft); /* Secondary text (e.g., subtitles) */
+  --secondary-accent: var(--color-green); /* Default secondary accent (e.g., secondary buttons) */
   --secondary-accent-hover: #4b5563; /* Hover state for secondary accent */
-
-  /* Utility colors */
-  --border-color: #e2e8f0; /* Default border color */
-  --shadow-color: rgba(0, 0, 0, 0.1); /* Default shadow */
 
   /* Spacing */
   --spacing-unit: 8px;
-  --section-gap: 160px;
-
-  /* Status colors */
-  --info: #0284c7; /* Info background */
-  --info-hover: #026395; /* Info hover background */
-  --info-text: #ffffff; /* Info text (white for buttons, adjustable for alerts) */
-  --success: #16a34a; /* Success background */
-  --success-hover: #15803d; /* Success hover background */
-  --success-text: #ffffff; /* Success text */
-  --warning: #d97706; /* Warning background */
-  --warning-hover: #b45309; /* Warning hover background */
-  --warning-text: #ffffff; /* Warning text */
-  --error: #dc2626; /* Error background */
-  --error-hover: #b91c1c; /* Error hover background */
-  --error-text: #ffffff; /* Error text */
-}
-
-/* Dark mode variables */
-@media (prefers-color-scheme: dark) {
-  :root {
-    --primary-bg: #1a202c;
-    --primary-text: #e2e8f0;
-    --primary-accent: #60a5fa;
-    --primary-accent-hover: #3b82f6;
-    --secondary-bg: #2d3748;
-    --secondary-text: #a0aec0;
-    --border-color: #4a5568;
-    --shadow-color: rgba(0, 0, 0, 0.3);
-  }
+  --section-gap: 160px; 
 }

@@ -10,7 +10,7 @@
 
 <style scoped>
 .cls-1 {
-  fill: var(--secondary);
+  fill: var(--secondary-text);
 }
 
 .cls-2 {
@@ -18,7 +18,7 @@
 }
 
 .cls-3 {
-  fill: var(--primary-accent);
+  fill: var(--secondary-accent);
 }
 
 .cls-4 {

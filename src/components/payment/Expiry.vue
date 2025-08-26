@@ -4,7 +4,7 @@
       <div class="flex items-baseline justify-between">
         <h5 class="font-bold">Are you stuck?</h5>
         <p class="text-sm text-right">
-          Expires in <span class="text-primary-color">{{ expiresIn }}</span>
+          Expires in <span class="text-primary-accent">{{ expiresIn }}</span>
         </p>
       </div>
 
@@ -15,7 +15,7 @@
         walletPrompt="Are you struggling to make payment?"
       >
         <template #trigger>
-          <button class="text-primary-color font-medium hover:underline flex items-center gap-1">
+          <button class="text-primary-accent font-medium hover:underline flex items-center gap-1">
             I need help
             <QuestionMarkCircleIcon class="w-5 h-5" />
           </button>

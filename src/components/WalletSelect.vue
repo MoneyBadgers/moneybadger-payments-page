@@ -5,13 +5,14 @@ import { usePaymentStore } from '../stores/payments'
 import { AnalyticsEvent } from '../types/analytics_events'
 import { defaultAnalyticproperties } from '../types/analytics_default_properties'
 import FeedbackForm from './FeedbackForm.vue'
-import { QuestionMarkCircleIcon } from '@heroicons/vue/24/solid'
+import { QuestionMarkCircleIcon, ChevronRightIcon } from '@heroicons/vue/24/solid'
 import { FeedbackType } from '../api/feedback'
 import { useThemeStore } from '../stores/theme';
 import StepIndicator from './payment/StepIndicator.vue'
 import TermsModal from './TermsModal.vue'
 import { useTermsStore } from '../stores/terms'
 import LightningAddressModal from './LightningAddressModal.vue'
+import ValrCurrencyModal from './ValrCurrencyModal.vue'
 
 export default {
   name: 'WalletSelect',
@@ -19,8 +20,10 @@ export default {
     FeedbackForm,
     StepIndicator,
     QuestionMarkCircleIcon,
+    ChevronRightIcon,
     TermsModal,
-    LightningAddressModal
+    LightningAddressModal,
+    ValrCurrencyModal
   },
   props: {
     requireTermsAccepted: {
@@ -117,24 +120,13 @@ export default {
         ...additionalProps
       })
     },
-    walletFeedbackSubmitted() {
-      setTimeout(() => {
-        this.wallletFeedback = false
-      }, 1000)
-      console.log('Wallet feedback submitted')
-    }
   },
   data() {
     return {
       ozow: useThemeStore().current === 'ozow',
       lightningAddressEntry: false,
       valrSelected: false,
-      lightningAddress: localStorage.getItem('RefundRecipientAddress') || '',
       Wallet: Wallet,
-      valrCurrencies: [
-        'BTC', 'AVAX', 'BNB', 'ETH', 'EURC', 'PYUSD', 'SHIB', 'SOL', 'USDC', 'USDT', 'XRP', 'ZAR'
-      ],
-      wallletFeedback: false,
       FeedbackType: FeedbackType
     }
   }
@@ -229,30 +221,17 @@ export default {
         </ul>
       </div>
     </div>
-    <transition name="fade">
-      <div v-if="valrSelected" class="fixed inset-0 modal-bg flex items-center justify-center">
-        <div class="w-1/2 h-[100%] overflow-y-auto p-6 rounded-lg shadow-lg justify-center">
-          <img src="@/assets/wallets/valr.png" class="w-40 mx-auto" />
-          <p class="font-semibold mb-4">Please choose the currency you want to pay with:</p>
-          <div class="grid grid-cols-1 gap-3">
-            <button
-              v-for="currency in valrCurrencies"
-              :key="currency"
-              class="mx-auto px-4 py-1 w-[10rem] rounded choose-currency-btn"
-              @click="setValr(currency)"
-            >
-              {{ currency }}
-            </button>
-          </div>
-        </div>
-      </div>
-    </transition>
     <TermsModal />
     <LightningAddressModal
       :open="lightningAddressEntry"
       @submit="onLightningAddressSubmit"
       @skip="skipLightningAddressEntry"
       @cancel="lightningAddressEntry = false"
+    />
+    <ValrCurrencyModal
+      :open="valrSelected"
+      @select="setValr"
+      @cancel="valrSelected = false"
     />
   </div>
 </template>

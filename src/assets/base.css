@@ -283,7 +283,7 @@ h2 {
   display: block;
   background-color: transparent;
   font-weight: bold;
-  color: var(--color-amber-med);
+  color: var(--primary-accent);
   text-decoration: none;
   text-align: center;
   border-radius: 12px;

@@ -2,7 +2,6 @@
 import Wallet from '../models/wallet'
 import { mapStores } from 'pinia'
 import { usePaymentStore } from '../stores/payments'
-import LightningAddress from '../models/lightning_address'
 import { AnalyticsEvent } from '../types/analytics_events'
 import { defaultAnalyticproperties } from '../types/analytics_default_properties'
 import FeedbackForm from './FeedbackForm.vue'
@@ -12,6 +11,7 @@ import { useThemeStore } from '../stores/theme';
 import StepIndicator from './payment/StepIndicator.vue'
 import TermsModal from './TermsModal.vue'
 import { useTermsStore } from '../stores/terms'
+import LightningAddressModal from './LightningAddressModal.vue'
 
 export default {
   name: 'WalletSelect',
@@ -19,7 +19,8 @@ export default {
     FeedbackForm,
     StepIndicator,
     QuestionMarkCircleIcon,
-    TermsModal
+    TermsModal,
+    LightningAddressModal
   },
   props: {
     requireTermsAccepted: {
@@ -95,45 +96,15 @@ export default {
       }
       this.lightningAddressEntry = true
     },
-    setLightningAddressAndWallet() {
-      this.lightningAddressError = false
-      this.verifyingLightningAddress = true
-      const address = new LightningAddress(this.lightningAddress)
-      address
-        .valid()
-        .then((valid) => {
-          if (valid) {
-            localStorage.setItem('RefundRecipientAddress', this.lightningAddress)
-            this.paymentsStore.setRefundRecipientAddress(this.lightningAddress)
-            this.paymentsStore.setWallet(Wallet.wallets['lightning'])
-            this.cancelLightningAddressEntry()
-
-            this.trackAnalytics(AnalyticsEvent.LightningSetRecipient)
-
-            return
-          } else {
-            this.lightningAddressError = true
-            this.verifyingLightningAddress = false
-            return
-          }
-        })
-        .catch(() => {
-          this.lightningAddressError = true
-          this.verifyingLightningAddress = false
-          return
-        })
+    onLightningAddressSubmit() {
+      this.paymentsStore.setWallet(Wallet.wallets['lightning'])
+      this.trackAnalytics(AnalyticsEvent.LightningSetRecipient)
     },
     skipLightningAddressEntry() {
       this.paymentsStore.setWallet(Wallet.wallets['lightning'])
       this.trackAnalytics(AnalyticsEvent.LightningSetRecipientSkipped, {
         Wallet: this.paymentsStore.wallet.name
       })
-      this.cancelLightningAddressEntry()
-    },
-    cancelLightningAddressEntry() {
-      this.lightningAddressEntry = false
-      this.lightningAddressError = false
-      this.verifyingLightningAddress = false
     },
     trackAnalytics(event: AnalyticsEvent, additionalProps?: Record<string, any>) {
       this.$mixpanel.trackEvent(event, {
@@ -157,26 +128,11 @@ export default {
     return {
       ozow: useThemeStore().current === 'ozow',
       lightningAddressEntry: false,
-      verifyingLightningAddress: false,
-      lightningAddressError: false,
-      lightningAddress: localStorage.getItem('RefundRecipientAddress') || '',
       valrSelected: false,
+      lightningAddress: localStorage.getItem('RefundRecipientAddress') || '',
       Wallet: Wallet,
-      // These are all the VALR currencies that have ZAR markets. Sorted alphabetically but with BTC first and ZAR added
-      // curl -s https://api.valr.com/v1/public/pairs | jq -r '.[] | select(.quoteCurrency == "ZAR" and .currencyPairType == "SPOT") | .baseCurrency' | sort
       valrCurrencies: [
-        'BTC',
-        'AVAX',
-        'BNB',
-        'ETH',
-        'EURC',
-        'PYUSD',
-        'SHIB',
-        'SOL',
-        'USDC',
-        'USDT',
-        'XRP',
-        'ZAR'
+        'BTC', 'AVAX', 'BNB', 'ETH', 'EURC', 'PYUSD', 'SHIB', 'SOL', 'USDC', 'USDT', 'XRP', 'ZAR'
       ],
       wallletFeedback: false,
       FeedbackType: FeedbackType
@@ -291,46 +247,13 @@ export default {
         </div>
       </div>
     </transition>
-    <transition name="fade">
-      <div
-        v-if="lightningAddressEntry"
-        class="fixed inset-0 modal-bg flex items-center justify-center"
-      >
-        <div class="w-200 h-[100%] overflow-y-auto p-6 rounded-lg shadow-lg justify-center">
-          <img src="@/assets/wallets/lightning.png" class="w-40 mx-auto mb-4" />
-          <p class="font-semibold mb-4 text-center">
-            To process a refund later (if needed), we require your
-            <strong>Lightning Address</strong>.
-          </p>
-          <div
-            v-if="verifyingLightningAddress"
-            class="text-center mb-4 info flex items-center justify-center"
-          >
-            <div class="spinner mr-4" role="status" aria-label="Loading"></div>
-            <p class="m-0">Verifying your Lightning Address...</p>
-          </div>
-          <div v-if="lightningAddressError" class="text-center mb-4 error">
-            <p>That doesn't seem to be a valid Lightning Address.</p>
-          </div>
-          <input
-            v-model="lightningAddress"
-            type="email"
-            placeholder="e.g. satoshi@wallet.co"
-            class="w-full border border-gray-300 rounded p-2 mb-4 text-black"
-          />
-          <div class="flex justify-between items-center">
-            <button class="secondary-outline mr-2" @click="cancelLightningAddressEntry">Cancel</button>
-            <div class="flex">
-              <button class="secondary-outline mr-2 rounded" @click="skipLightningAddressEntry">Skip</button>
-              <button class="primary rounded" @click="setLightningAddressAndWallet">
-                Continue
-              </button>
-            </div>
-          </div>
-        </div>
-      </div>
-    </transition>
     <TermsModal />
+    <LightningAddressModal
+      :open="lightningAddressEntry"
+      @submit="onLightningAddressSubmit"
+      @skip="skipLightningAddressEntry"
+      @cancel="lightningAddressEntry = false"
+    />
   </div>
 </template>
 

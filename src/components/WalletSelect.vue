@@ -8,11 +8,14 @@ import { defaultAnalyticproperties } from '../types/analytics_default_properties
 import FeedbackForm from './FeedbackForm.vue'
 import { QuestionMarkCircleIcon } from '@heroicons/vue/24/solid'
 import { FeedbackType } from '../api/feedback'
+import { useThemeStore } from '../stores/theme';
+import StepIndicator from './payment/StepIndicator.vue'
 
 export default {
   name: 'WalletSelect',
   components: {
     FeedbackForm,
+    StepIndicator,
     QuestionMarkCircleIcon
   },
   props: {
@@ -174,6 +177,7 @@ export default {
   },
   data() {
     return {
+      ozow: useThemeStore().current === 'ozow',
       lightningAddressEntry: false,
       verifyingLightningAddress: false,
       lightningAddressError: false,
@@ -205,7 +209,6 @@ export default {
   }
 }
 </script>
-
 <template>
   <div>
     <div>
@@ -231,7 +234,10 @@ export default {
           </a>
         </div>
       </div>
-      <p>Choose the wallet you want to pay with</p>
+      <div id="wallet-select-header" class="flex items-right mb-6">
+        <h1>Select Wallet</h1>
+        <StepIndicator v-if="ozow" :currentStep="2" id="step-indicator"/>
+      </div>
       <div>
         <ul class="available-wallets">
           <li>

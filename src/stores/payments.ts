@@ -14,7 +14,7 @@ export const usePaymentStore = defineStore('payments', {
     invoice: {} as Invoice,
     errors: [] as string[],
     status: PaymentStatus.Loading,
-    refundRecipientAddress: '',
+    refundRecipientAddress: localStorage.getItem('RefundRecipientAddress') || '',
     enabledWallets: ['lightning', 'valr', 'binance', 'luno'] as string[]
   }),
   getters: {
@@ -72,6 +72,7 @@ export const usePaymentStore = defineStore('payments', {
       }
     },
     setRefundRecipientAddress(address: string) {
+      localStorage.setItem('RefundRecipientAddress', address)
       this.refundRecipientAddress = address
     },
     async setWallet(wallet: Wallet) {

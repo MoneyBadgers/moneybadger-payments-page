@@ -23,12 +23,9 @@
 </template>
 
 <script lang="ts">
-import { PropType } from 'vue'
-
 const valrCurrencies = [
-        'BTC', 'AVAX', 'BNB', 'ETH', 'EURC', 'PYUSD', 'SHIB', 'SOL', 'USDC', 'USDT', 'XRP', 'ZAR'
-      ];
-
+  'BTC', 'AVAX', 'BNB', 'ETH', 'EURC', 'PYUSD', 'SHIB', 'SOL', 'USDC', 'USDT', 'XRP', 'ZAR'
+];
 
 export default {
   name: 'ValrCurrencyModal',

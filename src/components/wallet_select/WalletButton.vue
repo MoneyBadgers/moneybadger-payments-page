@@ -1,13 +1,13 @@
 <template>
     <button
-      class="choose-wallet-btn my-3 py-2 rounded w-[300px] relative"
+      class="choose-wallet-btn my-2 rounded w-[300px] relative"
       @click="$emit('click')"
       :disabled="disabled"
     >
       <div class="flex flex-row justify-between items-center w-full pl-4">
         <!-- dynamically add walletClass -->
         <div
-          class="wallet-logo h-12 bg-no-repeat bg-center"
+          class="wallet-logo h-10 bg-no-repeat bg-left"
           :class="walletClass"
         ></div>
         <ChevronRightIcon class="text-secondary-accent w-6 h-6 absolute right-4" />
@@ -34,7 +34,7 @@ defineEmits<{
     width: 8rem;
 }
 .choose-wallet-btn {
-  height: 70px;
+  height: 60px;
   font-weight: bold;
   color: var(--color-black);
   text-align: center;

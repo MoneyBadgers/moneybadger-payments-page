@@ -2,7 +2,7 @@
   <transition name="fade">
     <div v-if="open" class="fixed inset-0 modal-bg flex items-center justify-center">
       <div class="w-200 h-[100%] overflow-y-auto p-6 rounded-lg shadow-lg justify-center">
-        <div class="wallet-logo lightning h-12  bg-no-repeat bg-center"></div>
+        <div class="wallet-logo lightning h-12 bg-no-repeat bg-center"></div>
         <p class="font-semibold mb-4 text-center">
           To process a refund later (if needed), we require your
           <strong>Lightning Address</strong>.

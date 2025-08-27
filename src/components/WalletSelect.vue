@@ -10,13 +10,16 @@ import { QuestionMarkCircleIcon } from '@heroicons/vue/24/solid'
 import { FeedbackType } from '../api/feedback'
 import { useThemeStore } from '../stores/theme';
 import StepIndicator from './payment/StepIndicator.vue'
+import TermsModal from './TermsModal.vue'
+import { useTermsStore } from '../stores/terms'
 
 export default {
   name: 'WalletSelect',
   components: {
     FeedbackForm,
     StepIndicator,
-    QuestionMarkCircleIcon
+    QuestionMarkCircleIcon,
+    TermsModal
   },
   props: {
     requireTermsAccepted: {
@@ -27,6 +30,10 @@ export default {
       type: Boolean,
       default: false
     }
+  },
+  setup() {
+    const terms = useTermsStore()
+    return { terms }
   },
   computed: {
     ...mapStores(usePaymentStore),
@@ -48,22 +55,18 @@ export default {
       if (!this.requireTermsAccepted) {
         return true
       }
-
-      return this.termsAccepted
+      return this.terms.accepted
     },
     setWallet(wallet: Wallet) {
-      // force session recording to start when wallet is set
       this.$mixpanel.startSessionRecording()
       if (!this.checkTermsAccepted()) {
         this.highlightTerms(() => this.setWallet(wallet))
-
         return
       }
       this.paymentsStore.setWallet(wallet)
       this.trackAnalytics(AnalyticsEvent.WalletSelected)
     },
     chooseValr() {
-      // force session recording to start when wallet is set
       this.$mixpanel.startSessionRecording()
       if (!this.checkTermsAccepted()) {
         this.highlightTerms(this.chooseValr)
@@ -74,38 +77,13 @@ export default {
     setValr(currency: string) {
       this.paymentsStore.setPaymentCurrency(currency)
       this.paymentsStore.setWallet(Wallet.wallets['valr'])
-
       this.trackAnalytics(AnalyticsEvent.ValrCurrencySelected)
-    },
-    openTermsModal() {
-      this.termsModalOpen = true
-    },
-    closeTermsModal(invokeCallback = false) {
-      if (invokeCallback && this.termsCallback) {
-        this.termsCallback()
-        this.termsCallback = () => {}
-      }
-      this.termsModalOpen = false
-    },
-    acceptTerms() {
-      this.termsAccepted = true
-      localStorage.setItem('termsAccepted', 'true')
-      this.closeTermsModal(true)
-    },
-    toggleTerms() {
-      this.termsAccepted = !this.termsAccepted
-      localStorage.setItem('termsAccepted', 'true')
-      this.trackAnalytics(AnalyticsEvent.TermsAccepted, {
-        termsAccepted: this.termsAccepted
-      })
     },
     highlightTerms(callback: () => void) {
       this.trackAnalytics(AnalyticsEvent.WalletSelectedBeforeTerms)
-      this.termsCallback = callback
-      this.openTermsModal()
+      this.terms.openModal(callback)
     },
     chooseLightning() {
-      // force session recording to start when wallet is set
       this.$mixpanel.startSessionRecording()
       if (!this.checkTermsAccepted()) {
         this.highlightTerms(this.chooseLightning)
@@ -183,7 +161,6 @@ export default {
       lightningAddressError: false,
       lightningAddress: localStorage.getItem('RefundRecipientAddress') || '',
       valrSelected: false,
-      termsModalOpen: false,
       Wallet: Wallet,
       // These are all the VALR currencies that have ZAR markets. Sorted alphabetically but with BTC first and ZAR added
       // curl -s https://api.valr.com/v1/public/pairs | jq -r '.[] | select(.quoteCurrency == "ZAR" and .currencyPairType == "SPOT") | .baseCurrency' | sort
@@ -201,8 +178,6 @@ export default {
         'XRP',
         'ZAR'
       ],
-      termsAccepted: localStorage.getItem('termsAccepted') === 'true',
-      termsCallback: () => {},
       wallletFeedback: false,
       FeedbackType: FeedbackType
     }
@@ -216,20 +191,20 @@ export default {
         id="terms-container"
         class="my-5 w-[300px] flex flex-row text-left"
         v-if="requireTermsAccepted"
-        @click="toggleTerms"
+        @click="terms.toggle"
       >
         <label class="custom-checkbox">
           <input
             type="checkbox"
             id="terms-checkbox"
-            :checked="termsAccepted"
-            @click="toggleTerms"
+            :checked="terms.accepted"
+            @click="terms.toggle"
           />
           <span class="checkmark"></span>
         </label>
         <div>
           I acknowledge and accept <br />
-          <a @click="openTermsModal" class="terms-link ml-1">
+          <a @click.stop="terms.openModal(()=>{})" class="terms-link ml-1">
             <strong>the terms of use.</strong>
           </a>
         </div>
@@ -355,62 +330,7 @@ export default {
         </div>
       </div>
     </transition>
-    <transition name="fade">
-      <div
-        v-if="termsModalOpen"
-        class="terms-modal fixed inset-0 modal-bg flex items-center justify-center"
-      >
-        <div class="w-200 h-[100%] overflow-y-auto p-6 rounded-lg shadow-lg">
-          <h2 class="text-xl font-bold mb-4">Crypto Payment Terms</h2>
-          <p class="">
-            <strong
-              >By selecting MoneyBadger, you acknowledge and accept the terms and conditions
-              below.</strong
-            >
-          </p>
-          <div class="flex my-2">
-            <button class="primary rounded basis-3/4" @click="acceptTerms">
-              Accept and Continue
-            </button>
-            <button class="secondary-outline ml-2 basis-1/4" @click="closeTermsModal()">Cancel</button>
-          </div>
-          <ol class="list-decimal pl-6 mb-4">
-            <li class="mb-2">
-              <strong>Volatility Risks:</strong>
-              <ol class="list-decimal pl-6 mb-4">
-                <li>
-                  Crypto assets carry a risk due to its high volatility which may affect the value
-                  of price fluctuating from time of checkout to conclusion of payment;
-                </li>
-                <li>
-                  Past performance relating to the value of the crypto asset is not an indicator of
-                  future value;
-                </li>
-                <li>
-                  The customer understands the risks involved in using crypto assets as a payment
-                  method. They acknowledge that the value of the crypto asset converted to ZAR may
-                  vary from the time of the original transaction until the processing of a refund.
-                </li>
-              </ol>
-            </li>
-            <li class="mb-2">
-              <strong>Refunds:</strong>
-              <ol class="list-decimal pl-6 mb-4">
-                <li>
-                  Customers may be entitled to initiate refunds which shall be approved by the
-                  Merchant in accordance with its refund terms and conditions;
-                </li>
-                <li>
-                  Approved refunds shall be processed directly to the customer at the original
-                  transaction price calculated in ZAR, subject to the necessary wallet information
-                  being provided by the customer to MoneyBadger.
-                </li>
-              </ol>
-            </li>
-          </ol>
-        </div>
-      </div>
-    </transition>
+    <TermsModal />
   </div>
 </template>
 

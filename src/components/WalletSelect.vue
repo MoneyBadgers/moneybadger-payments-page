@@ -9,10 +9,10 @@ import { QuestionMarkCircleIcon, ChevronRightIcon } from '@heroicons/vue/24/soli
 import { FeedbackType } from '../api/feedback'
 import { useThemeStore } from '../stores/theme';
 import StepIndicator from './payment/StepIndicator.vue'
-import TermsModal from './TermsModal.vue'
+import TermsModal from './wallet_select/TermsModal.vue'
 import { useTermsStore } from '../stores/terms'
-import LightningAddressModal from './LightningAddressModal.vue'
-import ValrCurrencyModal from './ValrCurrencyModal.vue'
+import LightningAddressModal from './wallet_select/LightningAddressModal.vue'
+import ValrCurrencyModal from './wallet_select/ValrCurrencyModal.vue'
 import WalletButton from './wallet_select/WalletButton.vue'
 
 export default {

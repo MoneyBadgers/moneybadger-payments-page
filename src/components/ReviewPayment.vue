@@ -10,7 +10,7 @@
         </span>
       </button>
       
-      <h1>Review your payment</h1>
+      <h1>Review payment</h1>
       <StepIndicator v-if="ozow" :currentStep="3" id="step-indicator"/>
     </div>
 

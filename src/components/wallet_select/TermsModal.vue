@@ -54,7 +54,7 @@
 </template>
 
 <script lang="ts">
-import { useTermsStore } from '../stores/terms'
+import { useTermsStore } from '../../stores/terms'
 export default {
   name: 'TermsModal',
   setup() {

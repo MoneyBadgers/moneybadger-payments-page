@@ -34,8 +34,8 @@
 
 <script lang="ts">
 import { ref } from 'vue'
-import { usePaymentStore } from '../stores/payments'
-import LightningAddress from '../models/lightning_address'
+import { usePaymentStore } from '../../stores/payments'
+import LightningAddress from '../../models/lightning_address'
 
 export default {
   name: 'LightningAddressModal',
@@ -48,7 +48,7 @@ export default {
     const address = ref("") 
     address.value = usePaymentStore().refundRecipientAddress
     const verifying = ref(false)
-    const error = ref(true)
+    const error = ref(false)
 
     const submit = () => {
       error.value = false

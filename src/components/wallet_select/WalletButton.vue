@@ -1,0 +1,46 @@
+<template>
+    <button
+      class="choose-wallet-btn my-3 py-2 rounded w-[300px] relative"
+      @click="$emit('click')"
+      :disabled="disabled"
+    >
+      <div class="flex flex-row justify-between items-center w-full pl-4">
+        <!-- dynamically add walletClass -->
+        <div
+          class="wallet-logo h-12 bg-no-repeat bg-center"
+          :class="walletClass"
+        ></div>
+        <ChevronRightIcon class="text-secondary-accent w-6 h-6 absolute right-4" />
+      </div>
+    </button>
+    <div v-if="disabled" class="overlay">Not available</div>
+</template>
+
+<script setup lang="ts">
+import { ChevronRightIcon } from '@heroicons/vue/24/solid'
+
+defineProps<{
+  walletClass: string
+  disabled?: boolean
+  subtext?: string
+}>()
+
+defineEmits<{
+  (e: 'click'): void
+}>()
+</script>
+<style>
+.wallet-logo {
+    width: 8rem;
+}
+.choose-wallet-btn {
+  height: 70px;
+  font-weight: bold;
+  color: var(--color-black);
+  text-align: center;
+  &:hover {
+    transform: translateX(10px);
+  }
+  border: 1px solid var(--border-color);
+}
+</style>

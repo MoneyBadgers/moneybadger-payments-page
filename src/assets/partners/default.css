@@ -14,4 +14,10 @@
   /* Spacing */
   --spacing-unit: 8px;
   --section-gap: 160px; 
+
+  --border-color: var(--vt-c-text-dark-2); /* Default border color */
+}
+
+.choose-wallet-btn {
+  background-color: var(--color-background-soft);
 }

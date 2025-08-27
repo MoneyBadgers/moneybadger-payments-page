@@ -67,4 +67,11 @@
       border: 1.5px solid #FFFFFF
     }
   }
+  .choose-wallet-btn {
+    border: 2px solid var(--border-color);
+    border-radius: 8px;
+    .text-secondary-accent {
+      color: var(--secondary-accent);
+    }
+  }
 }

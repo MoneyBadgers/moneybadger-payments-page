@@ -56,11 +56,19 @@
   --section-gap: 160px;
 }
 
+/* image sizing */
+:root {
+--money-badger-logo-width: 172px;
+--money-badger-logo-height: 47px;
+}
+
 .money-badger-logo {
   background-image: url('@/assets/secure-payment-money-badger-dark.png');
   background-size: contain;
-  width: 172px;
-  height: 47px;
+  background-repeat: no-repeat;
+  background-position: center;
+  width: var(--money-badger-logo-width);
+  height: var(--money-badger-logo-height);
 }
 
 .wallet-logo {

@@ -44,10 +44,12 @@
   .money-badger-logo {
     background-image: url(/src/assets/secure-payment-money-badger-dark.png);
     background-size: cover;
-    width: 125px;
-    height: 10px;
     opacity: 0.5;
+    filter: grayscale(50%);
+    width: calc(var(--money-badger-logo-width) / 1.5);
+    height: calc(var(--money-badger-logo-height) / 1.5);
   }
+
   button, .button {
     &.main {
       background: linear-gradient(135deg, #00E587 0%, #00B8AD 100%);

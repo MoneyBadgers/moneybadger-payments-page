@@ -2,7 +2,7 @@
   <div class="text-white px-4 pb-4 h-full">
     <!-- Back Button + Header -->
     <div id="review-payment-header" class="flex items-right mb-2">
-      <button @click="$emit('change-wallet')" class="top-back-button mr-3">
+      <button v-if="!ozow" @click="$emit('change-wallet')" class="top-back-button mr-3">
         <span
           class="w-6 h-6 rounded-full flex items-center justify-center bg-primary-color"
         >
@@ -11,7 +11,7 @@
       </button>
       
       <h2 class="primary-text text-lg font-semibold">Review your payment</h2>
-      <StepIndicator :currentStep="1" id="step-indicator"/>
+      <StepIndicator v-if="ozow" :currentStep="1" id="step-indicator"/>
     </div>
 
     <div class="flex flex-col items-center my-4">
@@ -38,7 +38,7 @@
       />
     </div>
 
-    <a class="text-button" id="bottom-back-link" @click="$emit('change-wallet')">Go Back</a>
+    <a class="text-button" v-if="ozow" id="bottom-back-link" @click="$emit('change-wallet')">Go Back</a>
   </div>
 </template>
 
@@ -54,6 +54,7 @@ import type { Invoice } from '../api/cryptoqr/api'
 import HowToPayModal from './payment/HowToPayModal.vue'
 import Expiry from './payment/Expiry.vue'
 import StepIndicator from './payment/StepIndicator.vue'
+import { useThemeStore } from '../stores/theme';
 
 export default {
   name: 'ReviewPayment',
@@ -90,7 +91,8 @@ export default {
   },
   data() {
     return {
-      viewMode: ''
+      viewMode: '',
+      ozow: useThemeStore().current === 'ozow',
     }
   }
 }

@@ -38,16 +38,6 @@
   .top-bar {
     display: none;
   }
-  .top-back-button {
-    display: none;
-  }
-  #bottom-back-link{
-    display: block;
-    color: var(--primary-text)
-  }
-  #step-indicator{
-    display: flex;
-  }
   #review-payment-header {
     justify-content: space-between;
   }
@@ -57,6 +47,10 @@
     width: 125px;
     height: 10px;
     opacity: 0.5;
+    position: absolute;
+    bottom: 20px;          
+    left: 50%;
+    transform: translateX(-50%);
   }
   button, .button {
     &.main {

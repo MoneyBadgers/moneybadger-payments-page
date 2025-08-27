@@ -196,14 +196,6 @@ button.secondary:hover {
   background-color: var(--secondary-accent-hover);
 }
 
-/* Hide back link on review payment page, only used for ozow */
-#bottom-back-link{
-  display: none
-}
-#step-indicator{
-  display: none;
-}
-
 /* Alternative secondary button (outline style, if you prefer no secondary accent) */
 button.secondary-outline {
   background-color: transparent;
@@ -306,4 +298,8 @@ h2 {
 
 .bg-primary-color {
   background-color: var(--primary-accent);
+}
+
+#bottom-back-link{
+  color: var(--primary-text)
 }

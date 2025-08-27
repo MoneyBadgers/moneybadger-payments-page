@@ -298,6 +298,7 @@ h2 {
 
 .bg-primary-color {
   background-color: var(--primary-accent);
+  color: var(--primary-bg)
 }
 
 #bottom-back-link{

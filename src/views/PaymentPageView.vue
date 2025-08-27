@@ -114,7 +114,7 @@ export default {
 </script>
 
 <template>
-  <div class="mx-auto text-center">
+  <div class="mx-auto text-center flex flex-col min-h-screen">
     <div class="top-bar"></div>
     <div class="spacer"></div>
     <div class="container mx-auto my-2 text-center">
@@ -139,9 +139,9 @@ export default {
         :referenceId="referenceId"
         :returnUrl="Return"
       ></PaymentConfirmed>
-      <div class="secure-payment-logo px-16">
-        <div class="mx-auto py-4 money-badger-logo" alt="Secure Payment" role="image"></div>
-      </div>
+    </div>
+    <div class="secure-payment-logo px-16 mt-auto">
+      <div class="mx-auto py-4 money-badger-logo" alt="Secure Payment" role="image"></div>
     </div>
   </div>
 </template>
@@ -172,9 +172,6 @@ export default {
 
 .spacer {
   height: 24px; /* Same height as the top bar */
-}
-.secure-payment-logo {
-  max-width: 300px;
 }
 
 button:hover {

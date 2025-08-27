@@ -21,7 +21,6 @@ export default {
     FeedbackForm,
     StepIndicator,
     QuestionMarkCircleIcon,
-    ChevronRightIcon,
     TermsModal,
     LightningAddressModal,
     ValrCurrencyModal,
@@ -184,14 +183,14 @@ export default {
               walletClass="binance" 
               :disabled="binanceDisabled" 
               subtext="(coming soon)"
-              @click="setWallet(Wallet.wallets['binance'])"
+              @click="()=>setWallet(Wallet.wallets['binance'])"
             />
           </li>
           <li>
             <WalletButton 
               walletClass="luno" 
               :disabled="lunoDisabled" 
-              @click="setWallet(Wallet.wallets['luno'])"
+              @click="()=>setWallet(Wallet.wallets['luno'])"
             />
           </li>
           <li class="flex justify-center my-4">

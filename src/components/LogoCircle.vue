@@ -10,15 +10,15 @@
 
 <style scoped>
 .cls-1 {
-  fill: var(--secondary-text);
+  fill: var(--primary-bg);
 }
 
 .cls-2 {
-  fill: var(--secondary-accent);
+  fill: var(--primary-accent);
 }
 
 .cls-3 {
-  fill: var(--secondary-accent);
+  fill: var(--primary-accent);
 }
 
 .cls-4 {

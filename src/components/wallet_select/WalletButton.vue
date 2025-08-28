@@ -10,7 +10,7 @@
           class="wallet-logo h-10 bg-no-repeat bg-left"
           :class="walletClass"
         ></div>
-        <ChevronRightIcon class="text-secondary-accent w-6 h-6 absolute right-4" />
+        <ChevronRightIcon class="text-bg-color w-6 h-6 absolute right-4" />
       </div>
     </button>
     <div v-if="disabled" class="overlay">Not available</div>
@@ -40,6 +40,7 @@ defineEmits<{
   text-align: center;
   &:hover {
     transform: translateX(10px);
+    background-color: var(--secondary-bg);
   }
   border: 1px solid var(--border-color);
 }

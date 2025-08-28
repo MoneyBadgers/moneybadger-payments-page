@@ -28,28 +28,28 @@ class Wallet {
             'lightning',
             'Lightning',
             'lightning:PAYMENT_REQUEST',
-            'Lightning Wallet',
+            'your Lightning Wallet',
             'Lightning Invoice (BOLT11)'
         ),
         'binance': new Wallet(
             'binance',
             'Binance Pay',
             'PAYMENT_REQUEST',
-            'Binance App',
+            'your Binance App',
             'Binance Pay Link'
         ),
         'luno': new Wallet(
             'luno',
             'Luno',
             'PAYMENT_REQUEST',
-            'Luno App',
+            'your Luno App',
             'Luno Payment Link'
         ),
         'valr': new Wallet(
             'valr',
             'VALR',
             'https://valr.com/PAYMENT_REQUEST',
-            'VALR App',
+            'your VALR App',
             'VALR Payment Link'
         ),
     }

@@ -1,5 +1,5 @@
 <template>
-  <span class="text-primary-color underline cursor-pointer" @click="showModal = true">Learn more</span>
+  <span class="text-primary-accent underline cursor-pointer" @click="showModal = true">Learn more</span>
   <div
     v-if="showModal"
     class="modal-overlay"
@@ -28,7 +28,7 @@
       </div>
 
       <button
-        class="solid-btn mt-6"
+        class="primary mt-6"
         @click="showModal = false"
       >
         Got it
@@ -40,7 +40,7 @@
       >
         <template #trigger>
           <button
-            class="text-primary-color font-medium hover:underline flex items-center gap-1 mx-auto"
+            class="text-primary-accent font-medium hover:underline flex items-center gap-1 mx-auto"
           >
             I need more help
             <QuestionMarkCircleIcon class="w-5 h-5" />

@@ -1,7 +1,6 @@
 <script lang="ts">
 import { format } from 'date-fns'
 import LogoCircle from '@/components/LogoCircle.vue'
-import { peachComplete } from '../partner/peach'
 
 export default {
   name: 'PaymentConfirmed',
@@ -21,9 +20,6 @@ export default {
     paidAt() {
       return this.timeStamp
     },
-    returnUrl(): string {
-      return this.returnUrl
-    }
   },
   methods: {
     formatTime(timeString: String) {
@@ -53,11 +49,11 @@ export default {
 </script>
 
 <template>
-  <div>
+  <div class="py-6">
     <div>
       <h4 class="font-bold">Payment Successful</h4>
     </div>
-    <div class="logo-circle">
+    <div class="py-6 logo-circle">
       <LogoCircle class="payment-success-logo" />
     </div>
     <div>
@@ -67,7 +63,7 @@ export default {
     </div>
     <div>
       <button @click="redirectToReturnUrl" v-if="returnUrl"
-        class="done-btn py-2 mt-5 px-4 rounded w-[300px]">Done</button>
+        class="primary py-2 mt-5 px-4 rounded w-[300px]">Done</button>
     </div>
   </div>
 </template>
@@ -86,7 +82,7 @@ export default {
 
 .payment-amount,
 .time-stamp {
-  color: var(--color-text);
+  color: var(--secondary-text);
   font-weight: bold;
 }
 
@@ -99,13 +95,13 @@ export default {
 }
 
 .reference-id {
-  color: var(--color-green);
+  color: var(--success);
   font-size: 0.8em;
   font-weight: bold;
 }
 
-.done-btn {
-  background-color: var(--color-amber-med);
+/* .done-btn {
+  background-color: var(--);
   font-weight: bold;
   color: var(--color-black);
   text-align: center;
@@ -113,5 +109,5 @@ export default {
   &:hover {
     background-color: var(--color-amber-light);
   }
-}
+} */
 </style>

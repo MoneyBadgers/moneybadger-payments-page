@@ -1,20 +1,22 @@
 <template>
-  <div class="text-white px-4 h-full">
+  <div class="px-4 pb-4 h-full">
     <!-- Back Button + Header -->
-    <div class="flex items-center mb-2">
-      <button @click="$emit('change-wallet')" class="mr-2">
+    <div id="review-payment-header" class="flex items-right mb-2">
+      <button v-if="!ozow" @click="$emit('change-wallet')" class="top-back-button mr-3">
         <span
-          class="w-6 h-6 rounded-full flex items-center justify-center bg-primary-color text-bg-color"
+          class="w-6 h-6 rounded-full flex items-center justify-center bg-primary-color"
         >
           <ChevronLeftIcon class="w-5 h-5 mr-0.5" />
         </span>
       </button>
-      <h2 class="text-lg font-semibold">Review your payment</h2>
+      
+      <h1>Review payment</h1>
+      <StepIndicator v-if="ozow" :currentStep="3" id="step-indicator"/>
     </div>
 
     <div class="flex flex-col items-center my-4">
       <!-- Help Text -->
-      <p class="text-sm text-gray-300 text-left">
+      <p class="text-sm text-gray-500 text-left">
         We will take you to your wallet to finish the payment.
         <HowToPayModal />
       </p>
@@ -35,6 +37,8 @@
         :showingDeeplinkButton="showDeeplinkButton"
       />
     </div>
+
+    <a class="text-button" v-if="ozow" id="bottom-back-link" @click="$emit('change-wallet')">Go Back</a>
   </div>
 </template>
 
@@ -49,6 +53,8 @@ import Wallet from '../models/wallet'
 import type { Invoice } from '../api/cryptoqr/api'
 import HowToPayModal from './payment/HowToPayModal.vue'
 import Expiry from './payment/Expiry.vue'
+import StepIndicator from './payment/StepIndicator.vue'
+import { useThemeStore } from '../stores/theme';
 
 export default {
   name: 'ReviewPayment',
@@ -59,7 +65,8 @@ export default {
     PaymentDetails,
     QrDisplay,
     HowToPayModal,
-    Expiry
+    Expiry,
+    StepIndicator,
   },
   props: {
     invoice: { type: Object as PropType<Invoice>, required: true },
@@ -84,8 +91,11 @@ export default {
   },
   data() {
     return {
-      viewMode: ''
+      viewMode: '',
+      ozow: useThemeStore().current === 'ozow',
     }
   }
 }
 </script>
+
+<style scoped></style>

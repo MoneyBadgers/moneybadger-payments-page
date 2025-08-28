@@ -1,0 +1,23 @@
+:root {
+  /* Primary colors */
+  --primary-bg: var(--color-background); /* Default background */
+  --primary-text: var(--vt-c-white); /* Default text color */
+  --primary-accent: var(--color-amber-light); /* Default accent (e.g., buttons, links) */
+  --primary-accent-hover: var(--color-amber-dark); /* Hover state for accent */
+
+  /* Secondary colors */
+  --secondary-bg: var(--color-background-soft); /* Secondary background (e.g., cards) */
+  --secondary-text: var(--vt-c-white-soft); /* Secondary text (e.g., subtitles) */
+  --secondary-accent: var(--color-amber-light);; /* Default secondary accent (e.g., secondary buttons) */
+  --secondary-accent-hover: #4b5563; /* Hover state for secondary accent */
+
+  /* Spacing */
+  --spacing-unit: 8px;
+  --section-gap: 160px; 
+
+  --border-color: var(--vt-c-text-dark-2); /* Default border color */
+}
+
+.choose-wallet-btn {
+  background-color: var(--color-background-soft);
+}

@@ -85,6 +85,12 @@
   &.binance {
     background-image: url('@/assets/wallets/binance-dark.png');
   }
+  &.binance-15 {
+    background-image: url('@/assets/wallets/binance-15-dark.png');
+  }
+  &.binance-50 {
+    background-image: url('@/assets/wallets/binance-50-dark.png');
+  }
 }
 
 /* Dark mode variables */
@@ -104,6 +110,12 @@
     }
     &.binance {
       background-image: url('@/assets/wallets/binance.png');
+    }
+    &.binance-15 {
+      background-image: url('@/assets/wallets/binance-15.png');
+    }
+    &.binance-50 {
+      background-image: url('@/assets/wallets/binance-50.png');
     }
   }
 }

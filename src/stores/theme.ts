@@ -45,7 +45,12 @@ export const useThemeStore = defineStore('theme', {
     async initFromUrl() {
       const search = new URLSearchParams(window.location.search);
       const themeParam = search.get('theme'); // may be null
-      this.setTheme(themeParam || 'default');
+      if (themeParam) {
+        this.setTheme(themeParam);
+        return;
+      }
+      const merchantCode = search.get('merchantCode');
+      this.setTheme(merchantCode || 'default');
       await this.loadCssForCurrent();
     },
   },

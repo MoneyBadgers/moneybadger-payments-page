@@ -173,14 +173,7 @@ export default {
           </li>
           <li>
             <WalletButton 
-              walletClass="valr" 
-              :disabled="valrDisabled" 
-              @click="chooseValr"
-            />
-          </li>
-          <li>
-            <WalletButton 
-              walletClass="binance-15" 
+              walletClass="binance" 
               :disabled="binanceDisabled" 
               subtext="(coming soon)"
               @click="()=>setWallet(Wallet.wallets['binance'])"
@@ -191,6 +184,13 @@ export default {
               walletClass="luno" 
               :disabled="lunoDisabled" 
               @click="()=>setWallet(Wallet.wallets['luno'])"
+            />
+          </li>
+          <li>
+            <WalletButton 
+              walletClass="valr" 
+              :disabled="valrDisabled" 
+              @click="chooseValr"
             />
           </li>
           <li class="flex justify-center my-4">

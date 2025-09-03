@@ -180,7 +180,7 @@ export default {
           </li>
           <li>
             <WalletButton 
-              walletClass="binance-15" 
+              walletClass="binance"
               :disabled="binanceDisabled" 
               subtext="(coming soon)"
               @click="()=>setWallet(Wallet.wallets['binance'])"

@@ -139,7 +139,7 @@ export default {
       <div
         id="terms-container"
         class="my-2 w-[300px] flex flex-row text-left"
-        v-if="requireTermsAccepted"
+        v-if="requireTermsAccepted && !ozow"
         @click="terms.toggle"
       >
         <label class="custom-checkbox">

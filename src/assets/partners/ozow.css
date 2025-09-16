@@ -35,6 +35,8 @@
 }
 
 .ozow {
+  font-family: 'Gordita', sans-serif;
+
   .top-bar {
     display: none;
   }
@@ -67,6 +69,10 @@
       border: 1.5px solid #FFFFFF
     }
   }
+
+    h1 {
+      font-size: 18px;
+    }
   .choose-wallet-btn {
     border: 2px solid var(--border-color);
     border-radius: 8px;

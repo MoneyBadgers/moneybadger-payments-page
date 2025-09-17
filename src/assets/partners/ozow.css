@@ -44,12 +44,7 @@
     justify-content: space-between;
   }
   .money-badger-logo {
-    background-image: url(/src/assets/secure-payment-money-badger-dark.png);
-    background-size: cover;
-    opacity: 0.5;
-    filter: grayscale(50%);
-    width: calc(var(--money-badger-logo-width) / 1.5);
-    height: calc(var(--money-badger-logo-height) / 1.5);
+    background-image: url(/src/assets/partners/ozow/PoweredByMoneyBadgerTag.svg);
   }
 
   button, .button {

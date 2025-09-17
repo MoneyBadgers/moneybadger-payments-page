@@ -14,6 +14,8 @@ import { peachInit } from '../partner/peach'
 import { AnalyticsEvent } from '../types/analytics_events'
 import { defaultAnalyticproperties } from '../types/analytics_default_properties'
 import ReviewPayment from '../components/ReviewPayment.vue'
+import ReviewPaymentOzow from '../components/ReviewPaymentOzow.vue'
+import { useThemeStore } from '../stores/theme'
 
 export default {
   name: 'PaymentPageView',
@@ -21,6 +23,7 @@ export default {
     WalletSelect,
     LoadingSpinner,
     ReviewPayment,
+    ReviewPaymentOzow,
     PaymentConfirmed,
     ErrorPage,
     Expired
@@ -40,6 +43,9 @@ export default {
   },
   computed: {
     ...mapStores(usePaymentStore),
+    isOzowTheme() {
+      return useThemeStore().current === 'ozow'
+    },
     wallet: function (): Wallet {
       return this.paymentsStore.wallet
     },
@@ -126,8 +132,14 @@ export default {
         :requireTermsAccepted="(paymentsStore as any).requireTermsAccepted"
         :requireRefunds="(paymentsStore as any).requireRefunds"
       />
+      <ReviewPaymentOzow
+        v-if="status === Status.WaitForPayment && isOzowTheme"
+        :wallet="paymentsStore.wallet"
+        :invoice="paymentsStore.invoice"
+        @change-wallet="paymentsStore.changeWallet"
+      ></ReviewPaymentOzow>
       <ReviewPayment
-        v-if="status === Status.WaitForPayment"
+        v-if="status === Status.WaitForPayment && !isOzowTheme"
         :wallet="paymentsStore.wallet"
         :invoice="paymentsStore.invoice"
         @change-wallet="paymentsStore.changeWallet"

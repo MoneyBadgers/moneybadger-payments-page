@@ -159,7 +159,7 @@ export default {
         </div>
       </div>
       <div id="wallet-select-header" class="flex items-right">
-        <h1>Select Wallet</h1>
+        <h1>Select Crypto Wallet</h1>
         <StepIndicator v-if="ozow" :currentStep="2" id="step-indicator"/>
       </div>
       <div>
@@ -193,7 +193,7 @@ export default {
               @click="chooseValr"
             />
           </li>
-          <li class="flex justify-center my-4">
+          <li class="flex justify-center my-4" v-if="!ozow">
             <FeedbackForm
               :feedbackType="FeedbackType.WALLET_NOT_SUPPORTED"
               walletPrompt="Which wallet would you like to use?"

@@ -4,7 +4,7 @@
       <ReviewPageHeader :wallet="wallet" @change-wallet="$emit('change-wallet')" />
 
       <div class="flex flex-col items-center my-2 box">
-        <PaymentDetails :amountCents="invoice.amount_cents" :logo="wallet.valueStore" />
+        <PaymentDetails :amountCents="invoice.amount_cents" :logo="wallet.valueStore" v-if="!ozow"/>
         <MobilePayment v-if="showDeeplinkButton" :invoice="invoice" :wallet="wallet" />
         <QrDisplay v-else :invoice="invoice" :wallet="wallet" />
       </div>

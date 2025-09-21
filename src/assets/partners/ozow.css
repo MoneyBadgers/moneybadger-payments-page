@@ -75,4 +75,9 @@
       color: var(--secondary-accent);
     }
   }
+    .box {
+        background-color: transparent;
+        border-radius: 12px;
+        color: var( --primary-text);
+    }
 }

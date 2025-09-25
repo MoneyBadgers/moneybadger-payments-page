@@ -120,25 +120,25 @@ export default {
     <div class="container mx-auto my-2 text-center">
       <ErrorPage v-if="status === Status.Error" :errors="paymentsStore.errors"></ErrorPage>
       <Expired v-if="status === Status.Expired" :errors="paymentsStore.errors"></Expired>
-      <LoadingSpinner />
-<!--      <WalletSelect-->
-<!--        v-if="status === Status.SelectWallet"-->
-<!--        :requireTermsAccepted="(paymentsStore as any).requireTermsAccepted"-->
-<!--        :requireRefunds="(paymentsStore as any).requireRefunds"-->
-<!--      />-->
-<!--      <ReviewPayment-->
-<!--        v-if="status === Status.WaitForPayment"-->
-<!--        :wallet="paymentsStore.wallet"-->
-<!--        :invoice="paymentsStore.invoice"-->
-<!--        @change-wallet="paymentsStore.changeWallet"-->
-<!--      ></ReviewPayment>-->
-<!--      <PaymentConfirmed-->
-<!--        v-if="status === Status.Successful"-->
-<!--        :timeStamp="paymentTimeStamp"-->
-<!--        :paymentAmount="amountPaid"-->
-<!--        :referenceId="referenceId"-->
-<!--        :returnUrl="Return"-->
-<!--      ></PaymentConfirmed>-->
+      <LoadingSpinner v-if="status === Status.Loading" />
+      <WalletSelect
+        v-if="status === Status.SelectWallet"
+        :requireTermsAccepted="(paymentsStore as any).requireTermsAccepted"
+        :requireRefunds="(paymentsStore as any).requireRefunds"
+      />
+      <ReviewPayment
+        v-if="status === Status.WaitForPayment"
+        :wallet="paymentsStore.wallet"
+        :invoice="paymentsStore.invoice"
+        @change-wallet="paymentsStore.changeWallet"
+      ></ReviewPayment>
+      <PaymentConfirmed
+        v-if="status === Status.Successful"
+        :timeStamp="paymentTimeStamp"
+        :paymentAmount="amountPaid"
+        :referenceId="referenceId"
+        :returnUrl="Return"
+      ></PaymentConfirmed>
     </div>
     <div class="secure-payment-logo px-16 mt-auto">
       <div class="mx-auto py-4 money-badger-logo" alt="Secure Payment" role="image"></div>

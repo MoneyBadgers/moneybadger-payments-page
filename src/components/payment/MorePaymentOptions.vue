@@ -1,11 +1,15 @@
 <template>
-  <div class="box rounded-lg w-full p-4">
+  <div class="box rounded-lg w-full p-4" :class="{ 'ozow-border': isOzowTheme }">
     <!-- Toggle Header -->
     <div class="flex flex-row justify-between items-right cursor-pointer" @click="toggle">
       <span class="text-sm font-medium">More payment options</span>
       <ChevronUpIcon
-        class="w-6 h-6 transition-transform duration-200 text-primary-accent"
-        :class="{ 'rotate-180': !expanded }"
+        class="w-6 h-6 transition-transform duration-200"
+        :class="{
+          'rotate-180': !expanded,
+          'ozow-chevron': isOzowTheme,
+          'text-primary-accent': !isOzowTheme
+        }"
       />
     </div>
 
@@ -22,6 +26,7 @@
         <button
           v-if="showingDeeplinkButton"
           class="payment-option w-full flex items-center gap-2 px-4 py-2 text-sm rounded mb-2"
+          :class="{ 'ozow-payment-option': isOzowTheme }"
           @click="$emit('use-qr-code')"
         >
           <QrCodeIcon class="w-4 h-4 text-secondary-accent" />
@@ -30,6 +35,7 @@
         <button
           v-else
           class="payment-option w-full flex items-center gap-2 px-4 py-2 text-sm rounded mb-2"
+          :class="{ 'ozow-payment-option': isOzowTheme }"
           @click="$emit('use-deeplink')"
         >
           <ArrowRightIcon class="w-4 h-4 text-secondary-accent" />
@@ -44,6 +50,7 @@
         <button
           @click="copyPaymentRequest"
           class="payment-option w-full flex items-center gap-2 px-4 py-2 text-sm rounded"
+          :class="{ 'ozow-payment-option': isOzowTheme }"
         >
           <LinkIcon class="w-4 h-4 text-secondary-accent" />
           Copy payment link
@@ -63,6 +70,7 @@ import {
 } from '@heroicons/vue/24/solid'
 import { mapStores } from 'pinia'
 import { usePaymentStore } from '../../stores/payments'
+import { useThemeStore } from '../../stores/theme'
 import { AnalyticsEvent } from '../../types/analytics_events'
 import { defaultAnalyticproperties } from '../../types/analytics_default_properties'
 
@@ -82,7 +90,10 @@ export default {
     }
   },
   computed: {
-    ...mapStores(usePaymentStore)
+    ...mapStores(usePaymentStore, useThemeStore),
+    isOzowTheme() {
+      return this.themeStore.current === 'ozow'
+    }
   },
   data() {
     return {
@@ -132,3 +143,20 @@ export default {
   }
 }
 </script>
+
+<style scoped>
+.ozow-border {
+  border: 1px solid #E4E7EE;
+}
+
+.ozow-chevron {
+  color: #95A0BD;
+}
+
+.ozow-payment-option {
+  background: #F1F3F6;
+}
+
+.ozow-payment-option .text-secondary-accent {
+}
+</style>

@@ -1,6 +1,7 @@
 <script lang="ts">
 import { format } from 'date-fns'
 import LogoCircle from '@/components/LogoCircle.vue'
+import { useThemeStore } from '@/stores/theme'
 
 export default {
   name: 'PaymentConfirmed',
@@ -12,6 +13,11 @@ export default {
   },
   components: {
     LogoCircle
+  },
+  data() {
+    return {
+      ozow: useThemeStore().current === 'ozow',
+    }
   },
   computed: {
     currency() {
@@ -49,7 +55,17 @@ export default {
 </script>
 
 <template>
-  <div class="py-6">
+  <div v-if="ozow" class="ozow-background-container">
+    <div class="py-6 justify-center items-center flex flex-col relative z-10">
+      <img src="@/assets/partners/ozow/ozow_logo.svg" alt="Ozow Logo" class="ozow-logo mb-20 mt-10" />
+      <img src="@/assets/partners/ozow/ozow_success_icon.svg" alt="Payment Success" />
+      <div>
+        <button @click="redirectToReturnUrl" v-if="returnUrl"
+                class="ozow-done-btn py-4 mt-20 px-4 rounded w-[300px]">Return to Merchant</button>
+      </div>
+    </div>
+  </div>
+  <div v-else class="py-6">
     <div>
       <h4 class="font-bold">Payment Successful</h4>
     </div>
@@ -69,6 +85,19 @@ export default {
 </template>
 
 <style scoped>
+.ozow-background-container {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background-image: url('@/assets/partners/ozow/ozow_background.svg');
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  overflow-y: auto;
+}
+
 .logo-circle {
   display: flex;
   justify-content: center;
@@ -100,14 +129,16 @@ export default {
   font-weight: bold;
 }
 
-/* .done-btn {
-  background-color: var(--);
+.ozow-done-btn {
+  background-color: white;
   font-weight: bold;
-  color: var(--color-black);
+  color: black;
   text-align: center;
-
+  border: none;
+  cursor: pointer;
+  border-radius: 50px;
   &:hover {
-    background-color: var(--color-amber-light);
+    background-color: #f5f5f5;
   }
-} */
+}
 </style>

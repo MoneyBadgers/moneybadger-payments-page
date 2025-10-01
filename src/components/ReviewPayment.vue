@@ -32,8 +32,8 @@ import type { PropType } from 'vue'
 import Wallet from '../models/wallet'
 import type { Invoice } from '../api/cryptoqr/api'
 import Expiry from './payment/Expiry.vue'
-import ReviewPageHeader from '@/components/payment/ReviewPageHeader.vue'
-import { useThemeStore } from '@/stores/theme'
+import { useThemeStore } from '../stores/theme'
+import ReviewPageHeader from "./payment/ReviewPageHeader.vue"
 
 export default {
   name: 'ReviewPayment',

@@ -28,9 +28,9 @@
 import { ChevronLeftIcon } from '@heroicons/vue/24/solid'
 import StepIndicator from './StepIndicator.vue'
 import type { PropType } from 'vue'
-import { useThemeStore } from '@/stores/theme'
-import Wallet from '@/models/wallet'
+import { useThemeStore } from '../../stores/theme'
 import HowToPayModal from '@/components/payment/HowToPayModal.vue'
+import Wallet from '../../models/wallet'
 
 export default {
   name: 'ReviewPageHeader',

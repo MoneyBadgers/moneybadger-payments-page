@@ -1,7 +1,7 @@
 <script lang="ts">
 import { format } from 'date-fns'
 import LogoCircle from '@/components/LogoCircle.vue'
-import { useThemeStore } from '@/stores/theme'
+import { useThemeStore } from '../stores/theme'
 
 export default {
   name: 'PaymentConfirmed',

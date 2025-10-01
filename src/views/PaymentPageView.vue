@@ -118,21 +118,22 @@ export default {
     <div class="top-bar"></div>
     <div class="spacer"></div>
     <div class="container mx-auto my-2 text-center">
-<!--      <ErrorPage v-if="status === Status.Error" :errors="paymentsStore.errors"></ErrorPage>-->
-<!--      <Expired v-if="status === Status.Expired" :errors="paymentsStore.errors"></Expired>-->
-<!--      <LoadingSpinner v-if="status === Status.Loading" />-->
-<!--      <WalletSelect-->
-<!--        v-if="status === Status.SelectWallet"-->
-<!--        :requireTermsAccepted="(paymentsStore as any).requireTermsAccepted"-->
-<!--        :requireRefunds="(paymentsStore as any).requireRefunds"-->
-<!--      />-->
-<!--      <ReviewPayment-->
-<!--        v-if="status === Status.WaitForPayment"-->
-<!--        :wallet="paymentsStore.wallet"-->
-<!--        :invoice="paymentsStore.invoice"-->
-<!--        @change-wallet="paymentsStore.changeWallet"-->
-<!--      ></ReviewPayment>-->
+      <ErrorPage v-if="status === Status.Error" :errors="paymentsStore.errors"></ErrorPage>
+      <Expired v-if="status === Status.Expired" :errors="paymentsStore.errors"></Expired>
+      <LoadingSpinner v-if="status === Status.Loading" />
+      <WalletSelect
+        v-if="status === Status.SelectWallet"
+        :requireTermsAccepted="(paymentsStore as any).requireTermsAccepted"
+        :requireRefunds="(paymentsStore as any).requireRefunds"
+      />
+      <ReviewPayment
+        v-if="status === Status.WaitForPayment"
+        :wallet="paymentsStore.wallet"
+        :invoice="paymentsStore.invoice"
+        @change-wallet="paymentsStore.changeWallet"
+      ></ReviewPayment>
       <PaymentConfirmed
+        v-if="status === Status.Successful"
         :timeStamp="paymentTimeStamp"
         :paymentAmount="amountPaid"
         :referenceId="referenceId"

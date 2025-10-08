@@ -2,7 +2,7 @@
   <div class="box rounded-lg w-full p-4" :class="{ 'ozow-border': isOzowTheme }">
     <!-- Toggle Header -->
     <div class="flex flex-row justify-between items-right cursor-pointer" @click="toggle">
-      <span class="text-sm font-medium">More payment options</span>
+      <span style="font-size: 16px" class="font-medium">More payment options</span>
       <ChevronUpIcon
         class="w-6 h-6 transition-transform duration-200"
         :class="{
@@ -155,8 +155,10 @@ export default {
 
 .ozow-payment-option {
   background: #F1F3F6;
+  font-size: 16px;
 }
 
 .ozow-payment-option .text-secondary-accent {
+  color: #1E2330;
 }
 </style>

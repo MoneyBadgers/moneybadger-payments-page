@@ -1,13 +1,13 @@
 <template>
   <div class="w-full text-left">
     <p class="my-4">Open {{wallet.scanner}} to complete payment</p>
-    <div class="text-white rounded-lg w-80 px-6 pb-6 text-center mx-auto">
+    <div class="text-white rounded-lg w-80 pb-6 pt-4 text-center mx-auto">
       <!-- Payment Button -->
       <a
         :href="currentDeeplink"
         target="_blank"
         @click="onOpenWallet"
-        class="button main primary font-bold py-2 px-4 w-full flex items-center justify-center gap-2 transition font-bold"
+        class="button main primary font-bold h-16 px-4 w-full flex items-center justify-center gap-2 transition"
       >
         Open {{wallet.scanner}}
         <ArrowRightIcon class="w-5 h-5" />

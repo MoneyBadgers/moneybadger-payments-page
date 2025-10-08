@@ -19,7 +19,7 @@
       />
     </div>
 
-    <a class="text-button" v-if="ozow" id="bottom-back-link" @click="$emit('change-wallet')">Go Back</a>
+    <a class="text-button pt-6" v-if="ozow" id="bottom-back-link" @click="$emit('change-wallet')">Go Back</a>
   </div>
 </template>
 

@@ -42,7 +42,7 @@
           Open in wallet app
         </button>
 
-        <div v-if="showCopyHint" class="flex justify-left w-300 text-xs text-gray-300">
+        <div v-if="showCopyHint" class="flex justify-left w-300 text-xs" :class="{ 'ozow-copy-hint': isOzowTheme, 'text-gray-300': !isOzowTheme }">
           <ClipboardDocumentCheckIcon class="mx-2 size-4 text-secondary-accent" />
           <span>Payment details copied to clipboard!</span>
         </div>
@@ -159,6 +159,10 @@ export default {
 }
 
 .ozow-payment-option .text-secondary-accent {
+  color: #1E2330;
+}
+
+.ozow-copy-hint {
   color: #1E2330;
 }
 </style>

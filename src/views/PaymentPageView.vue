@@ -1,8 +1,6 @@
 <script lang="ts">
 import { mapStores } from 'pinia'
 import { usePaymentStore } from '../stores/payments'
-import AwaitingPayment from '@/components/AwaitingPayment.vue'
-import Logo from '@/components/Logo.vue'
 import PaymentConfirmed from '@/components/PaymentConfirmed.vue'
 import ErrorPage from '../components/ErrorPage.vue'
 import Expired from '../components/Expired.vue'

@@ -75,4 +75,8 @@ export default {
 }
 </script>
 
-<style scoped></style>
+<style scoped>
+#bottom-back-link {
+  padding-top: 24px;
+}
+</style>

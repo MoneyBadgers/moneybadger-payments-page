@@ -57,10 +57,11 @@ export default {
 <template>
   <div v-if="ozow" class="ozow-background-container">
     <div class="py-6 justify-center items-center flex flex-col relative z-10">
-      <img src="@/assets/partners/ozow/ozow_logo.svg" alt="Ozow Logo" class="ozow-logo mb-20 mt-10" />
-      <img src="@/assets/partners/ozow/ozow_success_icon.svg" alt="Payment Success" />
+      <img src="@/assets/partners/ozow/ozow_logo.svg" alt="Ozow Logo" class="ozow-logo mb-0 mt-10" />
+      <img src="@/assets/partners/ozow/confetti_once.gif" alt="Payment Success" style="width: 80%"/>
+      <div class="ozow-success-text">Payment Successful</div>
       <div>
-        <button @click="redirectToReturnUrl" v-if="returnUrl"
+        <button @click="redirectToReturnUrl"
                 class="ozow-done-btn py-4 mt-20 px-4 rounded w-[300px]">Return to Merchant</button>
       </div>
     </div>
@@ -85,19 +86,6 @@ export default {
 </template>
 
 <style scoped>
-.ozow-background-container {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100vw;
-  height: 100vh;
-  background-image: url('@/assets/partners/ozow/ozow_background.svg');
-  background-size: cover;
-  background-position: center;
-  background-repeat: no-repeat;
-  overflow-y: auto;
-}
-
 .logo-circle {
   display: flex;
   justify-content: center;
@@ -140,5 +128,29 @@ export default {
   &:hover {
     background-color: #f5f5f5;
   }
+}
+
+.ozow-background-container {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background-image: url('@/assets/partners/ozow/ozow_background.svg');
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  overflow-y: auto;
+}
+
+.ozow-success-text {
+  font-family: 'Gordita', sans-serif;
+  font-weight: 700;
+  font-size: 24px;
+  line-height: 34px;
+  letter-spacing: 0px;
+  text-align: center;
+  text-transform: capitalize;
+  color: #FFFFFF;
 }
 </style>

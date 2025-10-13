@@ -1,40 +1,40 @@
 <template>
   <div v-if="remainingSeconds <= 90" class="box">
-    <div class="flex flex-col items-left text-left justify-between my-6 p-4">
+    <div class="flex flex-col items-center text-center justify-between my-3
+    ">
       <div class="flex items-baseline justify-between">
-        <h5 class="font-bold">Are you stuck?</h5>
-        <p class="text-sm text-right">
-          Expires in <span class="text-primary-accent">{{ expiresIn }}</span>
-        </p>
+        <h5 class="font-bold">Payment Expires Soon</h5>
       </div>
 
-      <p class="mb-4">You need to make payment soon or this screen will expire.</p>
+      <p class="text-sm text-right py-2">
+          <span class="expiry-time">{{ expiresIn }}</span>
+      </p>
+
+      <p class="mb-4">Make payment before this screen expires.</p>
 
       <FeedbackForm
         :feedbackType="FeedbackType.ISSUE"
         walletPrompt="Are you struggling to make payment?"
-      >
-        <template #trigger>
-          <button class="text-primary-accent font-medium hover:underline flex items-center gap-1">
-            I need help
-            <QuestionMarkCircleIcon class="w-5 h-5" />
-          </button>
-        </template>
-      </FeedbackForm>
+      />
     </div>
   </div>
 </template>
 
+<style>
+.expiry-time {
+  font-weight: 500;
+  font-size: 20px;
+}
+</style>
+
 <script lang="ts">
 import { formatDistanceStrict } from 'date-fns'
-import { QuestionMarkCircleIcon } from '@heroicons/vue/24/solid'
 import FeedbackForm from '../FeedbackForm.vue'
 import { FeedbackType } from '../../api/feedback'
 
 export default {
   name: 'PaymentExpiryHelp',
   components: {
-    QuestionMarkCircleIcon,
     FeedbackForm
   },
   props: {

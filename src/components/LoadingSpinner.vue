@@ -1,11 +1,6 @@
 <template>
   <div class="min-h-screen flex flex-col justify-center items-center">
-    <Vue3Lottie v-if="ozow"
-                :animationData="ozowAnimation"
-                :height="200"
-                :width="200"
-                :loop="true"
-                :autoplay="true" />
+    <img v-if="ozow" src="@/assets/partners/ozow/loading.gif" alt="Loading" />
     <svg
       v-if="!ozow"
       aria-hidden="true"

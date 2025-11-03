@@ -29,7 +29,7 @@
   --warning: #d97706; /* Warning background */
   --warning-hover: #b45309; /* Warning hover background */
   --warning-text: #ffffff; /* Warning text */
-  --error: #dc2626; /* Error background */
+  --error: var(--primary-text); /* Error background */
   --error-hover: #b91c1c; /* Error hover background */
   --error-text: #ffffff; /* Error text */
 }
@@ -75,9 +75,31 @@
       color: var(--secondary-accent);
     }
   }
-    .box {
-        background-color: transparent;
-        border-radius: 12px;
-        color: var( --primary-text);
+  .box {
+      background-color: transparent;
+      border-radius: 12px;
+      color: var( --primary-text);
+  }
+
+  .button.currency-select {
+    background-color: #ffffff;
+    border: 1px solid rgba(0,0,0,0.06);
+    box-shadow: 0 0 0 1px rgba(0,0,0,0.03);
+    cursor: pointer;
+    transition: background-color 0.15s ease, box-shadow 0.15s ease;
+    &:hover {
+      background-color: #f9fafb;
     }
+    &:active {
+      background-color: #f3f4f6;
+    }
+    svg {
+      color: #9ca3af;
+    }
+    span {
+      font-weight: 500;
+      color: #111827;
+      letter-spacing: 0.01em;
+    }
+  }
 }

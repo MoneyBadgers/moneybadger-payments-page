@@ -2,20 +2,20 @@
 import ErrorSymbol from './ErrorSymbol.vue';
 
 export default {
-    name: 'Expired',
+    name: 'PaymentExpired',
     components: { ErrorSymbol }
 }
 </script>
 
 <template>
   <div class="error-page font-bold">
-    <h4>Your payment has expired.</h4>
+    <p class="font-bold">Your payment has expired.</p>
     <div class="error-symbol">
       <ErrorSymbol class="my-4" />
     </div>
     <div class="error-message">
       <ul>
-        <li class="font-bold">
+        <li>
             Please request a new payment.
         </li>
       </ul>
@@ -38,7 +38,6 @@ export default {
 }
 
 .error-message {
-  color: var(--color-red);
-  font-size: 1.2em;
+  color: var(--error);
 }
 </style>

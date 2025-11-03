@@ -193,34 +193,6 @@ export default {
               @click="chooseValr"
             />
           </li>
-          <li class="flex justify-center my-4" v-if="!ozow">
-            <FeedbackForm
-              :feedbackType="FeedbackType.WALLET_NOT_SUPPORTED"
-              walletPrompt="Which wallet would you like to use?"
-            >
-              <template #trigger>
-                <button
-                  class="text no-underline font-medium hover:underline flex items-center gap-1"
-                >
-                  Request a Wallet
-                  <QuestionMarkCircleIcon class="w-5 h-5" />
-                </button>
-              </template>
-            </FeedbackForm>
-          </li>
-          <li class="flex justify-center my-4" v-if="ozow">
-            <FeedbackForm
-              :feedbackType="FeedbackType.WALLET_NOT_SUPPORTED"
-              walletPrompt="Which wallet would you like to use?"
-            >
-              <template #trigger>
-                <button
-                  class="text hover:underline flex items-center gap-1" style="font-weight: 400; color: #1E2330; font-size: 18px"
-                >Request a Wallet
-                </button>
-              </template>
-            </FeedbackForm>
-          </li>
         </ul>
       </div>
     </div>

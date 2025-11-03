@@ -12,7 +12,7 @@
             <button
               v-for="currency in currencies"
               :key="currency"
-              class="button currency-select mx-auto pl-4 pr-1 py-1 w-[100%] flex items-center justify-between"
+              class="button currency-select mx-auto pl-4 pr-1 py-1.5 w-[100%] flex items-center justify-between"
               @click="select(currency)"
             >
               <span class="font-medium tracking-wide">{{ currency }}</span>
@@ -36,7 +36,7 @@ import ReviewPageHeader from "../payment/ReviewPageHeader.vue"
 import Wallet from '../../models/wallet';
 
 const valrCurrencies = [
-  'BTC', 'AVAX', 'BNB', 'ETH', 'EURC', 'PYUSD', 'SHIB', 'SOL', 'USDC', 'USDT', 'XRP', 'ZAR'
+  'BTC', 'AVAX', 'BNB', 'ETH', 'SOL', 'USDC', 'USDT', 'XRP', 'ZAR'
 ];
 
 export default {

@@ -38,8 +38,6 @@
           and agree with our Privacy Policy and Terms and conditions
         </p>
 
-        {{ showing }}
-
         <nav>
         <ul class="sheet__links">
           <li><a href="https://ozow.com/privacy-policy" target="_blank" rel="noopener">Privacy Policy</a></li>

@@ -4,8 +4,6 @@ import { mapStores } from 'pinia'
 import { usePaymentStore } from '../stores/payments'
 import { AnalyticsEvent } from '../types/analytics_events'
 import { defaultAnalyticproperties } from '../types/analytics_default_properties'
-import FeedbackForm from './FeedbackForm.vue'
-import { QuestionMarkCircleIcon, ChevronRightIcon } from '@heroicons/vue/24/solid'
 import { FeedbackType } from '../api/feedback'
 import { useThemeStore } from '../stores/theme';
 import StepIndicator from './payment/StepIndicator.vue'
@@ -18,9 +16,7 @@ import WalletButton from './wallet_select/WalletButton.vue'
 export default {
   name: 'WalletSelect',
   components: {
-    FeedbackForm,
     StepIndicator,
-    QuestionMarkCircleIcon,
     TermsModal,
     LightningAddressModal,
     ValrCurrencyModal,
@@ -53,6 +49,9 @@ export default {
     },
     lightningDisabled() {
       return !this.paymentsStore.enabledWallets.includes('lightning')
+    },
+    isOzowTheme() {
+      return useThemeStore().current === 'ozow'
     }
   },
   methods: {
@@ -121,6 +120,15 @@ export default {
         ...additionalProps
       })
     },
+    goBack() {
+      if (document.referrer) {
+        // Navigate to the actual referring page
+        window.location.href = document.referrer
+      } else {
+        // Fallback if no referrer available (e.g. direct entry)
+        history.back()
+      }
+    }
   },
   data() {
     return {
@@ -162,7 +170,7 @@ export default {
         <h1>Select Crypto Wallet</h1>
         <StepIndicator v-if="ozow" :currentStep="2" id="step-indicator"/>
       </div>
-      <div>
+      <div class="mb-6">
         <ul class="available-wallets pt-6">
           <li>
             <WalletButton 
@@ -208,6 +216,7 @@ export default {
       @select="setValr"
       @cancel="valrSelected = false"
     />
+    <a class="text-button" v-if="isOzowTheme" id="bottom-back-link" @click="goBack()">Go Back</a>
   </div>
 </template>
 

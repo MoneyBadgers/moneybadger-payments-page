@@ -1,6 +1,4 @@
 <script lang="ts">
-import { CheckIcon } from '@heroicons/vue/24/solid'
-
 export default {
   name: 'StepIndicator',
   props: {
@@ -10,9 +8,6 @@ export default {
     return {
       steps: [1, 2, 3],
     }
-  },
-  components: {
-    CheckIcon,
   },
 }
 </script>

@@ -137,6 +137,12 @@ export default {
       height: 120px;           /* adjust to taste */
     }
 
+    .hero__background {
+      max-width: none;
+      width: 100%;
+      max-height: 60px;
+    }
+
     /* Content row (logo left, actions right) sits above the white area */
     .hero__content {
       margin-left: auto;

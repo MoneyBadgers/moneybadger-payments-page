@@ -19,8 +19,8 @@
               <ChevronRightIcon class="w-6 h-6" />
             </button>
           </div>
-          <div class="text-bg-color flex justify-center mt-4">
-            <a class="underline font-bold" @click="$emit('cancel')">Back</a>
+          <div class="text-bg-color flex justify-center mt-8">
+            <a class="underline font-bold" @click="$emit('cancel')">Go Back</a>
           </div>
         </div>
       </div>

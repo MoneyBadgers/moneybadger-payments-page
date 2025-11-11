@@ -98,6 +98,18 @@ export const usePaymentStore = defineStore('payments', {
     async changeWallet() {
       this.status = PaymentStatus.SelectWallet
     },
+    async userCancelInvoice() {
+      if (!this.invoice.id) {
+        console.error('no invoice to cancel')
+        return
+      }
+      try {
+        await (this as any).api.userCancelInvoice(this.invoice.id)
+        this.refreshInvoice()
+      } catch (error: any) {
+        this.errors = ['Network Error']
+      }
+    },
     async refreshInvoice(wait?: number) {
       if (!this.invoice.id) {
         return

@@ -70,4 +70,9 @@ export default class Api {
       refund_recipient: refundRecipient,
     })
   }
+
+  userCancelInvoice(invoiceId: string) {
+    console.warn('userCancelInvoice is not implemented yet', invoiceId)
+    // return this._invoiceApi.invoices.userCancelInvoice(invoiceId)
+  }
 }

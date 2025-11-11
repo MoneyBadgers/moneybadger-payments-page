@@ -1,5 +1,5 @@
 <template>
-  <div class="min-h-screen flex flex-col justify-center items-center">
+  <div class="h-[50vh] flex flex-col justify-center items-center">
     <img v-if="ozow" src="@/assets/partners/ozow/loading.gif" alt="Loading" class="ozow-loader"/>
     <svg
       v-if="!ozow"
@@ -47,7 +47,7 @@ export default {
 }
 
 .ozow-loader {
-  width: 133px;
-  height: 133px;
+  width: 100px;
+  height: 100px;
 }
 </style>

@@ -1,6 +1,6 @@
 <template>
   <div class="min-h-screen flex flex-col justify-center items-center">
-    <img v-if="ozow" src="@/assets/partners/ozow/loading.gif" alt="Loading" />
+    <img v-if="ozow" src="@/assets/partners/ozow/loading.gif" alt="Loading" class="ozow-loader"/>
     <svg
       v-if="!ozow"
       aria-hidden="true"
@@ -46,4 +46,8 @@ export default {
   fill: var(--primary-accent);
 }
 
+.ozow-loader {
+  width: 133px;
+  height: 133px;
+}
 </style>

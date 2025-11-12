@@ -2,6 +2,7 @@
 import { format } from 'date-fns'
 import LogoCircle from '@/components/LogoCircle.vue'
 import { useThemeStore } from '../stores/theme'
+import OzowRedirect from './ozow/OzowRedirect.vue'
 
 export default {
   name: 'PaymentConfirmed',
@@ -12,7 +13,8 @@ export default {
     returnUrl: String,
   },
   components: {
-    LogoCircle
+    LogoCircle,
+    OzowRedirect,
   },
   data() {
     return {
@@ -38,6 +40,9 @@ export default {
       }
     },
     autoRedirect() {
+      if(this.ozow) {
+        return; // Ozow handles its own redirect
+      }
       if (this.returnUrl) {
         // Peach says that they think maybe the combination of the postmessage and the redirect is causing issues.
         // peachComplete(this.returnUrl) // this is a peach-specific function, but unless there's a listener, it will just be a nop
@@ -65,6 +70,7 @@ export default {
                 class="ozow-done-btn py-4 mt-20 px-4 rounded w-[300px]">Return to Merchant</button>
       </div>
     </div>
+    <OzowRedirect />
   </div>
   <div v-else class="py-6">
     <div>

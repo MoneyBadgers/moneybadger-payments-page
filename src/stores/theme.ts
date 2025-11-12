@@ -13,7 +13,11 @@ export const useThemeStore = defineStore('theme', {
       default: 'dark',
     } as Record<string, Brightness>,
   }),
-
+  getters: {
+    isOzow(state): boolean {
+      return state.current === 'ozow';
+    }
+  },
   actions: {
     merchantCodeToTheme(merchantCode: string | null): string {
       if (!merchantCode) return 'default';

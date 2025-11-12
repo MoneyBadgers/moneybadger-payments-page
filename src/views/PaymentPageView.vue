@@ -15,6 +15,7 @@ import ReviewPayment from '../components/ReviewPayment.vue'
 import OzowBanner from '../components/ozow/OzowBanner.vue'
 import OzowTnCs from '../components/ozow/OzowTnCs.vue'
 import { useThemeStore } from '../stores/theme';
+import PaymentCancelled from '../components/PaymentCancelled.vue';
 
 export default {
   name: 'PaymentPageView',
@@ -27,6 +28,7 @@ export default {
     Expired,
     OzowBanner,
     OzowTnCs,
+    PaymentCancelled,
   },
   methods: {
     trackAnalytics(event: AnalyticsEvent, additionalProps?: Record<string, any>) {
@@ -146,6 +148,9 @@ export default {
         :referenceId="referenceId"
         :returnUrl="Return"
       ></PaymentConfirmed>
+      <PaymentCancelled
+        v-if="status === Status.Cancelled">
+      </PaymentCancelled>
     </div>
     <OzowTnCs v-if="isOzowTheme" class="mt-auto"/>
     <div class="secure-payment-logo px-16">

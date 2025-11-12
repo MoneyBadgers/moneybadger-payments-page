@@ -10,6 +10,19 @@
  * ---------------------------------------------------------------
  */
 
+/** ErrorResponse is an error response. */
+export interface ErrorResponse {
+  /**
+   * The code representing the error.
+   * @example "ErrUnknown"
+   */
+  code: ErrorResponseCodeEnum;
+  /** Optional extra information about this error. */
+  detail?: string;
+  /** The error message. */
+  error: string;
+}
+
 export interface Invoice {
   amount_cents?: number;
   currency?: string;
@@ -29,15 +42,20 @@ export interface Invoice {
    * @format date-time
    */
   paid_at?: string;
+  payment_link?: string;
   /** Payment request details. This is what needs to be provided to the user to make payment */
   payment_request?: PaymentRequest;
+  /** Array of all associated refunds for this invoice */
+  refunds?: Refund[];
   /** Invoice Status */
   status?: InvoiceStatusEnum;
   status_webhook_url?: string;
+  /** Sub Merchant information */
+  sub_merchant?: SubMerchant;
 }
 
 export interface InvoiceRequest {
-  /** Allowed payment methods, in preferred order */
+  /** Optional/Advanced usage: Allowed payment methods, in preferred order */
   allowed_payment_methods?: string[];
   /** @format int64 */
   amount_cents: number;
@@ -52,14 +70,14 @@ export interface InvoiceRequest {
    */
   auto_confirm?: boolean;
   /**
-   * Payment request currency code. If none specified, merchant default is used, otherwise 'ZAR'
+   * Invoice currency code. If none specified, merchant default is used, otherwise 'ZAR'
    * @example "ZAR"
    */
   currency?: string;
   device_id?: string;
   order_description?: string;
   order_id?: string;
-  /** Allowed payment currencies, in order of preference. If none specified, merchant default and/or value store default is used, otherwise 'BTC'. NB: Not all value stores support multiple currencies. */
+  /** Optional/Advanced usage: Allowed payment currencies, in order of preference. If none specified, merchant default and/or value store default is used, otherwise 'BTC'. NB: Not all value stores support multiple currencies. */
   payment_currencies?: string[];
   /** Recipient to refund to (optional, dependent on payment method) */
   refund_recipient?: RefundRecipient;
@@ -155,6 +173,8 @@ export interface Refund {
   request_currency?: string;
   /** Status is the status of the refund */
   status?: RefundStatusEnum;
+  /** webhook url to call when refund status change. If not set the webhook url on the related invoice will be used to notify of status updates. */
+  status_webhook_url?: string;
   /** @format date-time */
   updated_at?: string;
 }
@@ -169,6 +189,17 @@ export interface RefundRequest {
   currency?: string;
   /** Invoice ID is the id of the invoice to refund */
   invoice_id?: string;
+  /** (optional) webhook url to call when refund status change. If not set the webhook url on the related invoice will be used to notify of status updates. */
+  status_webhook_url?: string;
+}
+
+export interface RefundStatusUpdate {
+  refund?: {
+    /** ID is the id of the refund */
+    id?: string;
+    /** Merchant's invoice order ID */
+    order_id?: string;
+  };
 }
 
 /** Sub Merchant details. */
@@ -179,6 +210,26 @@ export interface SubMerchant {
   mcc: string;
   /** Sub Merchant name */
   name: string;
+  /** Sub Merchant site ID. The site id provides a granular identifier for the submerchant, for example, a specific store location of this sub merchant. This is an optional field. */
+  site_id?: string;
+}
+
+/**
+ * The code representing the error.
+ * @example "ErrUnknown"
+ */
+export enum ErrorResponseCodeEnum {
+  ErrUnknown = "ErrUnknown",
+  ErrNotFound = "ErrNotFound",
+  ErrForbidden = "ErrForbidden",
+  ErrAuthentication = "ErrAuthentication",
+  ErrProcessing = "ErrProcessing",
+  ErrInternal = "ErrInternal",
+  ErrInsufficientFunds = "ErrInsufficientFunds",
+  ErrInvalidInvoiceState = "ErrInvalidInvoiceState",
+  ErrRefundDeclined = "ErrRefundDeclined",
+  ErrRefundBelowMinAmount = "ErrRefundBelowMinAmount",
+  ErrRefundInvalidRecipient = "ErrRefundInvalidRecipient",
 }
 
 /** Invoice Status */
@@ -194,7 +245,7 @@ export enum InvoiceStatusEnum {
 /** Status is the status of the refund */
 export enum RefundStatusEnum {
   Pending = "pending",
-  Success = "success",
+  Complete = "complete",
   Failed = "failed",
 }
 
@@ -213,6 +264,12 @@ export enum CancelInvoiceParamsByEnum {
 
 /** Retrieve invoice by (id or orderId) */
 export enum ConfirmInvoiceParamsByEnum {
+  Id = "id",
+  OrderId = "orderId",
+}
+
+/** Retrieve invoice by (id or orderId) */
+export enum UserCancelInvoiceParamsByEnum {
   Id = "id",
   OrderId = "orderId",
 }
@@ -672,6 +729,30 @@ export class InvoiceApi<
         format: "json",
         ...params,
       }),
+
+    /**
+     * @description This action is only allowed while the invoice is in the 'REQUESTED' state.
+     *
+     * @tags invoice
+     * @name UserCancelInvoice
+     * @summary User cancel an invoice
+     * @request POST:/invoices/{id}/user_cancel
+     */
+    userCancelInvoice: (
+      id: string,
+      query?: {
+        /** Retrieve invoice by (id or orderId) */
+        by?: UserCancelInvoiceParamsByEnum;
+      },
+      params: RequestParams = {},
+    ) =>
+      this.request<Invoice, void>({
+        path: `/invoices/${id}/user_cancel`,
+        method: "POST",
+        query: query,
+        format: "json",
+        ...params,
+      }),
   };
   merchants = {
     /**
@@ -716,7 +797,7 @@ export class InvoiceApi<
   };
   refund = {
     /**
-     * No description
+     * @description Create a refund for a previously created invoice. ## Authentication & Request Signing This endpoint requires three headers: - `X-API-Key`: Your API key. - `X-Timestamp`: UNIX timestamp (seconds). - `X-Signature`: `Base64(HMAC_SHA256(secret, "<METHOD>\n<PATH>\n<TIMESTAMP>"))` **Canonical string to sign** for this operation: ``` POST /refund <UNIX_SECONDS_TIMESTAMP> ``` Example: Method:    `POST` Path:      `/refund` Timestamp: `1234567890` Secret:    `test-secret-key` String to sign (including newlines): ``` POST /refund 1234567890 ``` Base64(HMAC-SHA256(secret, string)) = `kJo7ZC9/S2oMN2LjdboCE5Ut5bFttpCc+QrDReKIXbA=`
      *
      * @tags invoice
      * @name RequestRefund
@@ -725,12 +806,31 @@ export class InvoiceApi<
      * @secure
      */
     requestRefund: (body: RefundRequest, params: RequestParams = {}) =>
-      this.request<Refund, void>({
+      this.request<Refund, ErrorResponse>({
         path: `/refund`,
         method: "POST",
         body: body,
         secure: true,
         type: ContentType.Json,
+        format: "json",
+        ...params,
+      }),
+  };
+  refunds = {
+    /**
+     * @description Returns a single refund
+     *
+     * @tags invoice
+     * @name GetRefund
+     * @summary Get refund by ID
+     * @request GET:/refunds/{id}
+     * @secure
+     */
+    getRefund: (id: string, params: RequestParams = {}) =>
+      this.request<Refund, ErrorResponse>({
+        path: `/refunds/${id}`,
+        method: "GET",
+        secure: true,
         format: "json",
         ...params,
       }),

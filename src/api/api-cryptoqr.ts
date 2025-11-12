@@ -73,6 +73,6 @@ export default class Api {
 
   userCancelInvoice(invoiceId: string) {
     console.warn('userCancelInvoice is not implemented yet', invoiceId)
-    // return this._invoiceApi.invoices.userCancelInvoice(invoiceId)
+    return this._invoiceApi.invoices.userCancelInvoice(invoiceId)
   }
 }

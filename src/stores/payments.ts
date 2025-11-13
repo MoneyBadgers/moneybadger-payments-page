@@ -128,6 +128,9 @@ export const usePaymentStore = defineStore('payments', {
         if (this.invoice.status === InvoiceStatusEnum.CANCELLED) {
           this.status = PaymentStatus.Cancelled
         }
+        if (this.invoice.status === InvoiceStatusEnum.REJECTED) {
+          this.status = PaymentStatus.Cancelled
+        }
       } catch (error: any) {
         this.errors = ['Network Error']
       }

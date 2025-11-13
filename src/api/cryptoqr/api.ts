@@ -45,6 +45,8 @@ export interface Invoice {
   payment_link?: string;
   /** Payment request details. This is what needs to be provided to the user to make payment */
   payment_request?: PaymentRequest;
+  /** URL that MoneyBadger will redirect to after payment */
+  redirect_url?: string;
   /** Array of all associated refunds for this invoice */
   refunds?: Refund[];
   /** Invoice Status */
@@ -79,6 +81,8 @@ export interface InvoiceRequest {
   order_id?: string;
   /** Optional/Advanced usage: Allowed payment currencies, in order of preference. If none specified, merchant default and/or value store default is used, otherwise 'BTC'. NB: Not all value stores support multiple currencies. */
   payment_currencies?: string[];
+  /** URL to redirect to after payment */
+  redirect_url?: string;
   /** Recipient to refund to (optional, dependent on payment method) */
   refund_recipient?: RefundRecipient;
   scan_id?: string;
@@ -239,6 +243,7 @@ export enum InvoiceStatusEnum {
   CONFIRMED = "CONFIRMED",
   TIMED_OUT = "TIMED_OUT",
   CANCELLED = "CANCELLED",
+  REJECTED = "REJECTED",
   ERROR = "ERROR",
 }
 

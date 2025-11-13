@@ -70,7 +70,7 @@ export default {
                 class="ozow-done-btn py-4 mt-20 px-4 rounded w-[300px]">Return to Merchant</button>
       </div>
     </div>
-    <OzowRedirect />
+    <OzowRedirect v-if="ozow" />
   </div>
   <div v-else class="py-6">
     <div>

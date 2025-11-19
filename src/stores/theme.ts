@@ -16,6 +16,9 @@ export const useThemeStore = defineStore('theme', {
   getters: {
     isOzow(state): boolean {
       return state.current === 'ozow';
+    },
+    requireRefunds(state): boolean {
+      return state.current === 'peach' || state.current === 'ozow';
     }
   },
   actions: {

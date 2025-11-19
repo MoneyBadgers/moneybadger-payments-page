@@ -45,6 +45,7 @@ export default {
   },
   computed: {
     ...mapStores(usePaymentStore),
+    ...mapStores(useThemeStore),
     wallet: function (): Wallet {
       return this.paymentsStore.wallet
     },
@@ -133,7 +134,7 @@ export default {
       <WalletSelect
         v-if="status === Status.SelectWallet"
         :requireTermsAccepted="(paymentsStore as any).requireTermsAccepted"
-        :requireRefunds="(paymentsStore as any).requireRefunds"
+        :requireRefunds="(paymentsStore as any).requireRefunds || (themeStore as any).requireRefunds"
       />
       <ReviewPayment
         v-if="status === Status.WaitForPayment"

@@ -167,7 +167,7 @@ export default {
         </div>
       </div>
       <div id="wallet-select-header" class="flex items-right">
-        <h1>Select Crypto Wallet</h1>
+        <h1>Select Wallet</h1>
         <StepIndicator v-if="ozow" :currentStep="2" id="step-indicator"/>
       </div>
       <div class="mb-6">

@@ -1,6 +1,8 @@
 <template>
-  <div class="h-60 flex flex-col justify-center">
+  <div class="h-[50vh] flex flex-col justify-center items-center">
+    <img v-if="ozow" src="@/assets/partners/ozow/loading.gif" alt="Loading" class="ozow-loader"/>
     <svg
+      v-if="!ozow"
       aria-hidden="true"
       class="w-14 h-14 text-gray-200 animate-spin dark:text-gray-600"
       viewBox="0 0 100 101"
@@ -19,6 +21,21 @@
     <span class="sr-only">Loading...</span>
   </div>
 </template>
+
+<script>
+import { useThemeStore } from '@/stores/theme' // Adjust the import path as needed
+import ozowAnimation from '../assets/partners/ozow/ozow-loader.json'
+export default {
+  name: 'LoadingSpinner',
+  data() {
+    return {
+      ozow: useThemeStore().current === 'ozow',
+      ozowAnimation: ozowAnimation,
+    }
+  }
+}
+</script>
+
 <style>
 
 .fill-1 {
@@ -29,4 +46,8 @@
   fill: var(--primary-accent);
 }
 
+.ozow-loader {
+  width: 100px;
+  height: 100px;
+}
 </style>

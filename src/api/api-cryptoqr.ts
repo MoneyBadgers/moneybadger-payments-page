@@ -70,4 +70,8 @@ export default class Api {
       refund_recipient: refundRecipient,
     })
   }
+
+  userCancelInvoice(invoiceId: string) {
+    return this._invoiceApi.invoices.userCancelInvoice(invoiceId)
+  }
 }

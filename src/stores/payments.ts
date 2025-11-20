@@ -58,6 +58,12 @@ export const usePaymentStore = defineStore('payments', {
       }
 
       return state.wallet.generateCopyableRequest((this as any).paymentRequestData)
+    },
+    cancelable(state): boolean {
+      if (!state.invoice.id) {
+        return true
+      }
+      return state.invoice.status === InvoiceStatusEnum.REQUESTED
     }
   },
   actions: {
@@ -98,6 +104,17 @@ export const usePaymentStore = defineStore('payments', {
     async changeWallet() {
       this.status = PaymentStatus.SelectWallet
     },
+    async userCancelInvoice() {
+      if (!this.invoice.id) {
+        return
+      }
+      try {
+        await (this as any).api.userCancelInvoice(this.invoice.id)
+      } catch (error: any) {
+        console.error('Error cancelling invoice:', error)
+      }
+      this.refreshInvoice()
+    },
     async refreshInvoice(wait?: number) {
       if (!this.invoice.id) {
         return
@@ -107,6 +124,12 @@ export const usePaymentStore = defineStore('payments', {
         this.errors = []
         if (this.invoice.status === InvoiceStatusEnum.CONFIRMED) {
           this.status = PaymentStatus.Successful
+        }
+        if (this.invoice.status === InvoiceStatusEnum.CANCELLED) {
+          this.status = PaymentStatus.Cancelled
+        }
+        if (this.invoice.status === InvoiceStatusEnum.REJECTED) {
+          this.status = PaymentStatus.Cancelled
         }
       } catch (error: any) {
         this.errors = ['Network Error']

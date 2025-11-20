@@ -1,7 +1,7 @@
 <template>
-  <div class="w-full flex flex-col justify-center items-center pb-6">
-    <h4 class="instructions">Scan the QR code with {{ wallet.scanner }}</h4>
-    <div v-if="paymentRequestQrUrl && !qrLoadError" class="center">
+  <div class="w-full text-left">
+    <p class="my-4">Scan the QR code with {{ wallet.scanner }} to complete payment</p>
+    <div v-if="paymentRequestQrUrl && !qrLoadError" class="flex justify-center items-center">
       <LoadingSpinner v-if="qrLoading" />
       <img
         :src="paymentRequestQrUrl"
@@ -12,9 +12,10 @@
         :class="{ hidden: qrLoading }"
       />
     </div>
-    <div v-else>
+    <div v-else class="flex justify-center items-center">
       <qrcode-vue :value="paymentRequestQrData" :size="300" :margin="3" level="L" />
     </div>
+    <p class="my-2 text-center">Payment link expires in 2 minutes</p>
   </div>
 </template>
 

@@ -6,4 +6,5 @@ export enum PaymentStatus {
   Successful,
   Error,
   Expired,
+  Cancelled,
 }

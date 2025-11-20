@@ -1,6 +1,4 @@
 <script lang="ts">
-import { CheckIcon } from '@heroicons/vue/24/solid'
-
 export default {
   name: 'StepIndicator',
   props: {
@@ -10,9 +8,6 @@ export default {
     return {
       steps: [1, 2, 3],
     }
-  },
-  components: {
-    CheckIcon,
   },
 }
 </script>
@@ -24,7 +19,9 @@ export default {
            v-if="step < currentStep"
           class="step check w-6 h-6 rounded-full flex items-center justify-center bg-primary-color"
         >
-          <CheckIcon class="w-4 h-4 mr-0"  />
+        <svg width="13" height="10" viewBox="0 0 13 10" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M11.25 1.25L4.375 8.25L1.25 5.06818" stroke="white" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
       </span><span
           v-else
           class="step number w-6 h-6 rounded-full flex items-center justify-center bg-primary-color"

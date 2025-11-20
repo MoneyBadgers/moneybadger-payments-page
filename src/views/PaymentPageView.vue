@@ -1,8 +1,6 @@
 <script lang="ts">
 import { mapStores } from 'pinia'
 import { usePaymentStore } from '../stores/payments'
-import AwaitingPayment from '@/components/AwaitingPayment.vue'
-import Logo from '@/components/Logo.vue'
 import PaymentConfirmed from '@/components/PaymentConfirmed.vue'
 import ErrorPage from '../components/ErrorPage.vue'
 import Expired from '../components/Expired.vue'
@@ -14,6 +12,10 @@ import { peachInit } from '../partner/peach'
 import { AnalyticsEvent } from '../types/analytics_events'
 import { defaultAnalyticproperties } from '../types/analytics_default_properties'
 import ReviewPayment from '../components/ReviewPayment.vue'
+import OzowBanner from '../components/ozow/OzowBanner.vue'
+import OzowTnCs from '../components/ozow/OzowTnCs.vue'
+import { useThemeStore } from '../stores/theme';
+import PaymentCancelled from '../components/PaymentCancelled.vue';
 
 export default {
   name: 'PaymentPageView',
@@ -23,7 +25,10 @@ export default {
     ReviewPayment,
     PaymentConfirmed,
     ErrorPage,
-    Expired
+    Expired,
+    OzowBanner,
+    OzowTnCs,
+    PaymentCancelled,
   },
   methods: {
     trackAnalytics(event: AnalyticsEvent, additionalProps?: Record<string, any>) {
@@ -36,10 +41,11 @@ export default {
         }),
         ...additionalProps
       })
-    }
+    },
   },
   computed: {
     ...mapStores(usePaymentStore),
+    ...mapStores(useThemeStore),
     wallet: function (): Wallet {
       return this.paymentsStore.wallet
     },
@@ -89,6 +95,9 @@ export default {
       } else {
         return ''
       }
+    },
+    isOzowTheme() {
+      return useThemeStore().current === 'ozow'
     }
   },
   data() {
@@ -115,8 +124,9 @@ export default {
 
 <template>
   <div class="mx-auto text-center flex flex-col min-h-screen">
-    <div class="top-bar"></div>
-    <div class="spacer"></div>
+    <OzowBanner v-if="isOzowTheme"
+      :showBackButton="status !== Status.SelectWallet && status !== Status.Loading"
+      @back="paymentsStore.changeWallet"/>
     <div class="container mx-auto my-2 text-center">
       <ErrorPage v-if="status === Status.Error" :errors="paymentsStore.errors"></ErrorPage>
       <Expired v-if="status === Status.Expired" :errors="paymentsStore.errors"></Expired>
@@ -124,7 +134,7 @@ export default {
       <WalletSelect
         v-if="status === Status.SelectWallet"
         :requireTermsAccepted="(paymentsStore as any).requireTermsAccepted"
-        :requireRefunds="(paymentsStore as any).requireRefunds"
+        :requireRefunds="(paymentsStore as any).requireRefunds || (themeStore as any).requireRefunds"
       />
       <ReviewPayment
         v-if="status === Status.WaitForPayment"
@@ -139,8 +149,12 @@ export default {
         :referenceId="referenceId"
         :returnUrl="Return"
       ></PaymentConfirmed>
+      <PaymentCancelled
+        v-if="status === Status.Cancelled">
+      </PaymentCancelled>
     </div>
-    <div class="secure-payment-logo px-16 mt-auto">
+    <OzowTnCs v-if="isOzowTheme" class="mt-auto"/>
+    <div class="secure-payment-logo px-16">
       <div class="mx-auto py-4 money-badger-logo" alt="Secure Payment" role="image"></div>
     </div>
   </div>

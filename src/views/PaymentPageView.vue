@@ -71,6 +71,7 @@ export default {
       return (this.paymentsStore as any).referenceId || ''
     },
     expired: function (): boolean {
+      if (this.paymentsStore.status == PaymentStatus.Expired) return true
       if (this.paymentsStore.invoice.expires_at == null) return false
       return new Date(this.paymentsStore.invoice.expires_at) < new Date()
     },

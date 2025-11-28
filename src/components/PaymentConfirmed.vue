@@ -62,8 +62,7 @@ export default {
 <template>
   <div v-if="ozow" class="ozow-background-container">
     <div class="py-6 justify-center items-center flex flex-col relative z-10">
-      <img src="@/assets/partners/ozow/ozow_logo.svg" alt="Ozow Logo" class="ozow-logo mb-0 mt-10" />
-      <img src="@/assets/partners/ozow/confetti_once.gif" alt="Payment Success" style="width: 80%"/>
+      <img src="@/assets/partners/ozow/loading.gif" alt="Loading" class="ozow-loader"/>
       <div class="ozow-success-text">Payment Successful</div>
       <div>
         <button @click="redirectToReturnUrl"

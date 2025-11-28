@@ -142,7 +142,7 @@ export default {
 }
 </script>
 <template>
-  <div>
+  <div class="w-full">
     <div>
       <div
         id="terms-container"

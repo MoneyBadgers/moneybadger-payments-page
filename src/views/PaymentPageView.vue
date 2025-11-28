@@ -128,7 +128,7 @@ export default {
     <OzowBanner v-if="isOzowTheme"
       :showBackButton="status !== Status.SelectWallet && status !== Status.Loading"
       @back="paymentsStore.changeWallet"/>
-    <div class="container mx-auto my-2 text-center">
+    <div class="mb-container mx-auto px-2 my-2 text-center">
       <ErrorPage v-if="status === Status.Error" :errors="paymentsStore.errors"></ErrorPage>
       <Expired v-if="status === Status.Expired" :errors="paymentsStore.errors"></Expired>
       <LoadingSpinner v-if="status === Status.Loading" />
@@ -167,12 +167,12 @@ export default {
   height: auto;
 }
 
-.container {
+.mb-container {
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  margin: 0 auto;
+  width: 100%;
 }
 
 .top-bar {

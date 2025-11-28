@@ -1,6 +1,6 @@
 <template>
     <button
-      class="choose-wallet-btn my-2 rounded w-[300px] relative"
+      class="choose-wallet-btn my-2 rounded w-full relative"
       @click="$emit('click')"
       :disabled="disabled"
     >

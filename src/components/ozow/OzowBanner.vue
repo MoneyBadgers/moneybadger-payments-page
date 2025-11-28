@@ -26,13 +26,6 @@ export default {
           console.log('User cancelled the payment')
           // cancel the payment using the Moneybadger API
           this.paymentsStore.userCancelInvoice()
-          if (document.referrer) {
-            // Navigate to the actual referring page
-            window.location.href = document.referrer
-          } else {
-            // Fallback if no referrer available (e.g. direct entry)
-            history.back()
-          }
         },
  
         openHelpModal() {

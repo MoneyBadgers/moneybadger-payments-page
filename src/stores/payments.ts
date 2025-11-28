@@ -95,7 +95,12 @@ export const usePaymentStore = defineStore('payments', {
         this.status = PaymentStatus.WaitForPayment
         this.pollStatus()
       } else {
-        this.createInvoice()
+        try {
+          this.createInvoice()
+        } catch (err: any) {
+          this.errors = [`An error occurred while creating the payment`]
+          this.status = PaymentStatus.Error
+        }
       }
     },
     async setPaymentCurrency(currency: string) {
@@ -122,14 +127,25 @@ export const usePaymentStore = defineStore('payments', {
       try {
         this.invoice = (await (this as any).api.fetchInvoiceStatus(this.invoice.id, wait)).data
         this.errors = []
-        if (this.invoice.status === InvoiceStatusEnum.CONFIRMED) {
-          this.status = PaymentStatus.Successful
-        }
-        if (this.invoice.status === InvoiceStatusEnum.CANCELLED) {
-          this.status = PaymentStatus.Cancelled
-        }
-        if (this.invoice.status === InvoiceStatusEnum.REJECTED) {
-          this.status = PaymentStatus.Cancelled
+        switch (this.invoice.status) {
+          case InvoiceStatusEnum.CONFIRMED:
+            this.status = PaymentStatus.Successful
+            break
+          case InvoiceStatusEnum.CANCELLED:
+          case InvoiceStatusEnum.REJECTED:
+            // Both CANCELLED and REJECTED result in a cancelled payment flow
+            this.status = PaymentStatus.Cancelled
+            break
+          case InvoiceStatusEnum.TIMED_OUT:
+            this.status = PaymentStatus.Expired
+            break
+          case InvoiceStatusEnum.REQUESTED:
+          case InvoiceStatusEnum.AUTHORIZED:
+            this.status = PaymentStatus.WaitForPayment
+            break
+          case InvoiceStatusEnum.ERROR:
+            this.status = PaymentStatus.Error
+            break
         }
       } catch (error: any) {
         this.errors = ['Network Error']

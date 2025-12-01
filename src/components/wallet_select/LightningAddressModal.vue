@@ -8,8 +8,8 @@
           <template v-else>
             <div class="wallet-logo valr h-12 bg-no-repeat bg-center mx-auto"></div>
           </template>
-          <p class="mb-4 text-left">
-            Provide your Lightning Address in the event you need a refund
+          <p class="mb-4 text-left mt-6">
+            Provide your Lightning Address in the event that you need a refund
           </p>
           <div v-if="verifying" class="text-primary-accent text-center mb-4 flex items-center justify-center">
             <div class="spinner mr-4" role="status" aria-label="Loading"></div>

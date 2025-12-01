@@ -68,7 +68,6 @@ function closeModal() {
 .terms {
   color: #9AA3B5;          /* faded slate */
   font-weight: 500;
-  font-style: Medium;
   font-size: 12px;
   line-height: 18px;
   letter-spacing: -0.5px;
@@ -81,6 +80,7 @@ function closeModal() {
   font-weight: 800;
   position: relative;
   padding-bottom: 4px;
+  z-index: 0;
 }
 .link::after {
   content: "";

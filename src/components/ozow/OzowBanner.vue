@@ -46,7 +46,7 @@ export default {
 </script>
 
 <template>
-  <header class="hero" role="banner" aria-label="Ozow payment header">
+  <header class="hero w-[100%]" role="banner" aria-label="Ozow payment header">
     <img class="hero__background" src="@/assets/partners/ozow/blob.png" alt="" aria-hidden="true" />
 
     <!-- Row with logo (left) and action buttons (right) -->

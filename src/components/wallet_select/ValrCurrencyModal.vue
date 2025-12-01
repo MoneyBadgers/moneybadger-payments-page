@@ -69,3 +69,10 @@ export default {
   }
 }
 </script>
+
+<style scoped>
+.modal-bg {
+  background-color: var(--secondary-bg);
+  z-index: 1000;
+}
+</style>

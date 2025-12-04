@@ -2,7 +2,7 @@
   <transition name="fade">
     <div v-if="open" class="fixed inset-0 modal-bg flex items-center justify-center">
       <div class="h-[100%] w-[100%] overflow-y-auto p-6 justify-center">
-        <div  class="w-[300px] mx-auto">
+        <div  class="mx-auto">
           <ReviewPageHeader v-if="isOzowTheme" :wallet="valr" @change-wallet="$emit('cancel')" />
           <template v-else>
             <div class="wallet-logo valr h-12 bg-no-repeat bg-center mx-auto"></div>
@@ -69,3 +69,10 @@ export default {
   }
 }
 </script>
+
+<style scoped>
+.modal-bg {
+  background-color: var(--secondary-bg);
+  z-index: 1000;
+}
+</style>

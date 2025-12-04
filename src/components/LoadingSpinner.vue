@@ -47,7 +47,7 @@ export default {
 }
 
 .ozow-loader {
-  width: 100px;
-  height: 100px;
+  width: 170px;
+  height: 170px;
 }
 </style>

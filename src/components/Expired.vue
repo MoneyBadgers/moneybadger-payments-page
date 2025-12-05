@@ -1,9 +1,16 @@
 <script lang="ts">
 import ErrorSymbol from './ErrorSymbol.vue';
+import OzowRedirect from './ozow/OzowRedirect.vue';
+import { useThemeStore } from '../stores/theme';
 
 export default {
     name: 'PaymentExpired',
-    components: { ErrorSymbol }
+    components: { ErrorSymbol, OzowRedirect },
+    data() {
+      return {
+        ozow: useThemeStore().current === 'ozow',
+      }
+    },
 }
 </script>
 
@@ -20,6 +27,7 @@ export default {
         </li>
       </ul>
     </div>
+    <OzowRedirect v-if="ozow" />
   </div>
 </template>
 

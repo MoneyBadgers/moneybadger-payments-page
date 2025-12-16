@@ -11,6 +11,7 @@ export const useThemeStore = defineStore('theme', {
       peach: 'light',
       ozow: 'light',
       default: 'dark',
+      shopritetopups: 'light',
     } as Record<string, Brightness>,
   }),
   getters: {

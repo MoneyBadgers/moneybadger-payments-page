@@ -33,11 +33,3 @@
   --error-hover: #b91c1c; /* Error hover background */
   --error-text: #ffffff; /* Error text */
 }
-
-.peach {
-  button, .button {
-    &.main {
-      border-radius: 6px;
-    }
-  }
-}

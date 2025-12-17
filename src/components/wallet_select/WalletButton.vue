@@ -40,7 +40,6 @@ defineEmits<{
   color: var(--color-black);
   text-align: center;
   &:hover {
-    transform: translateX(10px);
     background-color: var(--secondary-bg);
   }
   border: 1px solid var(--border-color);

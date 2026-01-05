@@ -124,7 +124,7 @@ export default {
 </script>
 
 <template>
-  <div class="mx-auto text-center flex flex-col min-h-screen">
+  <div id="payment-page" class="mx-auto text-center flex flex-col min-h-screen">
     <OzowBanner v-if="isOzowTheme"
       :showBackButton="status !== Status.SelectWallet && status !== Status.Loading"
       @back="paymentsStore.changeWallet"/>

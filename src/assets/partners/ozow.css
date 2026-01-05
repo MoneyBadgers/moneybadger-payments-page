@@ -37,12 +37,20 @@
 .ozow {
   font-family: 'Gordita', sans-serif;
 
+  #payment-page {
+    margin-left: auto;
+    margin-right: auto;
+    max-width: 600px;
+  }
+
   .top-bar {
     display: none;
   }
+
   #review-payment-header, #wallet-select-header {
     justify-content: space-between;
   }
+
   .money-badger-logo {
     background-image: url(/src/assets/partners/ozow/money-badger-footer.svg);
   }
@@ -52,9 +60,11 @@
       background: linear-gradient(135deg, #00E587 0%, #00B8AD 100%);
     }
   }
+
   .go-back {
     display: block;
   }
+
   .step-indicator {
     .step {
       box-shadow: 0px 4px 8px 0px #0000001F;
@@ -65,9 +75,10 @@
     }
   }
 
-    h1 {
-      font-size: 18px;
-    }
+  h1 {
+    font-size: 18px;
+  }
+
   .choose-wallet-btn {
     border: 2px solid var(--border-color);
     border-radius: 8px;
@@ -75,6 +86,7 @@
       color: var(--secondary-accent);
     }
   }
+
   .box {
       background-color: transparent;
       border-radius: 12px;

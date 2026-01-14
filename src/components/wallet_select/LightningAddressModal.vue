@@ -37,7 +37,7 @@
             </div>
           </div>
           <div class="text-bg-color flex justify-center">
-            <a class="underline font-bold" @click="skip">Skip this step</a>
+            <a class="underline font-bold skip" @click="skip">Skip this step</a>
           </div>       
         </div>
       </div>
@@ -129,5 +129,8 @@ export default {
 .fade-enter,
 .fade-leave-to {
   opacity: 0;
+}
+a.skip {
+  cursor: pointer;
 }
 </style>

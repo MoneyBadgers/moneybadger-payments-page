@@ -6,7 +6,7 @@
         <div  class="mx-auto">
           <ReviewPageHeader v-if="isOzowTheme" :wallet="lightning" @change-wallet="$emit('cancel')" />
           <template v-else>
-            <div class="wallet-logo valr h-12 bg-no-repeat bg-center mx-auto"></div>
+            <div class="wallet-logo lightning h-12 bg-no-repeat bg-center mx-auto"></div>
           </template>
           <p class="mb-4 text-left mt-6">
             Provide your Lightning Address in the event that you need a refund

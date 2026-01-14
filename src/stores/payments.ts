@@ -15,7 +15,7 @@ export const usePaymentStore = defineStore('payments', {
     errors: [] as string[],
     status: PaymentStatus.Loading,
     refundRecipientAddress: localStorage.getItem('RefundRecipientAddress') || '',
-    enabledWallets: ['lightning', 'valr', 'binance', 'luno'] as string[]
+    enabledWallets: ['lightning', 'valr', 'binance', 'luno'] as string[],
   }),
   getters: {
     paidAt: (state): string => state.invoice.paid_at || '',
@@ -125,7 +125,17 @@ export const usePaymentStore = defineStore('payments', {
         return
       }
       try {
-        this.invoice = (await (this as any).api.fetchInvoiceStatus(this.invoice.id, wait)).data
+        const inv = (await (this as any).api.fetchInvoiceStatus(this.invoice.id, wait)).data
+        // this is a bit of a hack to avoid updating the status
+        // if the user has gone back to wallet selection
+        // the proper fix would be to have a backend API call
+        // to unset the payment method on an invoice
+        // the reason for doing it here is that there are many async calls
+        // that could be in-flight when the user changes wallet
+        if (this.status === PaymentStatus.SelectWallet) {
+          return
+        }
+        this.invoice = inv
         this.errors = []
         switch (this.invoice.status) {
           case InvoiceStatusEnum.CONFIRMED:

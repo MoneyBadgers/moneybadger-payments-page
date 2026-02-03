@@ -1,6 +1,8 @@
 <script lang="ts">
 import { format } from 'date-fns'
 import LogoCircle from '@/components/LogoCircle.vue'
+import { useThemeStore } from '../stores/theme'
+import OzowRedirect from './ozow/OzowRedirect.vue'
 
 export default {
   name: 'PaymentConfirmed',
@@ -11,7 +13,13 @@ export default {
     returnUrl: String,
   },
   components: {
-    LogoCircle
+    LogoCircle,
+    OzowRedirect,
+  },
+  data() {
+    return {
+      ozow: useThemeStore().current === 'ozow',
+    }
   },
   computed: {
     currency() {
@@ -32,6 +40,9 @@ export default {
       }
     },
     autoRedirect() {
+      if(this.ozow) {
+        return; // Ozow handles its own redirect
+      }
       if (this.returnUrl) {
         // Peach says that they think maybe the combination of the postmessage and the redirect is causing issues.
         // peachComplete(this.returnUrl) // this is a peach-specific function, but unless there's a listener, it will just be a nop
@@ -49,7 +60,18 @@ export default {
 </script>
 
 <template>
-  <div class="py-6">
+  <div v-if="ozow" class="ozow-background-container">
+    <div class="py-6 justify-center items-center flex flex-col relative z-10">
+      <img src="@/assets/partners/ozow/loading.gif" alt="Loading" class="ozow-loader"/>
+      <div class="ozow-success-text">Payment Successful</div>
+      <div>
+        <button @click="redirectToReturnUrl"
+                class="ozow-done-btn py-4 mt-20 px-4 rounded w-[300px]">Return to Merchant</button>
+      </div>
+    </div>
+    <OzowRedirect v-if="ozow" />
+  </div>
+  <div v-else class="py-6">
     <div>
       <h4 class="font-bold">Payment Successful</h4>
     </div>
@@ -100,14 +122,40 @@ export default {
   font-weight: bold;
 }
 
-/* .done-btn {
-  background-color: var(--);
+.ozow-done-btn {
+  background-color: white;
   font-weight: bold;
-  color: var(--color-black);
+  color: black;
   text-align: center;
-
+  border: none;
+  cursor: pointer;
+  border-radius: 50px;
   &:hover {
-    background-color: var(--color-amber-light);
+    background-color: #f5f5f5;
   }
-} */
+}
+
+.ozow-background-container {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background-image: url('@/assets/partners/ozow/ozow_background.svg');
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  overflow-y: auto;
+}
+
+.ozow-success-text {
+  font-family: 'Gordita', sans-serif;
+  font-weight: 700;
+  font-size: 24px;
+  line-height: 34px;
+  letter-spacing: 0px;
+  text-align: center;
+  text-transform: capitalize;
+  color: #FFFFFF;
+}
 </style>

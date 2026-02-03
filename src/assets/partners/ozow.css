@@ -29,25 +29,30 @@
   --warning: #d97706; /* Warning background */
   --warning-hover: #b45309; /* Warning hover background */
   --warning-text: #ffffff; /* Warning text */
-  --error: #dc2626; /* Error background */
+  --error: var(--primary-text); /* Error background */
   --error-hover: #b91c1c; /* Error hover background */
   --error-text: #ffffff; /* Error text */
 }
 
 .ozow {
+  font-family: 'Gordita', sans-serif;
+
+  #payment-page {
+    margin-left: auto;
+    margin-right: auto;
+    max-width: 600px;
+  }
+
   .top-bar {
     display: none;
   }
+
   #review-payment-header, #wallet-select-header {
     justify-content: space-between;
   }
+
   .money-badger-logo {
-    background-image: url(/src/assets/secure-payment-money-badger-dark.png);
-    background-size: cover;
-    opacity: 0.5;
-    filter: grayscale(50%);
-    width: calc(var(--money-badger-logo-width) / 1.5);
-    height: calc(var(--money-badger-logo-height) / 1.5);
+    background-image: url(/src/assets/partners/ozow/money-badger-footer.svg);
   }
 
   button, .button {
@@ -55,9 +60,11 @@
       background: linear-gradient(135deg, #00E587 0%, #00B8AD 100%);
     }
   }
+
   .go-back {
     display: block;
   }
+
   .step-indicator {
     .step {
       box-shadow: 0px 4px 8px 0px #0000001F;
@@ -67,11 +74,44 @@
       border: 1.5px solid #FFFFFF
     }
   }
+
+  h1 {
+    font-size: 18px;
+  }
+
   .choose-wallet-btn {
     border: 2px solid var(--border-color);
     border-radius: 8px;
     .text-secondary-accent {
       color: var(--secondary-accent);
+    }
+  }
+
+  .box {
+      background-color: transparent;
+      border-radius: 12px;
+      color: var( --primary-text);
+  }
+
+  .button.currency-select {
+    background-color: #ffffff;
+    border: 1px solid rgba(0,0,0,0.06);
+    box-shadow: 0 0 0 1px rgba(0,0,0,0.03);
+    cursor: pointer;
+    transition: background-color 0.15s ease, box-shadow 0.15s ease;
+    &:hover {
+      background-color: #f9fafb;
+    }
+    &:active {
+      background-color: #f3f4f6;
+    }
+    svg {
+      color: #9ca3af;
+    }
+    span {
+      font-weight: 500;
+      color: #111827;
+      letter-spacing: 0.01em;
     }
   }
 }

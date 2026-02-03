@@ -15,7 +15,7 @@ export const usePaymentStore = defineStore('payments', {
     errors: [] as string[],
     status: PaymentStatus.Loading,
     refundRecipientAddress: localStorage.getItem('RefundRecipientAddress') || '',
-    enabledWallets: ['lightning', 'valr', 'binance', 'luno'] as string[]
+    enabledWallets: ['lightning', 'valr', 'binance', 'luno'] as string[],
   }),
   getters: {
     paidAt: (state): string => state.invoice.paid_at || '',
@@ -58,6 +58,12 @@ export const usePaymentStore = defineStore('payments', {
       }
 
       return state.wallet.generateCopyableRequest((this as any).paymentRequestData)
+    },
+    cancelable(state): boolean {
+      if (!state.invoice.id) {
+        return true
+      }
+      return state.invoice.status === InvoiceStatusEnum.REQUESTED
     }
   },
   actions: {
@@ -89,7 +95,12 @@ export const usePaymentStore = defineStore('payments', {
         this.status = PaymentStatus.WaitForPayment
         this.pollStatus()
       } else {
-        this.createInvoice()
+        try {
+          this.createInvoice()
+        } catch (err: any) {
+          this.errors = [`An error occurred while creating the payment`]
+          this.status = PaymentStatus.Error
+        }
       }
     },
     async setPaymentCurrency(currency: string) {
@@ -98,15 +109,53 @@ export const usePaymentStore = defineStore('payments', {
     async changeWallet() {
       this.status = PaymentStatus.SelectWallet
     },
+    async userCancelInvoice() {
+      if (!this.invoice.id) {
+        return
+      }
+      try {
+        await (this as any).api.userCancelInvoice(this.invoice.id)
+      } catch (error: any) {
+        console.error('Error cancelling invoice:', error)
+      }
+      this.refreshInvoice()
+    },
     async refreshInvoice(wait?: number) {
       if (!this.invoice.id) {
         return
       }
       try {
-        this.invoice = (await (this as any).api.fetchInvoiceStatus(this.invoice.id, wait)).data
+        const inv = (await (this as any).api.fetchInvoiceStatus(this.invoice.id, wait)).data
+        // this is a bit of a hack to avoid updating the status
+        // if the user has gone back to wallet selection
+        // the proper fix would be to have a backend API call
+        // to unset the payment method on an invoice
+        // the reason for doing it here is that there are many async calls
+        // that could be in-flight when the user changes wallet
+        if (this.status === PaymentStatus.SelectWallet) {
+          return
+        }
+        this.invoice = inv
         this.errors = []
-        if (this.invoice.status === InvoiceStatusEnum.CONFIRMED) {
-          this.status = PaymentStatus.Successful
+        switch (this.invoice.status) {
+          case InvoiceStatusEnum.CONFIRMED:
+            this.status = PaymentStatus.Successful
+            break
+          case InvoiceStatusEnum.CANCELLED:
+          case InvoiceStatusEnum.REJECTED:
+            // Both CANCELLED and REJECTED result in a cancelled payment flow
+            this.status = PaymentStatus.Cancelled
+            break
+          case InvoiceStatusEnum.TIMED_OUT:
+            this.status = PaymentStatus.Expired
+            break
+          case InvoiceStatusEnum.REQUESTED:
+          case InvoiceStatusEnum.AUTHORIZED:
+            this.status = PaymentStatus.WaitForPayment
+            break
+          case InvoiceStatusEnum.ERROR:
+            this.status = PaymentStatus.Error
+            break
         }
       } catch (error: any) {
         this.errors = ['Network Error']

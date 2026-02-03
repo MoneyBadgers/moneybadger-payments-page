@@ -11,9 +11,17 @@ export const useThemeStore = defineStore('theme', {
       peach: 'light',
       ozow: 'light',
       default: 'dark',
+      shopritetopups: 'light',
     } as Record<string, Brightness>,
   }),
-
+  getters: {
+    isOzow(state): boolean {
+      return state.current === 'ozow';
+    },
+    requireRefunds(state): boolean {
+      return state.current === 'peach' || state.current === 'ozow';
+    }
+  },
   actions: {
     merchantCodeToTheme(merchantCode: string | null): string {
       if (!merchantCode) return 'default';

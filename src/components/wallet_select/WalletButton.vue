@@ -1,6 +1,6 @@
 <template>
     <button
-      class="choose-wallet-btn my-2 rounded w-[300px] relative"
+      class="choose-wallet-btn my-2 rounded w-full relative"
       @click="$emit('click')"
       :disabled="disabled"
     >
@@ -40,7 +40,6 @@ defineEmits<{
   color: var(--color-black);
   text-align: center;
   &:hover {
-    transform: translateX(10px);
     background-color: var(--secondary-bg);
   }
   border: 1px solid var(--border-color);

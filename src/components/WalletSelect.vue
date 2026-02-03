@@ -4,8 +4,6 @@ import { mapStores } from 'pinia'
 import { usePaymentStore } from '../stores/payments'
 import { AnalyticsEvent } from '../types/analytics_events'
 import { defaultAnalyticproperties } from '../types/analytics_default_properties'
-import FeedbackForm from './FeedbackForm.vue'
-import { QuestionMarkCircleIcon, ChevronRightIcon } from '@heroicons/vue/24/solid'
 import { FeedbackType } from '../api/feedback'
 import { useThemeStore } from '../stores/theme';
 import StepIndicator from './payment/StepIndicator.vue'
@@ -18,9 +16,7 @@ import WalletButton from './wallet_select/WalletButton.vue'
 export default {
   name: 'WalletSelect',
   components: {
-    FeedbackForm,
     StepIndicator,
-    QuestionMarkCircleIcon,
     TermsModal,
     LightningAddressModal,
     ValrCurrencyModal,
@@ -53,6 +49,9 @@ export default {
     },
     lightningDisabled() {
       return !this.paymentsStore.enabledWallets.includes('lightning')
+    },
+    isOzowTheme() {
+      return useThemeStore().current === 'ozow'
     }
   },
   methods: {
@@ -121,6 +120,9 @@ export default {
         ...additionalProps
       })
     },
+    goBack() {
+      this.paymentsStore.userCancelInvoice()
+    }
   },
   data() {
     return {
@@ -134,12 +136,12 @@ export default {
 }
 </script>
 <template>
-  <div>
+  <div class="w-full">
     <div>
       <div
         id="terms-container"
         class="my-2 w-[300px] flex flex-row text-left"
-        v-if="requireTermsAccepted"
+        v-if="requireTermsAccepted && !ozow"
         @click="terms.toggle"
       >
         <label class="custom-checkbox">
@@ -162,8 +164,8 @@ export default {
         <h1>Select Wallet</h1>
         <StepIndicator v-if="ozow" :currentStep="2" id="step-indicator"/>
       </div>
-      <div>
-        <ul class="available-wallets">
+      <div class="mb-6">
+        <ul class="available-wallets pt-6">
           <li>
             <WalletButton 
               walletClass="lightning" 
@@ -173,14 +175,7 @@ export default {
           </li>
           <li>
             <WalletButton 
-              walletClass="valr" 
-              :disabled="valrDisabled" 
-              @click="chooseValr"
-            />
-          </li>
-          <li>
-            <WalletButton 
-              walletClass="binance"
+              walletClass="binance" 
               :disabled="binanceDisabled" 
               subtext="(coming soon)"
               @click="()=>setWallet(Wallet.wallets['binance'])"
@@ -193,20 +188,12 @@ export default {
               @click="()=>setWallet(Wallet.wallets['luno'])"
             />
           </li>
-          <li class="flex justify-center my-4">
-            <FeedbackForm
-              :feedbackType="FeedbackType.WALLET_NOT_SUPPORTED"
-              walletPrompt="Which wallet would you like to use?"
-            >
-              <template #trigger>
-                <button
-                  class="text no-underline font-medium hover:underline flex items-center gap-1"
-                >
-                  My wallet is not listed
-                  <QuestionMarkCircleIcon class="w-5 h-5" />
-                </button>
-              </template>
-            </FeedbackForm>
+          <li>
+            <WalletButton 
+              walletClass="valr" 
+              :disabled="valrDisabled" 
+              @click="chooseValr"
+            />
           </li>
         </ul>
       </div>
@@ -223,6 +210,7 @@ export default {
       @select="setValr"
       @cancel="valrSelected = false"
     />
+    <a class="text-button" v-if="isOzowTheme" id="bottom-back-link" @click="goBack()">Go Back</a>
   </div>
 </template>
 

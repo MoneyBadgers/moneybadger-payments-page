@@ -111,6 +111,7 @@ export const usePaymentStore = defineStore('payments', {
     },
     async userCancelInvoice() {
       if (!this.invoice.id) {
+        console.error('No invoice to cancel')
         return
       }
       try {
@@ -126,15 +127,6 @@ export const usePaymentStore = defineStore('payments', {
       }
       try {
         const inv = (await (this as any).api.fetchInvoiceStatus(this.invoice.id, wait)).data
-        // this is a bit of a hack to avoid updating the status
-        // if the user has gone back to wallet selection
-        // the proper fix would be to have a backend API call
-        // to unset the payment method on an invoice
-        // the reason for doing it here is that there are many async calls
-        // that could be in-flight when the user changes wallet
-        if (this.status === PaymentStatus.SelectWallet) {
-          return
-        }
         this.invoice = inv
         this.errors = []
         switch (this.invoice.status) {
@@ -151,6 +143,19 @@ export const usePaymentStore = defineStore('payments', {
             break
           case InvoiceStatusEnum.REQUESTED:
           case InvoiceStatusEnum.AUTHORIZED:
+            // this is a bit of a hack to avoid updating the status
+            // if the user has gone back to wallet selection
+            // the proper fix would be to have a backend API call
+            // to unset the payment method on an invoice
+            // the reason for doing it here is that there are many async calls
+            // that could be in-flight when the user changes wallet
+            //
+            // NOTE that this is only applicable when waiting for payment
+            // in other cases we still want to go to the end state (e.g. cancelled, expired, confirmed)
+            if (this.status === PaymentStatus.SelectWallet) {
+              console.log('Skipping status update as user is selecting wallet')
+              return
+            }
             this.status = PaymentStatus.WaitForPayment
             break
           case InvoiceStatusEnum.ERROR:

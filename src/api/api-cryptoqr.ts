@@ -1,4 +1,4 @@
-import { InvoiceApi, type ApiConfig, type InvoiceUpdatePaymentMethod } from './cryptoqr/api'
+import { InvoiceApi, type ApiConfig, type InvoiceUpdatePaymentMethod, type RefundRecipient } from './cryptoqr/api'
 import type { Currency } from '../types/Currency'
 import { usePaymentStore } from '../stores/payments';
 // @ts-ignore
@@ -9,11 +9,18 @@ const host = import.meta.env.VITE_HOST
 const basePath = '/api/v2'
 
 export default class Api {
-  updateInvoicePaymentMethod(id: string, valueStore: string, paymentCurrencies: string[] = [],) {
+  updateInvoicePaymentMethod(id: string, valueStore: string, paymentCurrencies: string[] = [], recipientAddress?: string) {
+    let refundRecipient: RefundRecipient | undefined;
+    if (recipientAddress) {
+      refundRecipient = {
+        address: recipientAddress,
+      }
+    }
     const body: InvoiceUpdatePaymentMethod = {
       payment_method: valueStore,
       transaction_id: id,
       payment_currencies: paymentCurrencies,
+      refund_recipient: refundRecipient,
     }
     return this._invoiceApi.invoices.updatePaymentMethod(id, body)
   }
@@ -46,7 +53,14 @@ export default class Api {
     timeoutInSeconds: number,
     paymentMethod: string,
     paymentCurrencies: string[] = [],
+    recipientAddress?: string
   ) {
+    let refundRecipient: RefundRecipient | undefined;
+    if (recipientAddress) {
+      refundRecipient = {
+        address: recipientAddress,
+      }
+    }
    return this._invoiceApi.invoice.requestInvoice({
       amount_cents: amountCents,
       currency,
@@ -57,6 +71,11 @@ export default class Api {
       timeout_in_seconds: timeoutInSeconds,
       payment_currencies: paymentCurrencies,
       device_id: fingerprint,
+      refund_recipient: refundRecipient,
     })
+  }
+
+  userCancelInvoice(invoiceId: string) {
+    return this._invoiceApi.invoices.userCancelInvoice(invoiceId)
   }
 }

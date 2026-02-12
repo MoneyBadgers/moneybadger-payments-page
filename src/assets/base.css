@@ -35,6 +35,11 @@
   --color-green: #b6d115;
 
   --color-red: #e71d24;
+
+  --color-primary: #0700d4;
+  --color-primary-light: #342dff;
+  
+  --color-secondary: #002a73;
 }
 
 /* semantic color variables for this project */
@@ -48,8 +53,77 @@
 
   --color-heading: var(--vt-c-text-light-1);
   --color-text: var(--color-light-grey);
-
   --section-gap: 160px;
+}
+
+/* image sizing */
+:root {
+--money-badger-logo-width: 172px;
+--money-badger-logo-height: 47px;
+}
+
+.money-badger-logo {
+  background-image: url('@/assets/secure-payment-money-badger-dark.png');
+  background-size: contain;
+  background-repeat: no-repeat;
+  background-position: center;
+  width: var(--money-badger-logo-width);
+  height: var(--money-badger-logo-height);
+}
+
+.wallet-logo {
+  background-size: contain;
+  &.lightning {
+    background-image: url('@/assets/wallets/lightning-dark.png');
+  }
+  &.valr {
+    background-image: url('@/assets/wallets/valr-dark.png');
+  }
+  &.luno {
+    background-image: url('@/assets/wallets/luno-dark.png');
+  }
+  &.bybit {
+    background-image: url('@/assets/wallets/bybit-dark.png');
+  }
+  &.binance {
+    background-image: url('@/assets/wallets/binance-dark.png');
+  }
+  &.binance-15 {
+    background-image: url('@/assets/wallets/binance-15-dark.png');
+  }
+  &.binance-50 {
+    background-image: url('@/assets/wallets/binance-50-dark.png');
+  }
+}
+
+/* Dark mode variables */
+.dark {
+  .money-badger-logo {
+    background-image: url('@/assets/secure-payment-money-badger.png');
+  }
+  .wallet-logo {
+    &.lightning {
+      background-image: url('@/assets/wallets/lightning.png');
+    }
+    &.valr {
+      background-image: url('@/assets/wallets/valr.png');
+    }
+    &.bybit {
+      background-image: url('@/assets/wallets/bybit.png');
+    }
+    &.luno {
+      background-image: url('@/assets/wallets/luno.png');
+    }
+    &.binance {
+      background-image: url('@/assets/wallets/binance.png');
+    }
+    &.binance-15 {
+      background-image: url('@/assets/wallets/binance-15.png');
+    }
+    &.binance-50 {
+      background-image: url('@/assets/wallets/binance-50.png');
+    }
+  }
 }
 
 *,
@@ -62,8 +136,8 @@
 
 body {
   min-height: 100vh;
-  color: var(--color-text);
-  background: var(--color-background);
+  color: var(--primary-text);
+  background: var(--primary-bg);
   transition:
     color 0.5s,
     background-color 0.5s;
@@ -85,4 +159,174 @@ body {
   text-rendering: optimizeLegibility;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+}
+
+button, .button {
+  display: block;
+  background-color: var(--primary-accent);
+  color: #ffffff;
+  border: none;
+  padding: var(--spacing-unit) calc(var(--spacing-unit) * 2);
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: var(--font-size-base);
+  transition: background-color 0.2s ease;
+  text-decoration: none;
+
+  &.main {
+    min-height: 50px;
+    border-radius: 9999px;
+  }
+
+  &.payment-option {
+    background-color: var(--primary-bg);
+    color: var(--primary-text);
+    font-weight: bold;
+  }
+
+  &:hover {
+    background-color: var(--primary-accent-hover);
+  }
+}
+
+button.primary {
+  background-color: var(--primary-accent);
+  color: #ffffff;
+  border: none;
+  padding: var(--spacing-unit) calc(var(--spacing-unit) * 2);
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: var(--font-size-base);
+  transition: background-color 0.2s ease;
+  font-weight: bold;
+}
+
+button.primary:hover {
+  background-color: var(--primary-accent-hover);
+}
+
+/* Secondary button */
+button.secondary {
+  background-color: var(--secondary-accent);
+  color: #ffffff;
+  border: none;
+  padding: var(--spacing-unit) calc(var(--spacing-unit) * 2);
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: var(--font-size-base);
+  transition: background-color 0.2s ease;
+  font-weight: bold;
+}
+
+button.secondary:hover {
+  background-color: var(--secondary-accent-hover);
+}
+
+/* Alternative secondary button (outline style, if you prefer no secondary accent) */
+button.secondary-outline {
+  background-color: transparent;
+  color: var(--primary-accent);
+  border: 1px solid var(--primary-accent);
+  padding: var(--spacing-unit) calc(var(--spacing-unit) * 2);
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: var(--font-size-base);
+  transition: background-color 0.2s ease, color 0.2s ease;
+}
+
+button.secondary-outline:hover {
+  background-color: var(--primary-accent);
+  color: #ffffff;
+}
+
+button.text, a.text-button {
+  background: none;
+  border: none;
+  padding: var(--spacing-unit) calc(var(--spacing-unit) * 2);
+  color: var(--primary-accent);
+  cursor: pointer;
+  font-size: var(--font-size-base);
+  text-decoration: underline;
+  transition: color 0.2s ease;
+  font-weight: bold;
+  &.no-underline {
+    text-decoration: none;  
+  }
+  &:hover {
+    color: var(--primary-accent-hover);  
+    text-decoration: underline;
+  }
+}
+
+h2 {
+  color: var(--secondary-text);
+}
+
+.box {
+  background-color: var(--secondary-bg);
+  border-radius: 12px;
+  color: var( --primary-text);
+}
+
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  inset: 0;
+  background-color: rgba(0, 0, 0, 0.8);
+  color: white;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 50;
+}
+
+.solid-btn {
+  display: block;
+  background-color: var(--color-amber-med);
+  font-weight: bold;
+  color: var(--color-black);
+  text-decoration: none;
+  text-align: center;
+  border-radius: 12px;
+  &:hover {
+    background-color: var(--color-amber-light);
+    color: var(--color-black);
+  }
+}
+
+.text-btn {
+  display: block;
+  background-color: transparent;
+  font-weight: bold;
+  color: var(--primary-accent);
+  text-decoration: none;
+  text-align: center;
+  border-radius: 12px;
+  &:hover {
+    text-decoration: underline;
+  }
+}
+
+.text-primary-accent {
+  color: var(--primary-accent);
+}
+
+.text-secondary-accent {
+  color: var(--secondary-accent);
+}
+
+.text-bg-color {
+  color: var(--primary-text);
+}
+
+.bg-primary-color {
+  background-color: var(--primary-accent);
+  color: var(--primary-bg)
+}
+
+#bottom-back-link{
+  color: var(--primary-text)
 }

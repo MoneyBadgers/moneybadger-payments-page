@@ -1,0 +1,146 @@
+<script lang="ts">
+import { FeedbackService, FeedbackType } from '../api/feedback'
+import { mapStores } from 'pinia'
+import { usePaymentStore } from '../stores/payments'
+
+const feedbackService = new FeedbackService()
+
+export default {
+  name: 'FeedbackForm',
+  props: {
+    feedbackType: {
+      type: String as () => FeedbackType,
+      required: true
+    },
+    walletPrompt: {
+      type: String,
+      default: 'Which wallet would you like to use?'
+    }
+  },
+  data() {
+    return {
+      message: '',
+      error: '',
+      outcome: '',
+      sent: false,
+      showing: false,
+      maxLength: 500,
+      minLength: 3
+    }
+  },
+  computed: {
+    ...mapStores(usePaymentStore),
+    charsLeft(): number {
+      return this.maxLength - this.message.length
+    },
+    isValid(): boolean {
+      return this.message.trim().length >= this.minLength
+    }
+  },
+  methods: {
+    sanitize(text: string): string {
+      const trimmed = (text || '').trim()
+      return trimmed.length <= this.maxLength ? trimmed : trimmed.slice(0, this.maxLength)
+    },
+    async submit() {
+      this.outcome = ''
+      this.error = ''
+      this.sent = true
+      try {
+        const safeMessage = this.sanitize(this.message)
+        await feedbackService.submitFeedback({
+          feedbackType: this.feedbackType,
+          message: safeMessage,
+          orderId:
+            this.paymentsStore.invoice.order_id ||
+            this.paymentsStore.invoiceParams.orderId ||
+            'unknown',
+          merchantCode:
+            this.paymentsStore.invoice.merchant_code ||
+            this.paymentsStore.invoiceParams.merchantCode ||
+            'unknown'
+        })
+        this.outcome = 'Thank you for your feedback!'
+        this.$emit('submitted')
+        this.showing = false
+        this.message = ''
+      } catch (e: any) {
+        this.error = e?.message || 'Something went wrong, please try again.'
+      } finally {
+        this.sent = false
+      }
+    },
+    toggle() {
+      this.showing = !this.showing
+    },
+    close() {
+      this.showing = false
+    }
+  }
+}
+</script>
+
+<template>
+  <div>
+    <div @click="toggle">
+      <slot name="trigger"></slot>
+    </div>
+
+    <transition name="fade">
+      <div v-if="showing" class="modal-overlay" @click.self="close">
+        <div class="box m-3 p-6 w-[90%]">
+          <h5 class="primary-text font-bold mb-2 text-lg">{{ walletPrompt }}</h5>
+
+          <textarea
+            class="w-full p-3 rounded border border-gray-300 text-black"
+            placeholder="Please let us know what could be improved"
+            v-model="message"
+            :maxlength="maxLength"
+            rows="4"
+          ></textarea>
+
+          <div class="flex items-center justify-between mt-1 text-sm">
+            <span
+              v-if="message.trim().length >= minLength"
+              class="opacity-70"
+              :class="{ 'text-red-400': charsLeft < 0 }"
+            >
+              {{ Math.max(charsLeft, 0) }} characters left
+            </span>
+            <span v-else-if="message.trim().length" class="text-red-400">
+              Minimum {{ minLength }} characters
+            </span>
+          </div>
+
+          <div class="mt-3 flex flex-col items-center gap-2">
+            <div v-if="outcome" class="text-green-400 text-sm w-full text-center">
+              {{ outcome }}
+            </div>
+            <div v-if="error" class="text-red-400 text-sm w-full text-center">
+              {{ error }}
+            </div>
+            <button class="primary w-full" :disabled="!isValid || sent" @click="submit">
+              Send
+            </button>
+            <button type="button" class="text no-underline w-full my-3" @click="close">Cancel</button>
+          </div>
+        </div>
+      </div>
+    </transition>
+  </div>
+</template>
+
+<style scoped>
+/* fade-in/out transition */
+.fade-enter-active,
+.fade-leave-active {
+  transition:
+    opacity 0.25s ease,
+    transform 0.25s ease;
+}
+.fade-enter,
+.fade-leave-to {
+  opacity: 0;
+  transform: scale(0.95);
+}
+</style>

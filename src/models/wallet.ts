@@ -29,22 +29,22 @@ class Wallet {
             'lightning',
             'Lightning',
             'lightning:PAYMENT_REQUEST',
-            'Lightning Wallet',
+            'your Lightning Wallet',
             'Lightning Invoice (BOLT11)'
         ),
         'binance': new Wallet(
             'binance',
-            'Binance',
+            'Binance Pay',
             'PAYMENT_REQUEST',
-            'Binance App',
-            'Binance Payment Link',
-            true   // Binance uses a custom QR code format
+            'your Binance App',
+            'Binance Pay Link',
+            true   // Binance Pay uses a custom QR code format
         ),
         'luno': new Wallet(
             'luno',
             'Luno',
             'PAYMENT_REQUEST',
-            'Luno App',
+            'your Luno App',
             'Luno Payment Link',
             true   // Luno uses a custom QR code format
         ),
@@ -52,7 +52,7 @@ class Wallet {
             'valr',
             'VALR',
             'https://valr.com/PAYMENT_REQUEST',
-            'VALR App',
+            'your VALR App',
             'VALR Payment Link'
         ),
         'bybit': new Wallet(

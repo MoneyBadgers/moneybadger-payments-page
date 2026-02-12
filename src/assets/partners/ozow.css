@@ -1,0 +1,117 @@
+:root {
+  /* Primary colors */
+  --primary-bg: #F9F9F9; /* Default background */
+  --primary-text: #1a202c; /* Default text color */
+  --primary-accent: #00c5a2; /* Default accent (e.g., buttons, links) */
+  --primary-accent-hover: #02e389; /* Hover state for accent */
+
+  /* Secondary colors */
+  --secondary-bg: #ffffff; /* Secondary background (e.g., cards) */
+  --secondary-text: #4a5568; /* Secondary text (e.g., subtitles) */
+  --secondary-accent: #6b7280; /* Default secondary accent (e.g., secondary buttons) */
+  --secondary-accent-hover: #4b5563; /* Hover state for secondary accent */
+
+  /* Utility colors */
+  --border-color: #e2e8f0; /* Default border color */
+  --shadow-color: rgba(0, 0, 0, 0.1); /* Default shadow */
+
+  /* Spacing */
+  --spacing-unit: 8px;
+  --section-gap: 160px;
+
+  /* Status colors */
+  --info: #0284c7; /* Info background */
+  --info-hover: #026395; /* Info hover background */
+  --info-text: #ffffff; /* Info text (white for buttons, adjustable for alerts) */
+  --success: #16a34a; /* Success background */
+  --success-hover: #15803d; /* Success hover background */
+  --success-text: #ffffff; /* Success text */
+  --warning: #d97706; /* Warning background */
+  --warning-hover: #b45309; /* Warning hover background */
+  --warning-text: #ffffff; /* Warning text */
+  --error: var(--primary-text); /* Error background */
+  --error-hover: #b91c1c; /* Error hover background */
+  --error-text: #ffffff; /* Error text */
+}
+
+.ozow {
+  font-family: 'Gordita', sans-serif;
+
+  #payment-page {
+    margin-left: auto;
+    margin-right: auto;
+    max-width: 600px;
+  }
+
+  .top-bar {
+    display: none;
+  }
+
+  #review-payment-header, #wallet-select-header {
+    justify-content: space-between;
+  }
+
+  .money-badger-logo {
+    background-image: url(/src/assets/partners/ozow/money-badger-footer.svg);
+  }
+
+  button, .button {
+    &.main {
+      background: linear-gradient(135deg, #00E587 0%, #00B8AD 100%);
+    }
+  }
+
+  .go-back {
+    display: block;
+  }
+
+  .step-indicator {
+    .step {
+      box-shadow: 0px 4px 8px 0px #0000001F;
+      background: linear-gradient(135deg, #00E587 0%, #00B8AD 100%);
+    }
+    .check {
+      border: 1.5px solid #FFFFFF
+    }
+  }
+
+  h1 {
+    font-size: 18px;
+  }
+
+  .choose-wallet-btn {
+    border: 2px solid var(--border-color);
+    border-radius: 8px;
+    .text-secondary-accent {
+      color: var(--secondary-accent);
+    }
+  }
+
+  .box {
+      background-color: transparent;
+      border-radius: 12px;
+      color: var( --primary-text);
+  }
+
+  .button.currency-select {
+    background-color: #ffffff;
+    border: 1px solid rgba(0,0,0,0.06);
+    box-shadow: 0 0 0 1px rgba(0,0,0,0.03);
+    cursor: pointer;
+    transition: background-color 0.15s ease, box-shadow 0.15s ease;
+    &:hover {
+      background-color: #f9fafb;
+    }
+    &:active {
+      background-color: #f3f4f6;
+    }
+    svg {
+      color: #9ca3af;
+    }
+    span {
+      font-weight: 500;
+      color: #111827;
+      letter-spacing: 0.01em;
+    }
+  }
+}

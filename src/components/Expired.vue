@@ -1,25 +1,33 @@
 <script lang="ts">
 import ErrorSymbol from './ErrorSymbol.vue';
+import OzowRedirect from './ozow/OzowRedirect.vue';
+import { useThemeStore } from '../stores/theme';
 
 export default {
-    name: 'Expired',
-    components: { ErrorSymbol }
+    name: 'PaymentExpired',
+    components: { ErrorSymbol, OzowRedirect },
+    data() {
+      return {
+        ozow: useThemeStore().current === 'ozow',
+      }
+    },
 }
 </script>
 
 <template>
   <div class="error-page font-bold">
-    <h4>Your payment has expired.</h4>
+    <p class="font-bold">Your payment has expired.</p>
     <div class="error-symbol">
       <ErrorSymbol class="my-4" />
     </div>
     <div class="error-message">
       <ul>
-        <li class="font-bold">
+        <li>
             Please request a new payment.
         </li>
       </ul>
     </div>
+    <OzowRedirect v-if="ozow" />
   </div>
 </template>
 
@@ -38,7 +46,6 @@ export default {
 }
 
 .error-message {
-  color: var(--color-red);
-  font-size: 1.2em;
+  color: var(--error);
 }
 </style>

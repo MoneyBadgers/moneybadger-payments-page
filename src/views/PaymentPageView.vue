@@ -1,8 +1,6 @@
 <script lang="ts">
 import { mapStores } from 'pinia'
 import { usePaymentStore } from '../stores/payments'
-import AwaitingPayment from '@/components/AwaitingPayment.vue'
-import Logo from '@/components/Logo.vue'
 import PaymentConfirmed from '@/components/PaymentConfirmed.vue'
 import ErrorPage from '../components/ErrorPage.vue'
 import Expired from '../components/Expired.vue'
@@ -11,27 +9,48 @@ import { PaymentStatus } from '../types/PaymentStatus'
 import Wallet from '../models/wallet'
 import LoadingSpinner from '../components/LoadingSpinner.vue'
 import { peachInit } from '../partner/peach'
+import { AnalyticsEvent } from '../types/analytics_events'
+import { defaultAnalyticproperties } from '../types/analytics_default_properties'
+import ReviewPayment from '../components/ReviewPayment.vue'
+import OzowBanner from '../components/ozow/OzowBanner.vue'
+import OzowTnCs from '../components/ozow/OzowTnCs.vue'
+import { useThemeStore } from '../stores/theme';
+import PaymentCancelled from '../components/PaymentCancelled.vue';
 
 export default {
   name: 'PaymentPageView',
   components: {
     WalletSelect,
     LoadingSpinner,
-    AwaitingPayment,
-    Logo,
+    ReviewPayment,
     PaymentConfirmed,
     ErrorPage,
     Expired,
+    OzowBanner,
+    OzowTnCs,
+    PaymentCancelled,
   },
   methods: {
+    trackAnalytics(event: AnalyticsEvent, additionalProps?: Record<string, any>) {
+      this.$mixpanel.trackEvent(event, {
+        ...defaultAnalyticproperties({
+          wallet: this.paymentsStore.wallet.name,
+          currency: this.paymentsStore.invoice.currency,
+          merchant: this.paymentsStore.invoice.merchant_name,
+          amount: this.paymentsStore.invoice.amount_cents
+        }),
+        ...additionalProps
+      })
+    },
   },
   computed: {
     ...mapStores(usePaymentStore),
+    ...mapStores(useThemeStore),
     wallet: function (): Wallet {
       return this.paymentsStore.wallet
     },
     status: function (): PaymentStatus {
-      if(this.expired){
+      if (this.expired) {
         return PaymentStatus.Expired
       }
       return this.paymentsStore.status
@@ -40,25 +59,28 @@ export default {
       return this.paymentsStore.invoice.payment_request?.qr_code_url || '' // TODO: show an image to make it obvious this failed
     },
     paymentRequest: function (): string {
-      return this.paymentsStore.lnPaymentRequest || ''
+      return (this.paymentsStore as any).lnPaymentRequest || ''
     },
     amountPaid: function (): number {
-      return this.paymentsStore.amountPaidCents / 100.0
+      return (this.paymentsStore as any).amountPaidCents / 100.0
     },
     paymentTimeStamp: function (): string {
-      return this.paymentsStore.paidAt || ''
+      return (this.paymentsStore as any).paidAt || ''
     },
     referenceId: function (): string {
-      return this.paymentsStore.referenceId || ''
+      return (this.paymentsStore as any).referenceId || ''
     },
     expired: function (): boolean {
-      if(this.paymentsStore.invoice.expires_at == null) return false
+      if (this.paymentsStore.status == PaymentStatus.Expired) return true
+      if (this.paymentsStore.invoice.expires_at == null) return false
       return new Date(this.paymentsStore.invoice.expires_at) < new Date()
     },
     statusMessage: function (): string {
       if (this.paymentsStore.errors.length > 0) {
+        this.trackAnalytics(AnalyticsEvent.PaymentFailure, { error: this.paymentsStore.errors[0] })
         return this.paymentsStore.errors[0]
       } else if (this.paymentsStore.status === PaymentStatus.Successful) {
+        this.trackAnalytics(AnalyticsEvent.PaymentSuccess)
         return 'Payment Successful'
       } else if (this.paymentsStore.status === PaymentStatus.SelectWallet) {
         return 'Select Wallet'
@@ -75,6 +97,9 @@ export default {
         return ''
       }
     },
+    isOzowTheme() {
+      return useThemeStore().current === 'ozow'
+    }
   },
   data() {
     return {
@@ -92,32 +117,32 @@ export default {
     this.paymentsStore.checkForExistingInvoice()
   },
   mounted() {
+    this.trackAnalytics(AnalyticsEvent.ViewPaymentsPage, defaultAnalyticproperties())
     peachInit()
   }
 }
 </script>
 
 <template>
-  <div class="mx-auto text-center">
-    <div class="status-bar py-2" :class="statusStyle">
-      <span class="text" :class="statusStyle">{{statusMessage}}</span>
-    </div>
-    <div class="container mx-auto text-center">
-      <h1 class="py-2 font-bold flex justify-center items-center">
-        {{ wallet.name }}
-          <Logo class="mx-1 lightning-logo"/>
-        Payment
-      </h1>
+  <div id="payment-page" class="mx-auto text-center flex flex-col min-h-screen">
+    <OzowBanner v-if="isOzowTheme"
+      :showBackButton="status !== Status.SelectWallet && status !== Status.Loading"
+      @back="paymentsStore.changeWallet"/>
+    <div class="mb-container mx-auto px-2 my-2 text-center">
       <ErrorPage v-if="status === Status.Error" :errors="paymentsStore.errors"></ErrorPage>
       <Expired v-if="status === Status.Expired" :errors="paymentsStore.errors"></Expired>
-      <LoadingSpinner v-if="status === Status.Loading"/>
-      <WalletSelect v-if="status === Status.SelectWallet" :requireTermsAccepted="paymentsStore.requireTermsAccepted"></WalletSelect>
-      <AwaitingPayment
+      <LoadingSpinner v-if="status === Status.Loading" />
+      <WalletSelect
+        v-if="status === Status.SelectWallet"
+        :requireTermsAccepted="(paymentsStore as any).requireTermsAccepted"
+        :requireRefunds="(paymentsStore as any).requireRefunds || (themeStore as any).requireRefunds"
+      />
+      <ReviewPayment
         v-if="status === Status.WaitForPayment"
         :wallet="paymentsStore.wallet"
         :invoice="paymentsStore.invoice"
         @change-wallet="paymentsStore.changeWallet"
-      ></AwaitingPayment>
+      ></ReviewPayment>
       <PaymentConfirmed
         v-if="status === Status.Successful"
         :timeStamp="paymentTimeStamp"
@@ -125,40 +150,43 @@ export default {
         :referenceId="referenceId"
         :returnUrl="Return"
       ></PaymentConfirmed>
-      <div class="secure-payment-logo px-16">
-        <img src="@/assets/secure-payment-money-badger.png" alt="Secure Payment" class="mx-auto py-4"/>
-      </div>
+      <PaymentCancelled
+        v-if="status === Status.Cancelled">
+      </PaymentCancelled>
+    </div>
+    <OzowTnCs v-if="isOzowTheme" class="mt-auto"/>
+    <div class="secure-payment-logo px-16">
+      <div class="mx-auto py-4 money-badger-logo" alt="Secure Payment" role="image"></div>
     </div>
   </div>
 </template>
 
 <style scoped>
-
 .lightning-logo {
   width: 20px;
   height: auto;
 }
 
-.container {
+.mb-container {
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  margin: 0 auto;
+  width: 100%;
 }
 
-.status-bar, .status-bar .text {
-  background-color: var(--color-amber-med);
-  font-weight: bold;
-  color: var(--color-black);
-  text-align: center;
-  &.bg-red-500 {
-    background-color: var(--color-red);
-  }
+.top-bar {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 8px;
+  background: linear-gradient(to right, var(--secondary-accent), var(--primary-bg));
+  z-index: 50;
 }
 
-.secure-payment-logo {
-  max-width: 300px;
+.spacer {
+  height: 24px; /* Same height as the top bar */
 }
 
 button:hover {

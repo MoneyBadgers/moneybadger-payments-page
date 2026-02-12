@@ -14,8 +14,8 @@ export const usePaymentStore = defineStore('payments', {
     invoice: {} as Invoice,
     errors: [] as string[],
     status: PaymentStatus.Loading,
+    enabledWallets: ['lightning', 'valr', 'binance', 'luno', 'bybit'] as string[],
     refundRecipientAddress: localStorage.getItem('RefundRecipientAddress') || '',
-    enabledWallets: ['lightning', 'valr', 'binance', 'luno'] as string[],
   }),
   getters: {
     paidAt: (state): string => state.invoice.paid_at || '',
@@ -38,10 +38,10 @@ export const usePaymentStore = defineStore('payments', {
       return state.invoice?.payment_request?.data || ''
     },
     paymentRequestQrUrl(state) {
-      if (state.wallet.valueStore !== 'luno' && state.wallet.valueStore !== 'binance') {
-        return null
+      if (state.wallet.customQrCode) {
+        return state.invoice?.payment_request?.qr_code_url || null
       }
-      return state.invoice?.payment_request?.qr_code_url || null
+      return null
     },
     paymentRequestQrData(state) {
       const pr = state.invoice?.payment_request

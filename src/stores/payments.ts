@@ -38,10 +38,10 @@ export const usePaymentStore = defineStore('payments', {
       return state.invoice?.payment_request?.data || ''
     },
     paymentRequestQrUrl(state) {
-      if (state.wallet.valueStore !== 'luno' && state.wallet.valueStore !== 'binance' && state.wallet.valueStore !== 'bybit') {
-        return null
+      if (state.wallet.customQrCode) {
+        return state.invoice?.payment_request?.qr_code_url || null
       }
-      return state.invoice?.payment_request?.qr_code_url || null
+      return null
     },
     paymentRequestQrData(state) {
       const pr = state.invoice?.payment_request

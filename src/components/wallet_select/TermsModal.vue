@@ -9,7 +9,7 @@
           </strong>
         </p>
         <div class="flex my-2">
-          <button class="primary rounded basis-3/4" @click="terms.accept">
+          <button class="primary rounded basis-3/4" @click="acceptTerms">
             Accept and Continue
           </button>
           <button class="secondary-outline ml-2 basis-1/4" @click="terms.closeModal(false)">Cancel</button>
@@ -55,11 +55,18 @@
 
 <script lang="ts">
 import { useTermsStore } from '../../stores/terms'
+import { AnalyticsEvent } from '../../types/analytics_events'
 export default {
   name: 'TermsModal',
   setup() {
     const terms = useTermsStore()
     return { terms }
+  },
+  methods: {
+    acceptTerms() {
+      this.$mixpanel.trackEvent(AnalyticsEvent.TermsAccepted)
+      this.terms.accept()
+    }
   }
 }
 </script>

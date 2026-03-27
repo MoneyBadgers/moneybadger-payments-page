@@ -42,6 +42,28 @@ export default {
         ...additionalProps
       })
     },
+    onChangeWallet() {
+      this.trackAnalytics(AnalyticsEvent.ChangeWallet)
+      this.paymentsStore.changeWallet()
+    },
+  },
+  watch: {
+    status(newStatus: PaymentStatus) {
+      if (newStatus === PaymentStatus.WaitForPayment) {
+        this.trackAnalytics(AnalyticsEvent.WaitingForPayment)
+      } else if (newStatus === PaymentStatus.Expired && !this.isOzowTheme) {
+        this.trackAnalytics(AnalyticsEvent.TimedOut)
+      } else if (newStatus === PaymentStatus.Successful && !this.isOzowTheme) {
+        this.trackAnalytics(AnalyticsEvent.PaymentSuccess)
+      }
+    },
+    'paymentsStore.errors': {
+      handler(errors: string[]) {
+        if (errors.length > 0) {
+          this.trackAnalytics(AnalyticsEvent.PaymentFailure, { error: errors[0] })
+        }
+      }
+    }
   },
   computed: {
     ...mapStores(usePaymentStore),
@@ -74,28 +96,6 @@ export default {
       if (this.paymentsStore.status == PaymentStatus.Expired) return true
       if (this.paymentsStore.invoice.expires_at == null) return false
       return new Date(this.paymentsStore.invoice.expires_at) < new Date()
-    },
-    statusMessage: function (): string {
-      if (this.paymentsStore.errors.length > 0) {
-        this.trackAnalytics(AnalyticsEvent.PaymentFailure, { error: this.paymentsStore.errors[0] })
-        return this.paymentsStore.errors[0]
-      } else if (this.paymentsStore.status === PaymentStatus.Successful) {
-        this.trackAnalytics(AnalyticsEvent.PaymentSuccess)
-        return 'Payment Successful'
-      } else if (this.paymentsStore.status === PaymentStatus.SelectWallet) {
-        return 'Select Wallet'
-      } else if (this.paymentsStore.status === PaymentStatus.WaitForPayment) {
-        return 'Waiting for Payment...'
-      } else {
-        return 'Loading...'
-      }
-    },
-    statusStyle: function (): string {
-      if (this.paymentsStore.errors.length > 0) {
-        return 'bg-red-500'
-      } else {
-        return ''
-      }
     },
     isOzowTheme() {
       return useThemeStore().current === 'ozow'
@@ -141,7 +141,7 @@ export default {
         v-if="status === Status.WaitForPayment"
         :wallet="paymentsStore.wallet"
         :invoice="paymentsStore.invoice"
-        @change-wallet="paymentsStore.changeWallet"
+        @change-wallet="onChangeWallet"
       ></ReviewPayment>
       <PaymentConfirmed
         v-if="status === Status.Successful"

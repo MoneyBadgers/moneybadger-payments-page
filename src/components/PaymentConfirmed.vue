@@ -3,6 +3,7 @@ import { format } from 'date-fns'
 import LogoCircle from '@/components/LogoCircle.vue'
 import { useThemeStore } from '../stores/theme'
 import OzowRedirect from './ozow/OzowRedirect.vue'
+import { AnalyticsEvent } from '../types/analytics_events'
 
 export default {
   name: 'PaymentConfirmed',
@@ -19,6 +20,7 @@ export default {
   data() {
     return {
       ozow: useThemeStore().current === 'ozow',
+      AnalyticsEvent,
     }
   },
   computed: {
@@ -69,7 +71,7 @@ export default {
                 class="ozow-done-btn py-4 mt-20 px-4 rounded w-[300px]">Return to Merchant</button>
       </div>
     </div>
-    <OzowRedirect v-if="ozow" />
+    <OzowRedirect v-if="ozow" :preRedirectEvent="AnalyticsEvent.PaymentSuccess" />
   </div>
   <div v-else class="py-6">
     <div>

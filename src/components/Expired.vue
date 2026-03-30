@@ -2,6 +2,7 @@
 import ErrorSymbol from './ErrorSymbol.vue';
 import OzowRedirect from './ozow/OzowRedirect.vue';
 import { useThemeStore } from '../stores/theme';
+import { AnalyticsEvent } from '../types/analytics_events';
 
 export default {
     name: 'PaymentExpired',
@@ -9,6 +10,7 @@ export default {
     data() {
       return {
         ozow: useThemeStore().current === 'ozow',
+        AnalyticsEvent,
       }
     },
 }
@@ -27,7 +29,7 @@ export default {
         </li>
       </ul>
     </div>
-    <OzowRedirect v-if="ozow" />
+    <OzowRedirect v-if="ozow" :preRedirectEvent="AnalyticsEvent.TimedOut" />
   </div>
 </template>
 

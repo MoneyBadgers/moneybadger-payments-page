@@ -2,6 +2,7 @@
 import { FeedbackService, FeedbackType } from '../api/feedback'
 import { mapStores } from 'pinia'
 import { usePaymentStore } from '../stores/payments'
+import { AnalyticsEvent } from '../types/analytics_events'
 
 const feedbackService = new FeedbackService()
 
@@ -60,6 +61,7 @@ export default {
             this.paymentsStore.invoiceParams.merchantCode ||
             'unknown'
         })
+        this.$mixpanel.trackEvent(AnalyticsEvent.WalletFeedback)
         this.outcome = 'Thank you for your feedback!'
         this.$emit('submitted')
         this.showing = false

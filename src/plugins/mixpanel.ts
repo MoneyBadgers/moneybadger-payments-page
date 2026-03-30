@@ -12,6 +12,7 @@ interface MixpanelConfig {
 // Define the Mixpanel methods interface
 interface MixpanelMethods {
   trackEvent: (eventName: string, properties?: Record<string, any>, callback?: () => void) => void;
+  trackBeforeNavigation: (eventName: string, properties?: Record<string, any>) => void;
   identifyUser: (userId: string) => void;
   setUserProperties: (properties: Record<string, any>) => void;
   reset: () => void;
@@ -55,6 +56,14 @@ export const MixpanelPlugin: Plugin = {
         }
 
         mixpanel.track(eventName, {...defaultAnalyticproperties, ...properties}, callback);
+      },
+
+      trackBeforeNavigation(eventName: string, properties: Record<string, any> = {}) {
+        if (!mixpanel.get_config) {
+          console.warn('Mixpanel not initialized.');
+          return;
+        }
+        mixpanel.track(eventName, {...defaultAnalyticproperties, ...properties}, { transport: 'sendBeacon', send_immediately: true });
       },
 
       identifyUser(userId: string) {

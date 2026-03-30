@@ -29,12 +29,10 @@ export default {
         let redirectUrl = usePaymentStore().invoice?.redirect_url;
         if (redirectUrl) {
             if (this.preRedirectEvent) {
-                this.$mixpanel.trackEvent(this.preRedirectEvent);
+                this.$mixpanel.trackBeforeNavigation(this.preRedirectEvent);
             }
-            this.$mixpanel.trackEvent(AnalyticsEvent.Redirect);
-            setTimeout(() => {
-                window.location.href = redirectUrl;
-            }, 600);
+            this.$mixpanel.trackBeforeNavigation(AnalyticsEvent.Redirect);
+            window.location.href = redirectUrl;
             return;
         }
         console.warn("OzowRedirect: No redirect URL found in payment store.");

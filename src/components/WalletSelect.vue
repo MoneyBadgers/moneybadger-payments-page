@@ -50,6 +50,9 @@ export default {
     lightningDisabled() {
       return !this.paymentsStore.enabledWallets.includes('lightning')
     },
+    bybitDisabled() {
+      return !this.paymentsStore.enabledWallets.includes('bybit')
+    },
     isOzowTheme() {
       return useThemeStore().current === 'ozow'
     }
@@ -179,6 +182,14 @@ export default {
               :disabled="binanceDisabled" 
               subtext="(coming soon)"
               @click="()=>setWallet(Wallet.wallets['binance'])"
+            />
+          </li>
+          <li>
+            <WalletButton 
+              walletClass="bybit" 
+              :disabled="bybitDisabled" 
+              subtext="(coming soon)"
+              @click="()=>setWallet(Wallet.wallets['bybit'])"
             />
           </li>
           <li>

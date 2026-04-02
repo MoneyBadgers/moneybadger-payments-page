@@ -20,6 +20,7 @@
     "@honeybadger-io/js": "^6.11.2",
     "@honeybadger-io/vue": "^6.2.4",
     "axios": "^1.6.8",
+    "clientjs": "^0.2.1",
     "clipboard": "^2.0.11",
     "date-fns": "^3.6.0",
     "mixpanel-browser": "^2.67.0",

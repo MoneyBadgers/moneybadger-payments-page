@@ -12,6 +12,9 @@ import { useTermsStore } from '../stores/terms'
 import LightningAddressModal from './wallet_select/LightningAddressModal.vue'
 import ValrCurrencyModal from './wallet_select/ValrCurrencyModal.vue'
 import WalletButton from './wallet_select/WalletButton.vue'
+import LunoLimitModal from './wallet_select/LunoLimitModal.vue'
+
+const LUNO_MAX_AMOUNT_CENTS = 10_000_000 // R100,000
 
 export default {
   name: 'WalletSelect',
@@ -21,6 +24,7 @@ export default {
     LightningAddressModal,
     ValrCurrencyModal,
     WalletButton,
+    LunoLimitModal,
   },
   props: {
     requireTermsAccepted: {
@@ -68,6 +72,19 @@ export default {
         return
       }
       this.paymentsStore.setWallet(wallet)
+      this.trackAnalytics(AnalyticsEvent.WalletSelected)
+    },
+    chooseLuno() {
+      this.$mixpanel.startSessionRecording()
+      if (this.paymentsStore.invoiceParams.amountCents > LUNO_MAX_AMOUNT_CENTS) {
+        this.lunoLimitExceeded = true
+        return
+      }
+      if (!this.checkTermsAccepted()) {
+        this.highlightTerms(this.chooseLuno)
+        return
+      }
+      this.paymentsStore.setWallet(Wallet.wallets['luno'])
       this.trackAnalytics(AnalyticsEvent.WalletSelected)
     },
     chooseValr() {
@@ -129,6 +146,7 @@ export default {
       ozow: useThemeStore().current === 'ozow',
       lightningAddressEntry: false,
       valrSelected: false,
+      lunoLimitExceeded: false,
       Wallet: Wallet,
       FeedbackType: FeedbackType
     }
@@ -182,10 +200,10 @@ export default {
             />
           </li>
           <li>
-            <WalletButton 
-              walletClass="luno" 
-              :disabled="lunoDisabled" 
-              @click="()=>setWallet(Wallet.wallets['luno'])"
+            <WalletButton
+              walletClass="luno"
+              :disabled="lunoDisabled"
+              @click="chooseLuno"
             />
           </li>
           <li>
@@ -209,6 +227,11 @@ export default {
       :open="valrSelected"
       @select="setValr"
       @cancel="valrSelected = false"
+    />
+    <LunoLimitModal
+      :open="lunoLimitExceeded"
+      :amountCents="paymentsStore.invoiceParams.amountCents"
+      @close="lunoLimitExceeded = false"
     />
     <a class="text-button" v-if="isOzowTheme" id="bottom-back-link" @click="goBack()">Go Back</a>
   </div>

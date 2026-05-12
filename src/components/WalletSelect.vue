@@ -78,6 +78,16 @@ export default {
       }
       this.valrSelected = true
     },
+    chooseZaru() {
+      this.$mixpanel.startSessionRecording()
+      if (!this.checkTermsAccepted()) {
+        this.highlightTerms(this.chooseZaru)
+        return
+      }
+      this.paymentsStore.setPaymentCurrency('ZARU')
+      this.paymentsStore.setWallet(Wallet.wallets['luno'])
+      this.trackAnalytics(AnalyticsEvent.WalletSelected)
+    },
     setValr(currency: string) {
       this.paymentsStore.setPaymentCurrency(currency)
       this.paymentsStore.setWallet(Wallet.wallets['valr'])
@@ -193,6 +203,13 @@ export default {
               walletClass="valr" 
               :disabled="valrDisabled" 
               @click="chooseValr"
+            />
+          </li>
+          <li>
+            <WalletButton 
+              walletClass="zaru" 
+              :disabled="lunoDisabled" 
+              @click="chooseZaru"
             />
           </li>
         </ul>

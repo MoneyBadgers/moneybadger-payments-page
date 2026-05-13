@@ -2,7 +2,7 @@
   <!-- Ozow theme header -->
   <template v-if="isOzowTheme">
     <div id="review-payment-header" class="flex items-right mb-2">
-      <div :class="`wallet-logo ${wallet.valueStore}`" class="h-6 w-1/4 bg-no-repeat bg-left"></div>
+      <div :class="`wallet-logo ${wallet.valueStore} ${zaru}`" class="h-6 w-1/4 bg-no-repeat bg-left"></div>
       <StepIndicator :currentStep="3" id="step-indicator" />
     </div>
   </template>
@@ -29,6 +29,7 @@ import { ChevronLeftIcon } from '@heroicons/vue/24/solid'
 import StepIndicator from './StepIndicator.vue'
 import type { PropType } from 'vue'
 import { useThemeStore } from '../../stores/theme'
+import { usePaymentStore } from '../../stores/payments'
 import HowToPayModal from '@/components/payment/HowToPayModal.vue'
 import Wallet from '../../models/wallet'
 
@@ -46,6 +47,10 @@ export default {
   computed: {
     isOzowTheme() {
       return useThemeStore().current === 'ozow'
+    },
+    zaru() {
+      const methods = usePaymentStore().invoice.payment_request?.payment_methods
+      return methods && 'ZARU' in methods ? 'zaru' : ''
     }
   }
 }

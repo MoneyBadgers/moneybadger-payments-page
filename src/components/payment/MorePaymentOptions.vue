@@ -27,7 +27,7 @@
           v-if="showingDeeplinkButton"
           class="payment-option w-full flex items-center gap-2 px-4 py-2 text-sm rounded mb-2"
           :class="{ 'ozow-payment-option': isOzowTheme }"
-          @click="$emit('use-qr-code')"
+          @click="onUseQrCode"
         >
           <QrCodeIcon class="w-4 h-4 text-secondary-accent" />
           Use QR code
@@ -36,7 +36,7 @@
           v-else
           class="payment-option w-full flex items-center gap-2 px-4 py-2 text-sm rounded mb-2"
           :class="{ 'ozow-payment-option': isOzowTheme }"
-          @click="$emit('use-deeplink')"
+          @click="onUseDeeplink"
         >
           <ArrowRightIcon class="w-4 h-4 text-secondary-accent" />
           Open in wallet app
@@ -104,6 +104,14 @@ export default {
   methods: {
     toggle() {
       this.expanded = !this.expanded
+    },
+    onUseQrCode() {
+      this.trackAnalytics(AnalyticsEvent.ShowQrCodeButtonClicked)
+      this.$emit('use-qr-code')
+    },
+    onUseDeeplink() {
+      this.trackAnalytics(AnalyticsEvent.ShowOpenWalletButtonClicked)
+      this.$emit('use-deeplink')
     },
     copyPaymentRequest() {
       // not really sure what makes sense to copy for Binance

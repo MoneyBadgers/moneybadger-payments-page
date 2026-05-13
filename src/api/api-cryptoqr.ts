@@ -1,6 +1,9 @@
 import { InvoiceApi, type ApiConfig, type InvoiceUpdatePaymentMethod, type RefundRecipient } from './cryptoqr/api'
 import type { Currency } from '../types/Currency'
 import { usePaymentStore } from '../stores/payments';
+// @ts-ignore
+import { ClientJS } from 'clientjs';
+const fingerprint = new ClientJS().getFingerprint().toString();
 
 const host = import.meta.env.VITE_HOST
 const basePath = '/api/v2'
@@ -67,6 +70,7 @@ export default class Api {
       status_webhook_url: statusWebhookUrl,
       timeout_in_seconds: timeoutInSeconds,
       payment_currencies: paymentCurrencies,
+      device_id: fingerprint,
       refund_recipient: refundRecipient,
     })
   }

@@ -91,6 +91,9 @@
   &.binance-50 {
     background-image: url('@/assets/wallets/binance-50-dark.png');
   }
+  &.zaru {
+    background-image: url('@/assets/wallets/zaru-dark.png');
+  }
 }
 
 /* Dark mode variables */
@@ -116,6 +119,9 @@
     }
     &.binance-50 {
       background-image: url('@/assets/wallets/binance-50.png');
+    }
+    &.zaru {
+      background-image: url('@/assets/wallets/zaru.png');
     }
   }
 }

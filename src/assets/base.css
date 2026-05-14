@@ -95,7 +95,7 @@
     background-image: url('@/assets/wallets/binance-50-dark.png');
   }
   &.zaru {
-    background-image: url('@/assets/wallets/zaru-dark.png');
+    background-image: url('@/assets/wallets/zaru.png') !important;
   }
 }
 
@@ -127,7 +127,7 @@
       background-image: url('@/assets/wallets/binance-50.png');
     }
     &.zaru {
-      background-image: url('@/assets/wallets/zaru.png') !important;
+      background-image: url('@/assets/wallets/zaru-dark.png') !important;
     }
   }
 }

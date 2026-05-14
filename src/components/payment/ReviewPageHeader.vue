@@ -50,7 +50,7 @@ export default {
     },
     zaru() {
       const methods = usePaymentStore().invoice.payment_request?.payment_methods
-      return methods && 'ZARU' in methods ? 'zaru' : ''
+      return methods && Object.keys(methods).some(k => k.includes('ZARU')) ? 'zaru' : ''
     }
   }
 }

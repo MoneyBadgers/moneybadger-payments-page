@@ -148,7 +148,7 @@ export default {
         :timeStamp="paymentTimeStamp"
         :paymentAmount="amountPaid"
         :referenceId="referenceId"
-        :returnUrl="Return"
+        :returnUrl="paymentsStore.invoice.redirect_url"
       ></PaymentConfirmed>
       <PaymentCancelled
         v-if="status === Status.Cancelled">

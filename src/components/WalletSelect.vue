@@ -13,6 +13,7 @@ import LightningAddressModal from './wallet_select/LightningAddressModal.vue'
 import ValrCurrencyModal from './wallet_select/ValrCurrencyModal.vue'
 import WalletButton from './wallet_select/WalletButton.vue'
 import LunoLimitModal from './wallet_select/LunoLimitModal.vue'
+import { useDevModeStore } from '../stores/devMode'
 
 const LUNO_MAX_AMOUNT_CENTS = 10_000_000 // R100,000
 
@@ -38,7 +39,8 @@ export default {
   },
   setup() {
     const terms = useTermsStore()
-    return { terms }
+    const devMode = useDevModeStore()
+    return { terms, devMode }
   },
   computed: {
     ...mapStores(usePaymentStore),
@@ -234,10 +236,10 @@ export default {
               @click="chooseValr"
             />
           </li>
-          <li>
-            <WalletButton 
-              walletClass="zaru" 
-              :disabled="lunoDisabled" 
+          <li v-if="devMode.enabled">
+            <WalletButton
+              walletClass="zaru"
+              :disabled="lunoDisabled"
               @click="chooseZaru"
             />
           </li>

@@ -16,6 +16,7 @@ import OzowBanner from '../components/ozow/OzowBanner.vue'
 import OzowTnCs from '../components/ozow/OzowTnCs.vue'
 import { useThemeStore } from '../stores/theme';
 import PaymentCancelled from '../components/PaymentCancelled.vue';
+import { useDevModeStore } from '../stores/devMode';
 
 export default {
   name: 'PaymentPageView',
@@ -104,7 +105,8 @@ export default {
   data() {
     return {
       queryReturn: '',
-      Status: PaymentStatus
+      Status: PaymentStatus,
+      devModeStore: useDevModeStore()
     }
   },
   created() {
@@ -156,7 +158,7 @@ export default {
     </div>
     <OzowTnCs v-if="isOzowTheme" class="mt-auto"/>
     <div class="secure-payment-logo px-16">
-      <div class="mx-auto py-4 money-badger-logo" alt="Secure Payment" role="image"></div>
+      <div class="mx-auto py-4 money-badger-logo" alt="Secure Payment" role="image" @click="devModeStore.logoClick()"></div>
     </div>
   </div>
 </template>

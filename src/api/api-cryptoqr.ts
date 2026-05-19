@@ -53,7 +53,8 @@ export default class Api {
     timeoutInSeconds: number,
     paymentMethod: string,
     paymentCurrencies: string[] = [],
-    recipientAddress?: string
+    recipientAddress?: string,
+    redirectUrl?: string,
   ) {
     let refundRecipient: RefundRecipient | undefined;
     if (recipientAddress) {
@@ -72,6 +73,7 @@ export default class Api {
       payment_currencies: paymentCurrencies,
       device_id: fingerprint,
       refund_recipient: refundRecipient,
+      redirect_url: redirectUrl,
     })
   }
 

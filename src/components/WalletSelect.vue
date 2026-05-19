@@ -13,6 +13,7 @@ import LightningAddressModal from './wallet_select/LightningAddressModal.vue'
 import ValrCurrencyModal from './wallet_select/ValrCurrencyModal.vue'
 import WalletButton from './wallet_select/WalletButton.vue'
 import LunoLimitModal from './wallet_select/LunoLimitModal.vue'
+import { useDevModeStore } from '../stores/devMode'
 
 const LUNO_MAX_AMOUNT_CENTS = 10_000_000 // R100,000
 
@@ -38,7 +39,8 @@ export default {
   },
   setup() {
     const terms = useTermsStore()
-    return { terms }
+    const devMode = useDevModeStore()
+    return { terms, devMode }
   },
   computed: {
     ...mapStores(usePaymentStore),
@@ -97,6 +99,16 @@ export default {
         return
       }
       this.valrSelected = true
+    },
+    chooseZaru() {
+      this.$mixpanel.startSessionRecording()
+      if (!this.checkTermsAccepted()) {
+        this.highlightTerms(this.chooseZaru)
+        return
+      }
+      this.paymentsStore.setPaymentCurrency('ZARU')
+      this.paymentsStore.setWallet(Wallet.wallets['luno'])
+      this.trackAnalytics(AnalyticsEvent.WalletSelected)
     },
     setValr(currency: string) {
       this.paymentsStore.setPaymentCurrency(currency)
@@ -222,6 +234,13 @@ export default {
               walletClass="valr" 
               :disabled="valrDisabled" 
               @click="chooseValr"
+            />
+          </li>
+          <li v-if="devMode.enabled">
+            <WalletButton
+              walletClass="zaru"
+              :disabled="lunoDisabled"
+              @click="chooseZaru"
             />
           </li>
         </ul>

@@ -15,6 +15,7 @@ class InvoiceParameters {
         public reset: boolean = false,
         public requireTermsAccepted: boolean = false,
         public requireRefunds: boolean = false,
+        public returnUrl: string = '',
     ){}
 
     static createFromQueryParams(queryParams: LocationQuery) : InvoiceParameters {
@@ -31,6 +32,7 @@ class InvoiceParameters {
             queryParams.reset === 'true',
             queryParams.requireTermsAccepted === 'true',
             queryParams.requireRefunds === 'true',
+            queryParams.return as string || '',
         )
     }
 

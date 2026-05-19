@@ -103,7 +103,7 @@ export default {
   },
   data() {
     return {
-      Return: '',
+      queryReturn: '',
       Status: PaymentStatus
     }
   },
@@ -113,7 +113,7 @@ export default {
       // don't try creating an invoice if we have errors
       return
     }
-    this.Return = this.$route.query.return as string
+    this.queryReturn = this.$route.query.return as string
     this.paymentsStore.checkForExistingInvoice()
   },
   mounted() {
@@ -148,7 +148,7 @@ export default {
         :timeStamp="paymentTimeStamp"
         :paymentAmount="amountPaid"
         :referenceId="referenceId"
-        :returnUrl="paymentsStore.invoice.redirect_url"
+        :returnUrl="paymentsStore.invoice.redirect_url || queryReturn"
       ></PaymentConfirmed>
       <PaymentCancelled
         v-if="status === Status.Cancelled">

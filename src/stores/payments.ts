@@ -221,7 +221,8 @@ export const usePaymentStore = defineStore('payments', {
           this.invoiceParams.timeoutInSeconds,
           this.wallet.valueStore,
           this.paymentCurrencies,
-          this.refundRecipientAddress
+          this.refundRecipientAddress,
+          this.invoiceParams.returnUrl || undefined,
         )
         this.invoice = newInvoiceResponse.data
         this.status = PaymentStatus.WaitForPayment

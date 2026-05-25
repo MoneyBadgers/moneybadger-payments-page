@@ -75,9 +75,6 @@ export default {
 .terms-modal {
   text-align: left;
 }
-.modal-bg {
-  background-color: var(--secondary-bg);
-}
 .fade-enter-active,
 .fade-leave-active {
   transition: opacity 0.5s;

@@ -1,0 +1,58 @@
+@import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;600;700&family=Open+Sans:wght@400;700&display=swap');
+
+:root {
+  /* Primary colors */
+  --primary-bg: var(--color-background); /* Default background */
+  --primary-text: var(--vt-c-white); /* Default text color */
+  --primary-accent: var(--color-amber-light); /* Default accent (e.g., buttons, links) */
+  --primary-accent-hover: var(--color-amber-dark); /* Hover state for accent */
+
+  /* Secondary colors */
+  --secondary-bg: var(--color-background-soft); /* Secondary background (e.g., cards) */
+  --secondary-text: var(--vt-c-white-soft); /* Secondary text (e.g., subtitles) */
+  --secondary-accent-hover: #4b5563; /* Hover state for secondary accent */
+
+  /* Spacing */
+  --spacing-unit: 8px;
+  --section-gap: 160px; 
+
+  --border-color: var(--vt-c-text-dark-2); /* Default border color */
+
+  --primary-bg: var(--color-black); /* Default background */
+  --primary-text: var(--vt-c-white); /* Default text color */
+
+  /* Primary colors — purple is the actual CTA color in OTT app, not green */
+  --primary-accent: #B524FF;
+  --primary-accent-hover: #8a1abf;
+
+  /* Secondary colors */
+  --secondary-accent: #60E66E;
+  --secondary-accent-hover: #3A8A42;
+
+  /* Utility colors */
+  --border-color: #B524FF;
+  --shadow-color: rgba(0, 0, 0, 0.1);
+}
+
+.ott {
+  font-family: 'Open Sans', sans-serif;
+
+  h1, h2, h3, h4, h5, h6 {
+    font-family: 'Space Grotesk', sans-serif;
+  }
+
+  button, .button {
+    &.main {
+      background-color: var(--primary-accent);
+      color: #ffffff;
+      border-radius: 50px !important;
+      font-family: 'Space Grotesk', sans-serif;
+      font-weight: 600;
+      border: none;
+
+      &:hover {
+        background-color: var(--primary-accent-hover);
+      }
+    }
+  }
+}

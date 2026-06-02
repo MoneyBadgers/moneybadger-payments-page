@@ -32,6 +32,8 @@
   /* Utility colors */
   --border-color: #B524FF;
   --shadow-color: rgba(0, 0, 0, 0.1);
+
+  --ott-green: #60E66E;
 }
 
 .ott {
@@ -54,5 +56,14 @@
         background-color: var(--primary-accent-hover);
       }
     }
+  }
+  #payment-page .more-payment-options > svg {
+    color: var(--ott-green);
+  }
+  #payment-page .top-back-button .bg-primary-color {
+    background-color: var(--ott-green);
+  }
+  .secure-payment-logo .money-badger-logo {
+      background-image: url('@/assets/partners/ott/ott.png');
   }
 }

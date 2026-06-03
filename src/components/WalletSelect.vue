@@ -148,6 +148,7 @@ export default {
       this.trackAnalytics(AnalyticsEvent.LightningSetRecipient)
     },
     skipLightningAddressEntry() {
+      this.paymentsStore.refundRecipientAddress = ''
       this.paymentsStore.setWallet(Wallet.wallets['lightning'])
       this.trackAnalytics(AnalyticsEvent.LightningSetRecipientSkipped, {
         Wallet: this.paymentsStore.wallet.name

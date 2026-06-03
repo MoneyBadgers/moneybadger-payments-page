@@ -87,8 +87,7 @@ export default {
   emits: ['submit', 'skip', 'cancel'],
   setup(props, { emit }) {
     const paymentsStore = usePaymentStore()
-    const address = ref("") 
-    address.value = usePaymentStore().refundRecipientAddress
+    const address = ref(localStorage.getItem('RefundRecipientAddress') || '')
     const verifying = ref(false)
     const error = ref(false)
 

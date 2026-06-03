@@ -137,7 +137,7 @@ export default {
         this.highlightTerms(this.chooseLightning)
         return
       }
-      if (!this.requireRefunds) {
+      if (!this.requireRefunds && !this.paymentsStore.refundRecipientAddress) {
         this.paymentsStore.setWallet(Wallet.wallets['lightning'])
         return
       }

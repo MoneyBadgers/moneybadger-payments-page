@@ -1,6 +1,6 @@
 import { defineStore } from 'pinia'
 import Api from '../api/api-cryptoqr'
-import { InvoiceStatusEnum, type Invoice } from '../api/cryptoqr/api'
+import { InvoiceStatusEnum, ErrorResponseCodeEnum, type Invoice } from '../api/cryptoqr/api'
 import Wallet from '../models/wallet'
 import InvoiceParameters from '../models/invoice_parameters'
 import type { LocationQuery } from 'vue-router'
@@ -16,6 +16,7 @@ export const usePaymentStore = defineStore('payments', {
     status: PaymentStatus.Loading,
     enabledWallets: ['lightning', 'valr', 'binance', 'luno', 'bybit'] as string[],
     refundRecipientAddress: localStorage.getItem('RefundRecipientAddress') || '',
+    refundRecipientRequired: false,
   }),
   getters: {
     paidAt: (state): string => state.invoice.paid_at || '',
@@ -85,15 +86,25 @@ export const usePaymentStore = defineStore('payments', {
       this.wallet = wallet
       this.status = PaymentStatus.Loading
       if (this.invoice.id) {
-        const resp = await (this as any).api.updateInvoicePaymentMethod(
-          this.invoice.id,
-          wallet.valueStore,
-          this.paymentCurrencies,
-          this.refundRecipientAddress
-        )
-        this.invoice = resp.data
-        this.status = PaymentStatus.WaitForPayment
-        this.pollStatus()
+        try {
+          const resp = await (this as any).api.updateInvoicePaymentMethod(
+            this.invoice.id,
+            wallet.valueStore,
+            this.paymentCurrencies,
+            this.refundRecipientAddress
+          )
+          this.invoice = resp.data
+          this.status = PaymentStatus.WaitForPayment
+          this.pollStatus()
+        } catch (err: any) {
+          if (err?.error?.code === ErrorResponseCodeEnum.ErrRefundRecipientRequired) {
+            this.refundRecipientRequired = true
+            this.status = PaymentStatus.SelectWallet
+            return
+          }
+          this.errors = [`An error occurred while updating the payment method`]
+          this.status = PaymentStatus.Error
+        }
       } else {
         try {
           this.createInvoice()
@@ -228,6 +239,17 @@ export const usePaymentStore = defineStore('payments', {
         this.status = PaymentStatus.WaitForPayment
         this.pollStatus()
       } catch (err: any) {
+        if (err?.error?.code === ErrorResponseCodeEnum.ErrRefundRecipientRequired) {
+          try {
+            const existing = await (this as any).api.fetchInvoiceStatus(this.invoiceParams.orderId)
+            this.invoice = existing.data
+          } catch {
+            // no invoice found — retry will call createInvoice again
+          }
+          this.refundRecipientRequired = true
+          this.status = PaymentStatus.SelectWallet
+          return
+        }
         this.errors = [`An error occurred while creating the invoice - ${err.error.message}`]
         this.status = PaymentStatus.Error
       }

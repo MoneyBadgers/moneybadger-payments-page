@@ -6,10 +6,16 @@
         <div  class="mx-auto">
           <ReviewPageHeader v-if="isOzowTheme" :wallet="lightning" @change-wallet="$emit('cancel')" />
           <template v-else>
+            <a class="text-button back-link" @click="cancel">&#8592; Back</a>
             <div class="wallet-logo lightning h-12 bg-no-repeat bg-center mx-auto"></div>
           </template>
           <p class="mb-4 text-left mt-6">
-            Provide your Lightning Address in the event that you need a refund
+            <template v-if="required">
+              Payments for this merchant require a valid refund address before continuing.
+            </template>
+            <template v-else>
+              Provide your Lightning Address in the event that you need a refund.
+            </template>
           </p>
           <div v-if="verifying" class="text-primary-accent text-center mb-4 flex items-center justify-center">
             <div class="spinner mr-4" role="status" aria-label="Loading"></div>
@@ -36,9 +42,9 @@
               </a>
             </div>
           </div>
-          <div class="text-bg-color flex justify-center">
+          <div v-if="!required" class="text-bg-color flex justify-center">
             <a class="underline font-bold skip" @click="skip">Skip this step</a>
-          </div>       
+          </div>
         </div>
       </div>
     </div>
@@ -57,7 +63,8 @@ import OzowBanner from '../ozow/OzowBanner.vue'
 export default {
   name: 'LightningAddressModal',
   props: {
-    open: { type: Boolean, required: true }
+    open: { type: Boolean, required: true },
+    required: { type: Boolean, default: false },
   },
    components: {
     ReviewPageHeader,
@@ -132,5 +139,11 @@ export default {
 }
 a.skip {
   cursor: pointer;
+}
+a.back-link {
+  display: block;
+  text-align: left;
+  cursor: pointer;
+  margin-bottom: 8px;
 }
 </style>

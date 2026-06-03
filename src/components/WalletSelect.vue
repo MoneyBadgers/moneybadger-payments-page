@@ -42,6 +42,18 @@ export default {
     const devMode = useDevModeStore()
     return { terms, devMode }
   },
+  watch: {
+    'paymentsStore.refundRecipientRequired': {
+      immediate: true,
+      handler(val: boolean) {
+        if (val) {
+          this.lightningAddressEntry = true
+          this.lightningAddressRequired = true
+          this.paymentsStore.refundRecipientRequired = false
+        }
+      }
+    }
+  },
   computed: {
     ...mapStores(usePaymentStore),
     lunoDisabled() {
@@ -160,6 +172,7 @@ export default {
     return {
       ozow: useThemeStore().current === 'ozow',
       lightningAddressEntry: false,
+      lightningAddressRequired: false,
       valrSelected: false,
       lunoLimitExceeded: false,
       Wallet: Wallet,
@@ -249,9 +262,10 @@ export default {
     <TermsModal />
     <LightningAddressModal
       :open="lightningAddressEntry"
+      :required="lightningAddressRequired"
       @submit="onLightningAddressSubmit"
       @skip="skipLightningAddressEntry"
-      @cancel="lightningAddressEntry = false"
+      @cancel="lightningAddressEntry = false; lightningAddressRequired = false"
     />
     <ValrCurrencyModal
       :open="valrSelected"

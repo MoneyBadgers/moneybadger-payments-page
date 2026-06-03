@@ -283,9 +283,6 @@ export default {
 </template>
 
 <style scoped>
-.modal-bg {
-  background-color: var(--secondary-bg);
-}
 details {
   width: 300px;
   color: #ccc;

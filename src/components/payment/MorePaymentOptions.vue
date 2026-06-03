@@ -1,7 +1,7 @@
 <template>
   <div class="box rounded-lg w-full p-4" :class="{ 'ozow-border': isOzowTheme }">
     <!-- Toggle Header -->
-    <div class="flex flex-row justify-between items-right cursor-pointer" @click="toggle">
+    <div class="more-payment-options flex flex-row justify-between items-right cursor-pointer" @click="toggle">
       <span style="font-size: 16px" class="font-medium">More payment options</span>
       <ChevronUpIcon
         class="w-6 h-6 transition-transform duration-200"

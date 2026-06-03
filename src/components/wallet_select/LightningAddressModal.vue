@@ -6,7 +6,11 @@
         <div  class="mx-auto">
           <ReviewPageHeader v-if="isOzowTheme" :wallet="lightning" @change-wallet="$emit('cancel')" />
           <template v-else>
-            <a class="text-button back-link" @click="cancel">&#8592; Back</a>
+            <button @click="cancel" class="top-back-button mr-3">
+              <span class="w-6 h-6 rounded-full flex items-center justify-center bg-primary-color">
+                <ChevronLeftIcon class="w-5 h-5 mr-0.5" />
+              </span>
+            </button>
             <div class="wallet-logo lightning h-12 bg-no-repeat bg-center mx-auto"></div>
           </template>
           <p class="mb-4 text-left mt-6">
@@ -53,6 +57,7 @@
 
 <script lang="ts">
 import { ref } from 'vue'
+import { ChevronLeftIcon } from '@heroicons/vue/24/solid'
 import { usePaymentStore } from '../../stores/payments'
 import LightningAddress from '../../models/lightning_address'
 import { useThemeStore } from '../../stores/theme'
@@ -69,6 +74,7 @@ export default {
    components: {
     ReviewPageHeader,
     OzowBanner,
+    ChevronLeftIcon,
   },
   computed: {
     isOzowTheme() {
@@ -139,11 +145,5 @@ export default {
 }
 a.skip {
   cursor: pointer;
-}
-a.back-link {
-  display: block;
-  text-align: left;
-  cursor: pointer;
-  margin-bottom: 8px;
 }
 </style>

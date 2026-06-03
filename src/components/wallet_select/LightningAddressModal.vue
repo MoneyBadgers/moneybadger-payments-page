@@ -6,10 +6,20 @@
         <div  class="mx-auto">
           <ReviewPageHeader v-if="isOzowTheme" :wallet="lightning" @change-wallet="$emit('cancel')" />
           <template v-else>
+            <button @click="cancel" class="top-back-button mr-3">
+              <span class="w-6 h-6 rounded-full flex items-center justify-center bg-primary-color">
+                <ChevronLeftIcon class="w-5 h-5 mr-0.5" />
+              </span>
+            </button>
             <div class="wallet-logo lightning h-12 bg-no-repeat bg-center mx-auto"></div>
           </template>
           <p class="mb-4 text-left mt-6">
-            Provide your Lightning Address in the event that you need a refund
+            <template v-if="required">
+              Payments for this merchant require a valid refund address before continuing.
+            </template>
+            <template v-else>
+              Provide your Lightning Address in the event that you need a refund.
+            </template>
           </p>
           <div v-if="verifying" class="text-primary-accent text-center mb-4 flex items-center justify-center">
             <div class="spinner mr-4" role="status" aria-label="Loading"></div>
@@ -36,9 +46,9 @@
               </a>
             </div>
           </div>
-          <div class="text-bg-color flex justify-center">
+          <div v-if="!required" class="text-bg-color flex justify-center">
             <a class="underline font-bold skip" @click="skip">Skip this step</a>
-          </div>       
+          </div>
         </div>
       </div>
     </div>
@@ -47,6 +57,7 @@
 
 <script lang="ts">
 import { ref } from 'vue'
+import { ChevronLeftIcon } from '@heroicons/vue/24/solid'
 import { usePaymentStore } from '../../stores/payments'
 import LightningAddress from '../../models/lightning_address'
 import { useThemeStore } from '../../stores/theme'
@@ -57,11 +68,13 @@ import OzowBanner from '../ozow/OzowBanner.vue'
 export default {
   name: 'LightningAddressModal',
   props: {
-    open: { type: Boolean, required: true }
+    open: { type: Boolean, required: true },
+    required: { type: Boolean, default: false },
   },
    components: {
     ReviewPageHeader,
     OzowBanner,
+    ChevronLeftIcon,
   },
   computed: {
     isOzowTheme() {
@@ -74,8 +87,7 @@ export default {
   emits: ['submit', 'skip', 'cancel'],
   setup(props, { emit }) {
     const paymentsStore = usePaymentStore()
-    const address = ref("") 
-    address.value = usePaymentStore().refundRecipientAddress
+    const address = ref(localStorage.getItem('RefundRecipientAddress') || '')
     const verifying = ref(false)
     const error = ref(false)
 

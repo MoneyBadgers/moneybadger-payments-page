@@ -234,6 +234,7 @@ export enum ErrorResponseCodeEnum {
   ErrRefundDeclined = "ErrRefundDeclined",
   ErrRefundBelowMinAmount = "ErrRefundBelowMinAmount",
   ErrRefundInvalidRecipient = "ErrRefundInvalidRecipient",
+  ErrRefundRecipientRequired = "ErrRefundRecipientRequired",
 }
 
 /** Invoice Status */

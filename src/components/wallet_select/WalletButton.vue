@@ -2,7 +2,7 @@
     <button
       class="choose-wallet-btn my-2 rounded w-full relative"
       @click="$emit('click')"
-      :disabled="disabled"
+      :v-if="!disabled"
     >
       <div class="flex flex-row justify-between items-center w-full pl-4">
         <!-- dynamically add walletClass -->
@@ -13,7 +13,6 @@
         <ChevronRightIcon class="text-bg-color w-6 h-6 absolute right-4" />
       </div>
     </button>
-    <div v-if="disabled" class="overlay">Not available</div>
 </template>
 
 <script setup lang="ts">

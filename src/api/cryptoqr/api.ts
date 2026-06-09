@@ -262,6 +262,7 @@ export enum ErrorResponseCodeEnum {
   ErrRefundBelowMinAmount = "ErrRefundBelowMinAmount",
   ErrRefundInvalidRecipient = "ErrRefundInvalidRecipient",
   ErrDuplicateExternalID = "ErrDuplicateExternalID",
+  ErrRefundRecipientRequired = "ErrRefundRecipientRequired",
 }
 
 /** Retrieve invoice by (id or orderId) */
@@ -627,7 +628,7 @@ export class InvoiceApi<
      * @secure
      */
     requestInvoice: (body: InvoiceRequest, params: RequestParams = {}) =>
-      this.request<Invoice, void>({
+      this.request<Invoice, ErrorResponse | void>({
         path: `/invoice`,
         method: "POST",
         body: body,
@@ -684,7 +685,7 @@ export class InvoiceApi<
       body: InvoiceUpdatePaymentMethod,
       params: RequestParams = {},
     ) =>
-      this.request<Invoice, void>({
+      this.request<Invoice, ErrorResponse | void>({
         path: `/invoices/${id}/payment_methods`,
         method: "POST",
         body: body,

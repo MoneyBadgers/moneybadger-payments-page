@@ -2,7 +2,7 @@
     <button
       class="choose-wallet-btn my-2 rounded w-full relative"
       @click="$emit('click')"
-      :v-if="!disabled"
+      v-if="!disabled"
     >
       <div class="flex flex-row justify-between items-center w-full pl-4">
         <!-- dynamically add walletClass -->

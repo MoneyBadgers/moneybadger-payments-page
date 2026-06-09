@@ -236,6 +236,7 @@ export enum InvoiceStatusEnum {
   TIMED_OUT = "TIMED_OUT",
   CANCELLED = "CANCELLED",
   ERROR = "ERROR",
+  REJECTED = "REJECTED",
 }
 
 /** Status is the status of the refund */

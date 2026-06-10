@@ -10,87 +10,155 @@
  * ---------------------------------------------------------------
  */
 
-/** ErrorResponse is an error response. */
-export interface ErrorResponse {
-  /**
-   * The code representing the error.
-   * @example "ErrUnknown"
-   */
-  code: ErrorResponseCodeEnum;
-  /** Optional extra information about this error. */
-  detail?: string;
-  /** The error message. */
-  error: string;
+export interface Merchant {
+  id?: string;
+  name?: string;
+  logoUrl?: string;
 }
 
-export interface Invoice {
-  amount_cents?: number;
-  currency?: string;
-  /**
-   * when this invoice will expire (UTC Time)
-   * @format date-time
-   */
-  expires_at?: string;
-  id?: string;
-  merchant_code?: string;
-  merchant_name?: string;
-  order_description?: string;
-  /** Merchant's order ID */
-  order_id?: string;
-  /**
-   * when this invoice was paid (UTC Time)
-   * @format date-time
-   */
-  paid_at?: string;
-  payment_link?: string;
-  /** Payment request details. This is what needs to be provided to the user to make payment */
-  payment_request?: PaymentRequest;
-  /** URL that MoneyBadger will redirect to after payment */
-  redirect_url?: string;
-  /** Array of all associated refunds for this invoice */
-  refunds?: Refund[];
-  /** Invoice Status */
-  status?: InvoiceStatusEnum;
-  status_webhook_url?: string;
-  /** Sub Merchant information */
-  sub_merchant?: SubMerchant;
+/** Sub Merchant details. */
+export interface SubMerchant {
+  /** Sub Merchant unique id */
+  id: string;
+  /** Sub Merchant name */
+  name: string;
+  /** Sub Merchant category code */
+  mcc: string;
+  /** Sub Merchant site ID. The site id provides a granular identifier for the submerchant, for example, a specific store location of this sub merchant. This is an optional field. */
+  site_id?: string;
 }
 
 export interface InvoiceRequest {
-  /** Optional/Advanced usage: Allowed payment methods, in preferred order */
-  allowed_payment_methods?: string[];
-  /** @format int64 */
+  order_id?: string;
+  transaction_id?: string;
+  /**
+   * @format int64
+   * @min 0
+   */
   amount_cents: number;
   /**
    * Amount in sats. This is needed for LNURL payments, when an exact sats amount is required.
    * @format int64
+   * @min 0
    */
   amount_sats?: number;
-  /**
-   * Automatically confirm the invoice when paid
-   * @example false
-   */
-  auto_confirm?: boolean;
   /**
    * Invoice currency code. If none specified, merchant default is used, otherwise 'ZAR'
    * @example "ZAR"
    */
   currency?: string;
+  timeout_in_seconds?: number;
+  user_id?: string;
   device_id?: string;
+  scan_id?: string;
   order_description?: string;
-  order_id?: string;
+  /** Optional/Advanced usage: Allowed payment methods, in preferred order */
+  allowed_payment_methods?: string[];
   /** Optional/Advanced usage: Allowed payment currencies, in order of preference. If none specified, merchant default and/or value store default is used, otherwise 'BTC'. NB: Not all value stores support multiple currencies. */
   payment_currencies?: string[];
-  /** URL to redirect to after payment */
-  redirect_url?: string;
-  /** Recipient to refund to (optional, dependent on payment method) */
-  refund_recipient?: RefundRecipient;
-  scan_id?: string;
   status_webhook_url?: string;
+  /**
+   * Automatically confirm the invoice when paid
+   * @example false
+   */
+  auto_confirm?: boolean;
   /** Sub Merchant information */
   sub_merchant?: SubMerchant;
-  timeout_in_seconds?: number;
+  /** Recipient to refund to (optional, dependent on payment method) */
+  refund_recipient?: RefundRecipient;
+  /** URL to redirect to after payment */
+  redirect_url?: string;
+}
+
+export interface Invoice {
+  id?: string;
+  amount_cents?: number;
+  currency?: string;
+  /** Merchant's order ID */
+  order_id?: string;
+  order_description?: string;
+  merchant_name?: string;
+  merchant_code?: string;
+  /**
+   * when this invoice will expire (UTC Time)
+   * @format date-time
+   */
+  expires_at?: string;
+  /**
+   * when this invoice was paid (UTC Time)
+   * @format date-time
+   */
+  paid_at?: string;
+  status_webhook_url?: string;
+  /** Payment request details. This is what needs to be provided to the user to make payment */
+  payment_request?: PaymentRequest;
+  payment_link?: string;
+  /** Invoice Status */
+  status?: InvoiceStatusEnum;
+  /** Sub Merchant information */
+  sub_merchant?: SubMerchant;
+  /** Array of all associated refunds for this invoice */
+  refunds?: Refund[];
+  /** URL that MoneyBadger will redirect to after payment */
+  redirect_url?: string;
+  /** Payment methods available for this invoice */
+  allowed_payment_methods?: string[];
+}
+
+export interface InvoiceUpdatePaymentMethod {
+  /**
+   * Payment method to use for invoice
+   * @example "lightning"
+   */
+  payment_method?: string;
+  /** Transaction ID for payment method */
   transaction_id?: string;
+  /** Allowed payment currencies, in order of preference. If none specified, merchant default and/or value store default is used, otherwise 'BTC'. NB: Not all value stores support multiple currencies. */
+  payment_currencies?: string[];
+  /** Recipient to refund to (optional, dependent on payment method) */
+  refund_recipient?: RefundRecipient;
+}
+
+/** Payment request details. This is what needs to be provided to the user to make payment */
+export interface PaymentRequest {
+  /** @example "binance" */
+  value_store?: string;
+  /** @example 100.00007 */
+  amount?: number;
+  /** @example "BTC" */
+  currency?: string;
+  /** @example "sats" */
+  denomination?: string;
+  /**
+   * Conversion rate from fiat to crypto
+   * @format double
+   * @example 0.05
+   */
+  exchange_rate?: number;
+  /**
+   * Overpayment amount in fiat currency of invoice
+   * @example 0.01
+   */
+  over_payment?: number;
+  /**
+   * when this payment will expire (UTC Time). May differ from the Invoice (e.g. for lightning)
+   * @format date-time
+   */
+  expires_at?: string;
+  /** encoded data for use by app/value store. e.g. lightning invoice, deeplink, etc. */
+  data?: string;
+  /** deeplink for app to open and complete payment */
+  deeplink?: string;
+  /** QR code content (string, usually a URL or encoded data) */
+  qr_code_content?: string;
+  /** Url for QR code representation of encoded data (for use in webpage) */
+  qr_code_url?: string;
+  /**
+   * list of payment method types with payment instruction data the client can use to complete payment
+   * @example {"luno|XBT":"currency=xbt&amount=0.013"}
+   */
+  payment_methods?: Record<string, object>;
+  /** UserID is the id used by the partner to identify their user */
   user_id?: string;
 }
 
@@ -101,84 +169,34 @@ export interface InvoiceStatusUpdate {
   };
 }
 
-export interface InvoiceUpdatePaymentMethod {
-  /** Allowed payment currencies, in order of preference. If none specified, merchant default and/or value store default is used, otherwise 'BTC'. NB: Not all value stores support multiple currencies. */
-  payment_currencies?: string[];
-  /**
-   * Payment method to use for invoice
-   * @example "lightning"
-   */
-  payment_method?: string;
-  /** Recipient to refund to (optional, dependent on payment method) */
-  refund_recipient?: RefundRecipient;
-  /** Transaction ID for payment method */
-  transaction_id?: string;
-}
-
-export interface Merchant {
-  id?: string;
-  logoUrl?: string;
-  name?: string;
-}
-
-/** Payment request details. This is what needs to be provided to the user to make payment */
-export interface PaymentRequest {
-  /** @example 100.00007 */
-  amount?: number;
-  /** @example "BTC" */
+export interface RefundRequest {
+  /** Invoice ID is the id of the invoice to refund */
+  invoice_id?: string;
+  amount_cents?: number;
   currency?: string;
-  /** encoded data for use by app/value store. e.g. lightning invoice, deeplink, etc. */
-  data?: string;
-  /** deeplink for app to open and complete payment */
-  deeplink?: string;
-  /** @example "sats" */
-  denomination?: string;
-  /**
-   * Conversion rate from fiat to crypto
-   * @format double
-   * @example 0.05
-   */
-  exchange_rate?: number;
-  /**
-   * when this payment will expire (UTC Time). May differ from the Invoice (e.g. for lightning)
-   * @format date-time
-   */
-  expires_at?: string;
-  /**
-   * Overpayment amount in fiat currency of invoice
-   * @example 0.01
-   */
-  over_payment?: number;
-  /**
-   * list of payment method types with payment instruction data the client can use to complete payment
-   * @example {"luno|XBT":"currency=xbt&amount=0.013"}
-   */
-  payment_methods?: Record<string, object>;
-  /** QR code content (string, usually a URL or encoded data) */
-  qr_code_content?: string;
-  /** Url for QR code representation of encoded data (for use in webpage) */
-  qr_code_url?: string;
-  /** UserID is the id used by the partner to identify their user */
-  user_id?: string;
-  /** @example "binance" */
-  value_store?: string;
+  /** (optional) webhook url to call when refund status change. If not set the webhook url on the related invoice will be used to notify of status updates. */
+  status_webhook_url?: string;
+  /** (optional) External key for the refund. Must be unique per merchant - duplicate values return 409 Conflict. If omitted, no uniqueness is enforced. */
+  external_id?: string;
 }
 
 export interface Refund {
-  /** @format date-time */
-  created_at?: string;
   /** ID is the id of the refund */
   id?: string;
   /** Invoice ID is the id of the invoice to refund */
   invoice_id?: string;
-  refund_amount?: number;
-  refund_currency?: string;
+  /** External ID for the refund request */
+  external_id?: string;
   request_amount_cents?: number;
   request_currency?: string;
-  /** Status is the status of the refund */
-  status?: RefundStatusEnum;
+  refund_amount?: number;
+  refund_currency?: string;
   /** webhook url to call when refund status change. If not set the webhook url on the related invoice will be used to notify of status updates. */
   status_webhook_url?: string;
+  /** Status is the status of the refund */
+  status?: RefundStatusEnum;
+  /** @format date-time */
+  created_at?: string;
   /** @format date-time */
   updated_at?: string;
 }
@@ -186,15 +204,6 @@ export interface Refund {
 export interface RefundRecipient {
   /** Address to send refund to */
   address?: string;
-}
-
-export interface RefundRequest {
-  amount_cents?: number;
-  currency?: string;
-  /** Invoice ID is the id of the invoice to refund */
-  invoice_id?: string;
-  /** (optional) webhook url to call when refund status change. If not set the webhook url on the related invoice will be used to notify of status updates. */
-  status_webhook_url?: string;
 }
 
 export interface RefundStatusUpdate {
@@ -206,16 +215,34 @@ export interface RefundStatusUpdate {
   };
 }
 
-/** Sub Merchant details. */
-export interface SubMerchant {
-  /** Sub Merchant unique id */
-  id: string;
-  /** Sub Merchant category code */
-  mcc: string;
-  /** Sub Merchant name */
-  name: string;
-  /** Sub Merchant site ID. The site id provides a granular identifier for the submerchant, for example, a specific store location of this sub merchant. This is an optional field. */
-  site_id?: string;
+/** ErrorResponse is an error response. */
+export interface ErrorResponse {
+  /**
+   * The code representing the error.
+   * @example "ErrUnknown"
+   */
+  code: ErrorResponseCodeEnum;
+  /** The error message. */
+  error: string;
+  /** Optional extra information about this error. */
+  detail?: string;
+}
+
+/** Invoice Status */
+export enum InvoiceStatusEnum {
+  REQUESTED = "REQUESTED",
+  AUTHORIZED = "AUTHORIZED",
+  CONFIRMED = "CONFIRMED",
+  TIMED_OUT = "TIMED_OUT",
+  CANCELLED = "CANCELLED",
+  ERROR = "ERROR",
+}
+
+/** Status is the status of the refund */
+export enum RefundStatusEnum {
+  Pending = "pending",
+  Complete = "complete",
+  Failed = "failed",
 }
 
 /**
@@ -234,25 +261,8 @@ export enum ErrorResponseCodeEnum {
   ErrRefundDeclined = "ErrRefundDeclined",
   ErrRefundBelowMinAmount = "ErrRefundBelowMinAmount",
   ErrRefundInvalidRecipient = "ErrRefundInvalidRecipient",
+  ErrDuplicateExternalID = "ErrDuplicateExternalID",
   ErrRefundRecipientRequired = "ErrRefundRecipientRequired",
-}
-
-/** Invoice Status */
-export enum InvoiceStatusEnum {
-  REQUESTED = "REQUESTED",
-  AUTHORIZED = "AUTHORIZED",
-  CONFIRMED = "CONFIRMED",
-  TIMED_OUT = "TIMED_OUT",
-  CANCELLED = "CANCELLED",
-  REJECTED = "REJECTED",
-  ERROR = "ERROR",
-}
-
-/** Status is the status of the refund */
-export enum RefundStatusEnum {
-  Pending = "pending",
-  Complete = "complete",
-  Failed = "failed",
 }
 
 /** Retrieve invoice by (id or orderId) */
@@ -263,21 +273,21 @@ export enum GetInvoiceParamsByEnum {
 }
 
 /** Retrieve invoice by (id or orderId) */
-export enum CancelInvoiceParamsByEnum {
-  Id = "id",
-  OrderId = "orderId",
-}
-
-/** Retrieve invoice by (id or orderId) */
 export enum ConfirmInvoiceParamsByEnum {
-  Id = "id",
-  OrderId = "orderId",
+  ID = "ID",
+  ORDER_ID = "ORDER_ID",
 }
 
 /** Retrieve invoice by (id or orderId) */
 export enum UserCancelInvoiceParamsByEnum {
-  Id = "id",
-  OrderId = "orderId",
+  ID = "ID",
+  ORDER_ID = "ORDER_ID",
+}
+
+/** Retrieve invoice by (id or orderId) */
+export enum CancelInvoiceParamsByEnum {
+  ID = "ID",
+  ORDER_ID = "ORDER_ID",
 }
 
 export type QueryParamsType = Record<string | number, any>;
@@ -542,6 +552,22 @@ export class HttpClient<SecurityDataType = unknown> {
 export class InvoiceApi<
   SecurityDataType extends unknown,
 > extends HttpClient<SecurityDataType> {
+  swaggerJson = {
+    /**
+     * @description Returns API swagger spec
+     *
+     * @tags info
+     * @name GetSwaggerSpec
+     * @summary Get API swagger spec
+     * @request GET:/swagger.json
+     */
+    getSwaggerSpec: (params: RequestParams = {}) =>
+      this.request<string, any>({
+        path: `/swagger.json`,
+        method: "GET",
+        ...params,
+      }),
+  };
   health = {
     /**
      * @description Returns health check status
@@ -554,15 +580,39 @@ export class InvoiceApi<
     healthCheck: (params: RequestParams = {}) =>
       this.request<
         {
-          /** API build */
-          build?: string;
           /** Health check message */
           message?: string;
+          /** API build */
+          build?: string;
         },
         any
       >({
         path: `/health`,
         method: "GET",
+        format: "json",
+        ...params,
+      }),
+  };
+  merchants = {
+    /**
+     * @description Returns merchant information
+     *
+     * @tags merchant
+     * @name GetMerchantInfo
+     * @summary Get merchant information
+     * @request GET:/merchants
+     */
+    getMerchantInfo: (
+      query: {
+        /** The merchant's unique URL code resembling the merchant's name */
+        code: string;
+      },
+      params: RequestParams = {},
+    ) =>
+      this.request<Merchant, void>({
+        path: `/merchants`,
+        method: "GET",
+        query: query,
         format: "json",
         ...params,
       }),
@@ -578,7 +628,7 @@ export class InvoiceApi<
      * @secure
      */
     requestInvoice: (body: InvoiceRequest, params: RequestParams = {}) =>
-      this.request<Invoice, void>({
+      this.request<Invoice, ErrorResponse | void>({
         path: `/invoice`,
         method: "POST",
         body: body,
@@ -589,45 +639,6 @@ export class InvoiceApi<
       }),
   };
   invoices = {
-    /**
-     * @description Returns an array of Invoice objects according to query parameters
-     *
-     * @tags invoice
-     * @name GetInvoiceHistory
-     * @summary Get invoice history with various filters
-     * @request GET:/invoices/
-     * @secure
-     */
-    getInvoiceHistory: (
-      query?: {
-        /**
-         * only show invoices created after this date/time (UTC)
-         * @format date-time
-         */
-        startTime?: string;
-        /**
-         * only show invoices created before this date/time (UTC)
-         * @format date-time
-         */
-        endTime?: string;
-        /** Maximum number of objects to return */
-        limit?: number;
-        /** Number of invoices to skip */
-        skip?: number;
-        /** Filter invoices by status (REQUESTED, AUTHORIZED, CONFIRMED, TIMED_OUT, CANCELLED, ERROR). Provide value as comma-separated list. */
-        statusList?: string[];
-      },
-      params: RequestParams = {},
-    ) =>
-      this.request<Invoice[], void>({
-        path: `/invoices/`,
-        method: "GET",
-        query: query,
-        secure: true,
-        format: "json",
-        ...params,
-      }),
-
     /**
      * @description Returns a single invoice
      *
@@ -664,24 +675,22 @@ export class InvoiceApi<
      * No description
      *
      * @tags invoice
-     * @name CancelInvoice
-     * @summary Cancel an invoice
-     * @request POST:/invoices/{id}/cancel
+     * @name UpdatePaymentMethod
+     * @summary Update payment method for an invoice
+     * @request POST:/invoices/{id}/payment_methods
      * @secure
      */
-    cancelInvoice: (
+    updatePaymentMethod: (
       id: string,
-      query?: {
-        /** Retrieve invoice by (id or orderId) */
-        by?: CancelInvoiceParamsByEnum;
-      },
+      body: InvoiceUpdatePaymentMethod,
       params: RequestParams = {},
     ) =>
-      this.request<Invoice, void>({
-        path: `/invoices/${id}/cancel`,
+      this.request<Invoice, ErrorResponse | void>({
+        path: `/invoices/${id}/payment_methods`,
         method: "POST",
-        query: query,
+        body: body,
         secure: true,
+        type: ContentType.Json,
         format: "json",
         ...params,
       }),
@@ -713,30 +722,6 @@ export class InvoiceApi<
       }),
 
     /**
-     * No description
-     *
-     * @tags invoice
-     * @name UpdatePaymentMethod
-     * @summary Update payment method for an invoice
-     * @request POST:/invoices/{id}/payment_methods
-     * @secure
-     */
-    updatePaymentMethod: (
-      id: string,
-      body: InvoiceUpdatePaymentMethod,
-      params: RequestParams = {},
-    ) =>
-      this.request<Invoice, void>({
-        path: `/invoices/${id}/payment_methods`,
-        method: "POST",
-        body: body,
-        secure: true,
-        type: ContentType.Json,
-        format: "json",
-        ...params,
-      }),
-
-    /**
      * @description This action is only allowed while the invoice is in the 'REQUESTED' state.
      *
      * @tags invoice
@@ -759,45 +744,69 @@ export class InvoiceApi<
         format: "json",
         ...params,
       }),
-  };
-  merchants = {
+
     /**
-     * @description Returns merchant information
+     * No description
      *
-     * @tags merchant
-     * @name GetMerchantInfo
-     * @summary Get merchant information
-     * @request GET:/merchants
+     * @tags invoice
+     * @name CancelInvoice
+     * @summary Cancel an invoice
+     * @request POST:/invoices/{id}/cancel
+     * @secure
      */
-    getMerchantInfo: (
-      query: {
-        /** The merchant's unique URL code resembling the merchant's name */
-        code: string;
+    cancelInvoice: (
+      id: string,
+      query?: {
+        /** Retrieve invoice by (id or orderId) */
+        by?: CancelInvoiceParamsByEnum;
       },
       params: RequestParams = {},
     ) =>
-      this.request<Merchant, void>({
-        path: `/merchants`,
-        method: "GET",
+      this.request<Invoice, void>({
+        path: `/invoices/${id}/cancel`,
+        method: "POST",
         query: query,
+        secure: true,
         format: "json",
         ...params,
       }),
-  };
-  qrpng = {
+
     /**
-     * @description Returns the QR code PNG image associated with the given ID
+     * @description Returns an array of Invoice objects according to query parameters
      *
-     * @tags png
-     * @name GetQrPng
-     * @summary Get QR code as a PNG image.
-     * @request GET:/qrpng/{id}.png
+     * @tags invoice
+     * @name GetInvoiceHistory
+     * @summary Get invoice history with various filters
+     * @request GET:/invoices/
+     * @secure
      */
-    getQrPng: (id: string, params: RequestParams = {}) =>
-      this.request<File, void>({
-        path: `/qrpng/${id}.png`,
+    getInvoiceHistory: (
+      query?: {
+        /**
+         * only show invoices created after this date/time (UTC)
+         * @format date-time
+         */
+        startTime?: string;
+        /**
+         * only show invoices created before this date/time (UTC)
+         * @format date-time
+         */
+        endTime?: string;
+        /** Maximum number of objects to return */
+        limit?: number;
+        /** Number of invoices to skip */
+        skip?: number;
+        /** Filter invoices by status (REQUESTED, AUTHORIZED, CONFIRMED, TIMED_OUT, CANCELLED, ERROR). Provide value as comma-separated list. */
+        statusList?: string[];
+      },
+      params: RequestParams = {},
+    ) =>
+      this.request<Invoice[], void>({
+        path: `/invoices/`,
         method: "GET",
-        format: "blob",
+        query: query,
+        secure: true,
+        format: "json",
         ...params,
       }),
   };
@@ -840,20 +849,39 @@ export class InvoiceApi<
         format: "json",
         ...params,
       }),
-  };
-  swaggerJson = {
+
     /**
-     * @description Returns API swagger spec
+     * @description Returns a single refund
      *
-     * @tags info
-     * @name GetSwaggerSpec
-     * @summary Get API swagger spec
-     * @request GET:/swagger.json
+     * @tags invoice
+     * @name GetRefundByExternalId
+     * @summary Get refund by External ID
+     * @request GET:/refunds/external_id/{id}
+     * @secure
      */
-    getSwaggerSpec: (params: RequestParams = {}) =>
-      this.request<string, any>({
-        path: `/swagger.json`,
+    getRefundByExternalId: (id: string, params: RequestParams = {}) =>
+      this.request<Refund, ErrorResponse>({
+        path: `/refunds/external_id/${id}`,
         method: "GET",
+        secure: true,
+        format: "json",
+        ...params,
+      }),
+  };
+  qrpng = {
+    /**
+     * @description Returns the QR code PNG image associated with the given ID
+     *
+     * @tags png
+     * @name GetQrPng
+     * @summary Get QR code as a PNG image.
+     * @request GET:/qrpng/{id}.png
+     */
+    getQrPng: (id: string, params: RequestParams = {}) =>
+      this.request<File, void>({
+        path: `/qrpng/${id}.png`,
+        method: "GET",
+        format: "blob",
         ...params,
       }),
   };

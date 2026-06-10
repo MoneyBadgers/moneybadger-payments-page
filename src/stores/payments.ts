@@ -94,6 +94,7 @@ export const usePaymentStore = defineStore('payments', {
             this.refundRecipientAddress
           )
           this.invoice = resp.data
+          this.applyInvoicePaymentMethodRestrictions()
           this.status = PaymentStatus.WaitForPayment
           this.pollStatus()
         } catch (err: any) {
@@ -145,7 +146,6 @@ export const usePaymentStore = defineStore('payments', {
             this.status = PaymentStatus.Successful
             break
           case InvoiceStatusEnum.CANCELLED:
-          case InvoiceStatusEnum.REJECTED:
             // Both CANCELLED and REJECTED result in a cancelled payment flow
             this.status = PaymentStatus.Cancelled
             break
@@ -189,12 +189,19 @@ export const usePaymentStore = defineStore('payments', {
         }, 500)
       }
     },
+    applyInvoicePaymentMethodRestrictions() {
+      const allowed = this.invoice.allowed_payment_methods
+      if (allowed && allowed.length > 0) {
+        this.enabledWallets = this.enabledWallets.filter(w => allowed.includes(w))
+      }
+    },
     async checkForExistingInvoice() {
       try {
         const invoiceResponse = await (this as any).api.fetchInvoiceStatus(
           this.invoiceParams.orderId
         )
         this.invoice = invoiceResponse.data
+        this.applyInvoicePaymentMethodRestrictions()
         if (this.invoice.status === InvoiceStatusEnum.CONFIRMED) {
           this.status = PaymentStatus.Successful
           return
@@ -236,6 +243,7 @@ export const usePaymentStore = defineStore('payments', {
           this.invoiceParams.returnUrl || undefined,
         )
         this.invoice = newInvoiceResponse.data
+        this.applyInvoicePaymentMethodRestrictions()
         this.status = PaymentStatus.WaitForPayment
         this.pollStatus()
       } catch (err: any) {

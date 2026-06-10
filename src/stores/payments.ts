@@ -146,7 +146,6 @@ export const usePaymentStore = defineStore('payments', {
             this.status = PaymentStatus.Successful
             break
           case InvoiceStatusEnum.CANCELLED:
-          case InvoiceStatusEnum.REJECTED:
             // Both CANCELLED and REJECTED result in a cancelled payment flow
             this.status = PaymentStatus.Cancelled
             break

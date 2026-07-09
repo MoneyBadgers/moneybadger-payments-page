@@ -28,7 +28,6 @@
           <div v-if="error" class="text-center mb-4 error">
             <p>That doesn't seem to be a valid Lightning Address.</p>
           </div>
-          <p class="mb-2 text-left lightning-refund-label">Provide your Lightning Address in the event you need a refund</p>
           <input
             v-model="address"
             type="email"

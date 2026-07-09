@@ -251,7 +251,7 @@ export default {
             text-decoration: underline;
             text-decoration-style: solid;
             text-decoration-thickness: 0%;
-            color: #00B8AD;
+            color: #1E2330;
         }
     }
 </style>

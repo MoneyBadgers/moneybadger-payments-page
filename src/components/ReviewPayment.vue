@@ -1,5 +1,5 @@
 <template>
-  <div class="px-4 pb-4 h-full">
+  <div :class="['pb-4 h-full', { 'px-4': !ozow, 'w-full': ozow }]">
       <!-- Back Button + Header -->
       <ReviewPageHeader :wallet="wallet" @change-wallet="$emit('change-wallet')" />
 

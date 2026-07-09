@@ -28,6 +28,7 @@
           <div v-if="error" class="text-center mb-4 error">
             <p>That doesn't seem to be a valid Lightning Address.</p>
           </div>
+          <p class="mb-2 text-left lightning-refund-label">Provide your Lightning Address in the event you need a refund</p>
           <input
             v-model="address"
             type="email"
@@ -41,6 +42,7 @@
                 target="_blank"
                 @click="submit"
                 class="button main primary font-bold h-16 px-4 w-full flex items-center justify-center gap-2 transition"
+                style="color: #1E2330"
               >
                 Continue to payment
               </a>
@@ -143,5 +145,14 @@ export default {
 }
 a.skip {
   cursor: pointer;
+}
+
+.lightning-refund-label {
+  font-family: Gordita, sans-serif;
+  font-weight: 400;
+  font-size: 14px;
+  line-height: 25.99px;
+  letter-spacing: 0px;
+  color: #1E2330;
 }
 </style>

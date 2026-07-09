@@ -3,6 +3,7 @@ import { format } from 'date-fns'
 import LogoCircle from '@/components/LogoCircle.vue'
 import { useThemeStore } from '../stores/theme'
 import OzowRedirect from './ozow/OzowRedirect.vue'
+import OzowTnCs from './ozow/OzowTnCs.vue'
 import { AnalyticsEvent } from '../types/analytics_events'
 
 export default {
@@ -16,6 +17,7 @@ export default {
   components: {
     LogoCircle,
     OzowRedirect,
+    OzowTnCs,
   },
   data() {
     return {
@@ -64,14 +66,18 @@ export default {
 <template>
   <div v-if="ozow" class="ozow-background-container">
     <div class="py-6 justify-center items-center flex flex-col relative z-10">
-      <img src="@/assets/partners/ozow/loading.gif" alt="Loading" class="ozow-loader"/>
+      <img src="@/assets/partners/ozow/ozow_primary_logo_black.svg" alt="Ozow" class="ozow-primary-logo"/>
+      <img src="@/assets/partners/ozow/ozow_success_icon.svg" alt="Payment Successful" class="ozow-loader"/>
       <div class="ozow-success-text">Payment Successful</div>
       <div>
         <button @click="redirectToReturnUrl"
-                class="ozow-done-btn py-4 mt-20 px-4 rounded w-[300px]">Return to Merchant</button>
+                class="ozow-done-btn mt-20">Return to Merchant</button>
       </div>
     </div>
     <OzowRedirect v-if="ozow" :preRedirectEvent="AnalyticsEvent.PaymentSuccess" />
+    <div class="ozow-footer">
+      <OzowTnCs />
+    </div>
   </div>
   <div v-else class="py-6">
     <div>
@@ -124,14 +130,34 @@ export default {
   font-weight: bold;
 }
 
+.ozow-footer {
+  position: absolute;
+  bottom: 24px;
+  left: 0;
+  right: 0;
+  display: flex;
+  justify-content: center;
+}
+
+.ozow-primary-logo {
+  width: 140px;
+  height: auto;
+  margin-bottom: 48px;
+}
+
 .ozow-done-btn {
-  background-color: white;
-  font-weight: bold;
-  color: black;
+  background: #FFFFFF;
+  font-family: 'Gordita', sans-serif;
+  font-weight: 700;
+  font-size: 16px;
+  color: #3F4A65;
   text-align: center;
   border: none;
   cursor: pointer;
-  border-radius: 50px;
+  border-radius: 40px;
+  width: 315px;
+  height: 56px;
+  box-shadow: 0px 10px 15px rgba(0, 0, 0, 0.1);
   &:hover {
     background-color: #f5f5f5;
   }
@@ -155,9 +181,8 @@ export default {
   font-weight: 700;
   font-size: 24px;
   line-height: 34px;
-  letter-spacing: 0px;
   text-align: center;
   text-transform: capitalize;
-  color: #FFFFFF;
+  color: #1E2330;
 }
 </style>

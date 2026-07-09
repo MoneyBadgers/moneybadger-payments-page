@@ -1,5 +1,6 @@
 <script lang="ts">
 import ErrorSymbol from './ErrorSymbol.vue';
+import { useThemeStore } from '../stores/theme';
 
 export default {
     name: 'ErrorPage',
@@ -9,7 +10,12 @@ export default {
             required: true
         }
     },
-    components: { ErrorSymbol }
+    components: { ErrorSymbol },
+    data() {
+        return {
+            ozow: useThemeStore().current === 'ozow',
+        }
+    }
 }
 </script>
 
@@ -17,7 +23,8 @@ export default {
   <div class="error-page font-bold">
     <h4>Oops! Something went wrong.</h4>
     <div class="error-symbol">
-      <ErrorSymbol class="my-4" />
+      <img v-if="ozow" src="@/assets/partners/ozow/red_sad_face.svg" alt="Error" class="my-4" />
+      <ErrorSymbol v-else class="my-4" />
     </div>
     <div class="error-message">
       <ul>

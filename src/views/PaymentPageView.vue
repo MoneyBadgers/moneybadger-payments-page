@@ -128,7 +128,7 @@ export default {
 <template>
   <div id="payment-page" class="mx-auto text-center flex flex-col min-h-screen">
     <OzowBanner v-if="isOzowTheme"
-      :showBackButton="status !== Status.SelectWallet && status !== Status.Loading"
+      :showBackButton="status !== Status.Loading"
       @back="paymentsStore.changeWallet"/>
     <div class="mb-container mx-auto px-2 my-2 text-center">
       <ErrorPage v-if="status === Status.Error" :errors="paymentsStore.errors"></ErrorPage>

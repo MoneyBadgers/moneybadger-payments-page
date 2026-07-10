@@ -1,6 +1,7 @@
 <script lang="ts">
 import ErrorSymbol from './ErrorSymbol.vue';
 import { useThemeStore } from '../stores/theme';
+import { usePaymentStore } from '../stores/payments';
 
 export default {
     name: 'ErrorPage',
@@ -11,6 +12,11 @@ export default {
         }
     },
     components: { ErrorSymbol },
+    methods: {
+      goBack() {
+        usePaymentStore().changeWallet()
+      }
+    },
     data() {
         return {
             ozow: useThemeStore().current === 'ozow',
@@ -33,6 +39,7 @@ export default {
         </li>
       </ul>
     </div>
+    <button v-if="ozow" class="ozow-done-btn mt-8" @click="goBack">Return to Payment Methods</button>
   </div>
 </template>
 

@@ -122,10 +122,12 @@ function closeModal() {
 }
 
 .sheet__title {
+    font-family: 'Gordita', sans-serif;
     font-weight: 700;
     font-size: 24px;
     line-height: 100%;
     letter-spacing: -0.5px;
+    color: #1E2330;
 }
 
 .sheet__body {
@@ -139,13 +141,13 @@ function closeModal() {
   display: grid;
   gap: 14px;
   a {
+    font-family: 'Gordita', sans-serif;
     font-weight: 500;
     font-size: 14px;
     line-height: 100%;
-    letter-spacing: 0%;
+    letter-spacing: 0;
     text-decoration: underline;
     text-decoration-style: solid;
-    text-decoration-thickness: 0%;
     color: #1E2330;
   }
 }

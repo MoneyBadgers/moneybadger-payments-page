@@ -98,23 +98,28 @@
       box-shadow: 0px 10px 15px 0px #0000001A;
       flex-grow: 1;
       padding: 0 25px;
-      h1, p {
+      h1, p:not(.lightning-input-error) {
         color: #1E2330;
       }
     }
   }
 
-  #wallet-select-header, #review-payment-header, .error-page {
+  #wallet-select-header, #review-payment-header {
     padding-top: 20px;
+  }
+
+  .error-page {
+    padding-top: 48px;
   }
 
   .ozow-done-btn {
     background: #FFFFFF;
     font-family: 'Gordita', sans-serif;
     font-weight: 700;
-    font-size: 16px;
+    font-size: 18px;
     color: #1E2330;
     text-align: center;
+    white-space: nowrap;
     border: 2px solid #1E2330;
     cursor: pointer;
     border-radius: 40px;
@@ -126,17 +131,24 @@
     &:hover { opacity: 0.9; }
   }
 
-  .error-page h4 {
-    font-size: 1rem;
+  .error-page h4,
+  .error-page > p {
+    font-family: 'Gordita', sans-serif;
+    font-size: 18px;
     font-weight: 700;
+    line-height: 26px;
+    color: #1E2330;
   }
 
   .error-symbol {
     display: flex;
     justify-content: center;
+    margin-top: 24px;
+    margin-bottom: 24px;
     img {
-      width: 120px;
-      height: auto;
+      width: 100px;
+      height: 100px;
+      margin: 0;
     }
   }
 
@@ -145,6 +157,10 @@
     flex-direction: column;
     gap: 8px;
     padding-top: 16px;
+  }
+
+  .wallet-logo {
+    height: 24px;
   }
 
   .choose-wallet-btn {

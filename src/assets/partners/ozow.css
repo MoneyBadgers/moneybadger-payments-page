@@ -98,7 +98,7 @@
       box-shadow: 0px 10px 15px 0px #0000001A;
       flex-grow: 1;
       padding: 0 25px;
-      h1, p {
+      h1, p:not(.lightning-input-error) {
         color: #1E2330;
       }
     }

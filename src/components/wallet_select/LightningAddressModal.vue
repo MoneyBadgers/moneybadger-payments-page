@@ -25,17 +25,18 @@
             <div class="spinner mr-4" role="status" aria-label="Loading"></div>
             <p class="m-0">Verifying your Lightning Address...</p>
           </div>
-          <div v-if="error" class="text-center mb-4 error">
+          <div v-if="error && !isOzowTheme" class="text-center mb-4 error">
             <p>That doesn't seem to be a valid Lightning Address.</p>
           </div>
           <div v-if="isOzowTheme" class="lightning-input-wrapper">
-            <label class="lightning-input-label">Lightning Address</label>
+            <label :class="['lightning-input-label', { 'lightning-input-label--error': error }]">Lightning Address</label>
             <input
               v-model="address"
               type="email"
               placeholder="yourname@wallet.co"
-              class="lightning-input text-black"
+              :class="['lightning-input text-black', { 'lightning-input--error': error }]"
             />
+            <p v-if="error" class="lightning-input-error">Invalid Lightning Address</p>
           </div>
           <input
             v-else
@@ -45,7 +46,7 @@
             class="w-full border border-gray-300 rounded p-2 mb-4 text-black"
           />
           <div class="flex justify-between items-center">
-            <div class="text-white rounded-lg w-80 pb-6 pt-4 text-center mx-auto">
+            <div :class="['text-white rounded-lg pb-6 pt-4 text-center mx-auto', isOzowTheme ? 'w-full' : 'w-80']">
               <!-- Payment Button -->
               <a
                 target="_blank"
@@ -199,6 +200,23 @@ a.skip {
     letter-spacing: 0.5px;
     vertical-align: middle;
   }
+}
+
+.lightning-input--error {
+  border-color: #E14A5B;
+}
+
+.lightning-input-label--error {
+  color: #E14A5B;
+}
+
+.lightning-input-error {
+  margin-top: 4px;
+  padding-left: 16px;
+  font-family: 'Gordita', sans-serif;
+  font-size: 12px;
+  color: #E14A5B;
+  text-align: left;
 }
 
 .lightning-refund-label {

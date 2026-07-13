@@ -28,7 +28,17 @@
           <div v-if="error" class="text-center mb-4 error">
             <p>That doesn't seem to be a valid Lightning Address.</p>
           </div>
+          <div v-if="isOzowTheme" class="lightning-input-wrapper">
+            <label class="lightning-input-label">Lightning Address</label>
+            <input
+              v-model="address"
+              type="email"
+              placeholder="yourname@wallet.co"
+              class="lightning-input text-black"
+            />
+          </div>
           <input
+            v-else
             v-model="address"
             type="email"
             placeholder="e.g. satoshi@wallet.co"
@@ -144,6 +154,51 @@ export default {
 }
 a.skip {
   cursor: pointer;
+}
+
+.lightning-input-wrapper {
+  position: relative;
+  margin-bottom: 16px;
+}
+
+.lightning-input-label {
+  position: absolute;
+  top: -8px;
+  left: 12px;
+  font-family: 'Gordita', sans-serif;
+  font-weight: 400;
+  font-size: 12px;
+  line-height: 16px;
+  letter-spacing: 0.4px;
+  color: #1E2330;
+  background: #F9F9F9;
+  padding: 0 4px;
+  height: 16px;
+  z-index: 2;
+}
+
+.lightning-input {
+  width: 100%;
+  height: 48px;
+  border: 1px solid #60719A;
+  border-radius: 4px;
+  padding: 12px 16px;
+  gap: 10px;
+  font-family: Gordita, sans-serif;
+  font-size: 14px;
+  color: #1E2330;
+  background: #F9F9F9;
+  outline: none;
+  box-sizing: border-box;
+  &::placeholder {
+    color: #95A0BD;
+    font-family: 'Gordita', sans-serif;
+    font-weight: 400;
+    font-size: 16px;
+    line-height: 24px;
+    letter-spacing: 0.5px;
+    vertical-align: middle;
+  }
 }
 
 .lightning-refund-label {

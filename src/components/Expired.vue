@@ -12,7 +12,7 @@ export default {
       goBack() {
         const redirectUrl = usePaymentStore().invoice?.redirect_url
         if (redirectUrl) {
-          window.location.href = redirectUrl
+          window.location.href = decodeURIComponent(redirectUrl)
         }
       }
     },

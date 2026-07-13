@@ -142,7 +142,13 @@ export default {
 .ozow-primary-logo {
   width: 140px;
   height: auto;
+  margin-top: 40px;
   margin-bottom: 48px;
+}
+
+.ozow-loader {
+  width: 257px;
+  height: 176px;
 }
 
 .ozow-done-btn {

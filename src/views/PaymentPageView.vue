@@ -95,6 +95,7 @@ export default {
     },
     expired: function (): boolean {
       if (this.paymentsStore.status == PaymentStatus.Expired) return true
+      if (this.paymentsStore.status == PaymentStatus.Successful) return false
       if (this.paymentsStore.invoice.expires_at == null) return false
       return new Date(this.paymentsStore.invoice.expires_at) < new Date()
     },

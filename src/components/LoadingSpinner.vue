@@ -1,6 +1,7 @@
 <template>
   <div class="h-[50vh] flex flex-col justify-center items-center">
     <img v-if="ozow" src="@/assets/partners/ozow/loading.gif" alt="Loading" class="ozow-loader"/>
+    <p v-if="ozow" class="ozow-loading-text">Processing Payment</p>
     <svg
       v-if="!ozow"
       aria-hidden="true"
@@ -49,5 +50,16 @@ export default {
 .ozow-loader {
   width: 170px;
   height: 170px;
+}
+
+.ozow-loading-text {
+  font-family: 'Gordita', sans-serif;
+  font-weight: 700;
+  font-size: 24px;
+  line-height: 28px;
+  letter-spacing: -0.5px;
+  text-align: center;
+  color: #1E2330;
+  margin-top: 16px;
 }
 </style>

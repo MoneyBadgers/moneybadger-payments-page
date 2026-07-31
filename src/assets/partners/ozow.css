@@ -186,6 +186,207 @@
       color: var( --primary-text);
   }
 
+  .ozow-loading-icon {
+    width: 170px;
+    height: 170px;
+  }
+
+  .ozow-loading-text {
+    font-family: 'Gordita', sans-serif;
+    font-weight: 700;
+    font-size: 24px;
+    line-height: 28px;
+    letter-spacing: -0.5px;
+    text-align: center;
+    color: #1E2330;
+    margin-top: 16px;
+  }
+
+  .ozow-footer {
+    position: absolute;
+    bottom: 24px;
+    left: 0;
+    right: 0;
+    display: flex;
+    justify-content: center;
+  }
+
+  .ozow-primary-logo {
+    width: 140px;
+    height: auto;
+    margin-top: 40px;
+    margin-bottom: 48px;
+  }
+
+  .ozow-success-icon {
+    width: 257px;
+    height: 176px;
+  }
+
+  .ozow-return-btn {
+    background: #FFFFFF;
+    font-family: 'Gordita', sans-serif;
+    font-weight: 700;
+    font-size: 16px;
+    color: #3F4A65;
+    text-align: center;
+    border: none;
+    cursor: pointer;
+    border-radius: 40px;
+    width: 315px;
+    height: 56px;
+    box-shadow: 0px 10px 15px rgba(0, 0, 0, 0.1);
+    &:hover {
+      background-color: #f5f5f5;
+    }
+  }
+
+  .ozow-background-container {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background-image: url('@/assets/partners/ozow/ozow_background.svg');
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    overflow-y: auto;
+  }
+
+  .ozow-success-text {
+    font-family: 'Gordita', sans-serif;
+    font-weight: 700;
+    font-size: 24px;
+    line-height: 34px;
+    text-align: center;
+    text-transform: capitalize;
+    color: #1E2330;
+  }
+
+  .step-indicator {
+    position: relative;
+    width: 100px;
+    height: 25px;
+  }
+
+  .joiner {
+    position: absolute;
+    top: 37.69%;
+    bottom: 38.19%;
+    box-sizing: border-box;
+    background: #F9F9F9;
+    border: 1px solid #CACFDE;
+  }
+  .joiner--left  { left: 21%; right: 59%; }
+  .joiner--right { left: 59%; right: 21%; }
+  .joiner--active {
+    background: #C7FFE8;
+    border: 1.5px solid #00B8AD;
+  }
+
+  .step {
+    position: absolute;
+    width: 24px;
+    height: 24px;
+    top: 50%;
+    transform: translateY(-50%);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-sizing: border-box;
+  }
+
+  .step--check {
+    background: #F9F9F9;
+    border: 1px solid #CACFDE;
+    filter: drop-shadow(0px 4px 8px rgba(0, 0, 0, 0.12));
+  }
+
+  .step--current {
+    background: #C7FFE8;
+    border: 1.5px solid #00B8AD;
+    filter: drop-shadow(0px 4px 8px rgba(0, 0, 0, 0.12));
+    color: #1E2330;
+  }
+
+  .step--later {
+    background: #F9F9F9;
+    border: 1px solid #95A0BD;
+    color: #3F4A65;
+  }
+
+  .step-number {
+    font-size: 15px;
+    font-weight: 600;
+    font-family: Gordita, sans-serif;
+    line-height: 1;
+    padding-top: 2px;
+  }
+
+  .lightning-input-wrapper {
+    position: relative;
+    margin-bottom: 16px;
+  }
+
+  .lightning-input-label {
+    position: absolute;
+    top: -8px;
+    left: 12px;
+    font-family: 'Gordita', sans-serif;
+    font-weight: 400;
+    font-size: 12px;
+    line-height: 16px;
+    letter-spacing: 0.4px;
+    color: #1E2330;
+    background: #F9F9F9;
+    padding: 0 4px;
+    height: 16px;
+    z-index: 2;
+  }
+
+  .lightning-input {
+    width: 100%;
+    height: 48px;
+    border: 1px solid #60719A;
+    border-radius: 4px;
+    padding: 12px 16px;
+    gap: 10px;
+    font-family: Gordita, sans-serif;
+    font-size: 14px;
+    color: #1E2330;
+    background: #F9F9F9;
+    outline: none;
+    box-sizing: border-box;
+    &::placeholder {
+      color: #95A0BD;
+      font-family: 'Gordita', sans-serif;
+      font-weight: 400;
+      font-size: 16px;
+      line-height: 24px;
+      letter-spacing: 0.5px;
+      vertical-align: middle;
+    }
+  }
+
+  .lightning-input--error {
+    border-color: #E14A5B;
+  }
+
+  .lightning-input-label--error {
+    color: #E14A5B;
+  }
+
+  .lightning-input-error {
+    margin-top: 4px;
+    padding-left: 16px;
+    font-family: 'Gordita', sans-serif;
+    font-size: 12px;
+    color: #E14A5B;
+    text-align: left;
+  }
+
   .button.currency-select {
     background-color: #ffffff;
     border: 1px solid #E4E7EE;

@@ -282,7 +282,7 @@ h2 {
   bottom: 0;
   inset: 0;
   background-color: var(--secondary-bg);
-  color: white;
+  color: var(--primary-text);
   display: flex;
   justify-content: center;
   align-items: center;

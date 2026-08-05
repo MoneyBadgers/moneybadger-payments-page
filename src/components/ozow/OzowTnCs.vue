@@ -66,7 +66,7 @@ function closeModal() {
 
 <style scoped>
 .terms {
-  color: #9AA3B5;          /* faded slate */
+  color: #1E2330;
   font-weight: 500;
   font-size: 12px;
   line-height: 18px;
@@ -75,21 +75,14 @@ function closeModal() {
 }
 
 .link {
-  color: #43C6AD;          /* teal */
-  text-decoration: none;
-  font-weight: 800;
-  position: relative;
-  padding-bottom: 4px;
-  z-index: 0;
+  color: #1E2330;
+  font-weight: 700;
+  font-size: 12px;
+  line-height: 18px;
+  letter-spacing: -0.5px;
+  text-decoration: underline;
+  text-decoration-style: solid;
 }
-.link::after {
-  content: "";
-  position: absolute;
-  left: 0; bottom: 0;
-  width: 100%; height: 3px;
-  background: currentColor;
-}
-.link:hover::after { height: 4px; }
 
 /* Modal */
 .overlay {
@@ -129,10 +122,12 @@ function closeModal() {
 }
 
 .sheet__title {
+    font-family: 'Gordita', sans-serif;
     font-weight: 700;
     font-size: 24px;
     line-height: 100%;
     letter-spacing: -0.5px;
+    color: #1E2330;
 }
 
 .sheet__body {
@@ -146,14 +141,14 @@ function closeModal() {
   display: grid;
   gap: 14px;
   a {
+    font-family: 'Gordita', sans-serif;
     font-weight: 500;
     font-size: 14px;
     line-height: 100%;
-    letter-spacing: 0%;
+    letter-spacing: 0;
     text-decoration: underline;
     text-decoration-style: solid;
-    text-decoration-thickness: 0%;
-    color: #00B8AD;
+    color: #1E2330;
   }
 }
 

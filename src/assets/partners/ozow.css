@@ -1,18 +1,18 @@
 :root {
   /* Primary colors */
   --primary-bg: #F9F9F9; /* Default background */
-  --primary-text: #1a202c; /* Default text color */
+  --primary-text: #1E2330; /* Default text color */
   --primary-accent: #00c5a2; /* Default accent (e.g., buttons, links) */
   --primary-accent-hover: #02e389; /* Hover state for accent */
 
   /* Secondary colors */
   --secondary-bg: #ffffff; /* Secondary background (e.g., cards) */
-  --secondary-text: #4a5568; /* Secondary text (e.g., subtitles) */
-  --secondary-accent: #6b7280; /* Default secondary accent (e.g., secondary buttons) */
-  --secondary-accent-hover: #4b5563; /* Hover state for secondary accent */
+  --secondary-text: #60719A; /* Secondary text (e.g., subtitles) */
+  --secondary-accent: #95A0BD; /* Default secondary accent (e.g., secondary buttons) */
+  --secondary-accent-hover: #7A88AC; /* Hover state for secondary accent */
 
   /* Utility colors */
-  --border-color: #e2e8f0; /* Default border color */
+  --border-color: #E4E7EE; /* Default border color */
   --shadow-color: rgba(0, 0, 0, 0.1); /* Default shadow */
 
   /* Spacing */
@@ -37,10 +37,15 @@
 .ozow {
   font-family: 'Gordita', sans-serif;
 
+  background: #FFFFFF;
+
   #payment-page {
     margin-left: auto;
     margin-right: auto;
     max-width: 600px;
+    background: #F9F9F9;
+    box-shadow: 0px 10px 15px 0px #0000001A;
+    min-height: 100vh;
   }
 
   .top-bar {
@@ -58,6 +63,7 @@
   button, .button {
     &.main {
       background: linear-gradient(135deg, #00E587 0%, #00B8AD 100%);
+      color: #1E2330;
     }
   }
 
@@ -65,23 +71,110 @@
     display: block;
   }
 
-  .step-indicator {
-    .step {
-      box-shadow: 0px 4px 8px 0px #0000001F;
-      background: linear-gradient(135deg, #00E587 0%, #00B8AD 100%);
-    }
-    .check {
-      border: 1.5px solid #FFFFFF
-    }
-  }
-
   h1 {
     font-size: 18px;
   }
 
+  .mb-container {
+    margin-top: 0;
+    padding-left: 25px;
+    padding-right: 25px;
+  }
+
+  .modal-bg {
+    background: #FFFFFF;
+    align-items: center !important;
+    justify-content: flex-start !important;
+
+    > header {
+      max-width: 600px;
+      width: 100%;
+    }
+
+    > div {
+      max-width: 600px;
+      width: 100%;
+      background: #F9F9F9;
+      box-shadow: 0px 10px 15px 0px #0000001A;
+      flex-grow: 1;
+      padding: 0 25px;
+      h1, p:not(.lightning-input-error) {
+        color: #1E2330;
+      }
+    }
+  }
+
+  #wallet-select-header, #review-payment-header {
+    padding-top: 20px;
+  }
+
+  .error-page {
+    padding-top: 48px;
+  }
+
+  .ozow-done-btn {
+    background: #FFFFFF;
+    font-family: 'Gordita', sans-serif;
+    font-weight: 700;
+    font-size: 18px;
+    color: #1E2330;
+    text-align: center;
+    white-space: nowrap;
+    border: 2px solid #1E2330;
+    cursor: pointer;
+    border-radius: 40px;
+    width: 289px;
+    height: 64px;
+    padding: 16px 24px;
+    gap: 8px;
+    box-shadow: 0px 10px 15px rgba(0, 0, 0, 0.1);
+    &:hover { opacity: 0.9; }
+  }
+
+  .error-page h4,
+  .error-page > p {
+    font-family: 'Gordita', sans-serif;
+    font-size: 18px;
+    font-weight: 700;
+    line-height: 26px;
+    color: #1E2330;
+  }
+
+  .error-symbol {
+    display: flex;
+    justify-content: center;
+    margin-top: 24px;
+    margin-bottom: 24px;
+    img {
+      width: 100px;
+      height: 100px;
+      margin: 0;
+    }
+  }
+
+  .available-wallets {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    padding-top: 16px;
+  }
+
+  .wallet-logo {
+    height: 24px;
+  }
+
   .choose-wallet-btn {
-    border: 2px solid var(--border-color);
+    border: 1px solid #E4E7EE;
     border-radius: 8px;
+    box-shadow: 0px 1px 2px rgba(0, 0, 0, 0.15);
+    height: 48px;
+    margin-top: 0;
+    margin-bottom: 0;
+    background: #FFFFFF;
+    color: #000000;
+    svg {
+      color: #95A0BD;
+    }
     .text-secondary-accent {
       color: var(--secondary-accent);
     }
@@ -93,10 +186,212 @@
       color: var( --primary-text);
   }
 
+  .ozow-loading-icon {
+    width: 170px;
+    height: 170px;
+  }
+
+  .ozow-loading-text {
+    font-family: 'Gordita', sans-serif;
+    font-weight: 700;
+    font-size: 24px;
+    line-height: 28px;
+    letter-spacing: -0.5px;
+    text-align: center;
+    color: #1E2330;
+    margin-top: 16px;
+  }
+
+  .ozow-footer {
+    position: absolute;
+    bottom: 24px;
+    left: 0;
+    right: 0;
+    display: flex;
+    justify-content: center;
+  }
+
+  .ozow-primary-logo {
+    width: 140px;
+    height: auto;
+    margin-top: 40px;
+    margin-bottom: 48px;
+  }
+
+  .ozow-success-icon {
+    width: 257px;
+    height: 176px;
+  }
+
+  .ozow-return-btn {
+    background: #FFFFFF;
+    font-family: 'Gordita', sans-serif;
+    font-weight: 700;
+    font-size: 16px;
+    color: #3F4A65;
+    text-align: center;
+    border: none;
+    cursor: pointer;
+    border-radius: 40px;
+    width: 315px;
+    height: 56px;
+    box-shadow: 0px 10px 15px rgba(0, 0, 0, 0.1);
+    &:hover {
+      background-color: #f5f5f5;
+    }
+  }
+
+  .ozow-background-container {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background-image: url('@/assets/partners/ozow/ozow_background.svg');
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    overflow-y: auto;
+  }
+
+  .ozow-success-text {
+    font-family: 'Gordita', sans-serif;
+    font-weight: 700;
+    font-size: 24px;
+    line-height: 34px;
+    text-align: center;
+    text-transform: capitalize;
+    color: #1E2330;
+  }
+
+  .step-indicator {
+    position: relative;
+    width: 100px;
+    height: 25px;
+  }
+
+  .joiner {
+    position: absolute;
+    top: 37.69%;
+    bottom: 38.19%;
+    box-sizing: border-box;
+    background: #F9F9F9;
+    border: 1px solid #CACFDE;
+  }
+  .joiner--left  { left: 21%; right: 59%; }
+  .joiner--right { left: 59%; right: 21%; }
+  .joiner--active {
+    background: #C7FFE8;
+    border: 1.5px solid #00B8AD;
+  }
+
+  .step {
+    position: absolute;
+    width: 24px;
+    height: 24px;
+    top: 50%;
+    transform: translateY(-50%);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-sizing: border-box;
+  }
+
+  .step--check {
+    background: #F9F9F9;
+    border: 1px solid #CACFDE;
+    filter: drop-shadow(0px 4px 8px rgba(0, 0, 0, 0.12));
+  }
+
+  .step--current {
+    background: #C7FFE8;
+    border: 1.5px solid #00B8AD;
+    filter: drop-shadow(0px 4px 8px rgba(0, 0, 0, 0.12));
+    color: #1E2330;
+  }
+
+  .step--later {
+    background: #F9F9F9;
+    border: 1px solid #95A0BD;
+    color: #3F4A65;
+  }
+
+  .step-number {
+    font-size: 15px;
+    font-weight: 600;
+    font-family: Gordita, sans-serif;
+    line-height: 1;
+    padding-top: 2px;
+  }
+
+  .lightning-input-wrapper {
+    position: relative;
+    margin-bottom: 16px;
+  }
+
+  .lightning-input-label {
+    position: absolute;
+    top: -8px;
+    left: 12px;
+    font-family: 'Gordita', sans-serif;
+    font-weight: 400;
+    font-size: 12px;
+    line-height: 16px;
+    letter-spacing: 0.4px;
+    color: #1E2330;
+    background: #F9F9F9;
+    padding: 0 4px;
+    height: 16px;
+    z-index: 2;
+  }
+
+  .lightning-input {
+    width: 100%;
+    height: 48px;
+    border: 1px solid #60719A;
+    border-radius: 4px;
+    padding: 12px 16px;
+    gap: 10px;
+    font-family: Gordita, sans-serif;
+    font-size: 14px;
+    color: #1E2330;
+    background: #F9F9F9;
+    outline: none;
+    box-sizing: border-box;
+    &::placeholder {
+      color: #95A0BD;
+      font-family: 'Gordita', sans-serif;
+      font-weight: 400;
+      font-size: 16px;
+      line-height: 24px;
+      letter-spacing: 0.5px;
+      vertical-align: middle;
+    }
+  }
+
+  .lightning-input--error {
+    border-color: #E14A5B;
+  }
+
+  .lightning-input-label--error {
+    color: #E14A5B;
+  }
+
+  .lightning-input-error {
+    margin-top: 4px;
+    padding-left: 16px;
+    font-family: 'Gordita', sans-serif;
+    font-size: 12px;
+    color: #E14A5B;
+    text-align: left;
+  }
+
   .button.currency-select {
     background-color: #ffffff;
-    border: 1px solid rgba(0,0,0,0.06);
-    box-shadow: 0 0 0 1px rgba(0,0,0,0.03);
+    border: 1px solid #E4E7EE;
+    box-shadow: 0px 1px 2px rgba(0, 0, 0, 0.15);
+    border-radius: 8px;
     cursor: pointer;
     transition: background-color 0.15s ease, box-shadow 0.15s ease;
     &:hover {
@@ -106,11 +401,11 @@
       background-color: #f3f4f6;
     }
     svg {
-      color: #9ca3af;
+      color: #95A0BD;
     }
     span {
       font-weight: 500;
-      color: #111827;
+      color: #000000;
       letter-spacing: 0.01em;
     }
   }

@@ -2,11 +2,20 @@
 import ErrorSymbol from './ErrorSymbol.vue';
 import OzowRedirect from './ozow/OzowRedirect.vue';
 import { useThemeStore } from '../stores/theme';
+import { usePaymentStore } from '../stores/payments';
 import { AnalyticsEvent } from '../types/analytics_events';
 
 export default {
     name: 'PaymentExpired',
     components: { ErrorSymbol, OzowRedirect },
+    methods: {
+      goBack() {
+        const redirectUrl = usePaymentStore().invoice?.redirect_url
+        if (redirectUrl) {
+          window.location.href = decodeURIComponent(redirectUrl)
+        }
+      }
+    },
     data() {
       return {
         ozow: useThemeStore().current === 'ozow',
@@ -20,7 +29,8 @@ export default {
   <div class="error-page font-bold">
     <p class="font-bold">Your payment has expired.</p>
     <div class="error-symbol">
-      <ErrorSymbol class="my-4" />
+      <img v-if="ozow" src="@/assets/partners/ozow/red_sad_face.svg" alt="Payment Expired" class="my-4" />
+      <ErrorSymbol v-else class="my-4" />
     </div>
     <div class="error-message">
       <ul>
@@ -29,6 +39,7 @@ export default {
         </li>
       </ul>
     </div>
+    <button v-if="ozow" class="ozow-done-btn mt-8" @click="goBack">Return to Payment Methods</button>
     <OzowRedirect v-if="ozow" :preRedirectEvent="AnalyticsEvent.TimedOut" />
   </div>
 </template>

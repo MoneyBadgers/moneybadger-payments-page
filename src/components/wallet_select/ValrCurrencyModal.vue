@@ -1,6 +1,7 @@
 <template>
   <transition name="fade">
-    <div v-if="open" class="fixed inset-0 modal-bg flex items-center justify-center">
+    <div v-if="open" class="fixed inset-0 modal-bg flex flex-col items-center justify-center">
+      <OzowBanner v-if="isOzowTheme" :showBackButton="true" @back="$emit('cancel')"/>
       <div class="h-[100%] w-[100%] overflow-y-auto p-6 justify-center">
         <div  class="mx-auto">
           <ReviewPageHeader v-if="isOzowTheme" :wallet="valr" @change-wallet="$emit('cancel')" />
@@ -33,6 +34,7 @@
 import { ChevronRightIcon } from '@heroicons/vue/24/solid'
 import { useThemeStore } from '../../stores/theme'
 import ReviewPageHeader from "../payment/ReviewPageHeader.vue"
+import OzowBanner from '../ozow/OzowBanner.vue'
 import Wallet from '../../models/wallet';
 
 const valrCurrencies = [
@@ -47,6 +49,7 @@ export default {
   components: {
     ChevronRightIcon,
     ReviewPageHeader,
+    OzowBanner,
   },
   emits: ['select', 'cancel'],
   methods: {

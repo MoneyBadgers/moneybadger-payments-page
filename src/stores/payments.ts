@@ -179,15 +179,13 @@ export const usePaymentStore = defineStore('payments', {
     },
     async pollStatus() {
       await this.refreshInvoice(10)
-      if (this.status === PaymentStatus.Successful) {
-        // payment has been confirmed, no need to poll anymore
+      const terminalStates = [PaymentStatus.Successful, PaymentStatus.Expired, PaymentStatus.Cancelled, PaymentStatus.Error]
+      if (terminalStates.includes(this.status)) {
         return
-      } else {
-        // invoice is in some other state, so wait before polling again
-        setTimeout(async () => {
-          this.pollStatus()
-        }, 500)
       }
+      setTimeout(async () => {
+        this.pollStatus()
+      }, 500)
     },
     applyInvoicePaymentMethodRestrictions() {
       const allowed = this.invoice.allowed_payment_methods

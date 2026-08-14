@@ -38,7 +38,7 @@ import OzowBanner from '../ozow/OzowBanner.vue'
 import Wallet from '../../models/wallet';
 
 const valrCurrencies = [
-  'BTC', 'AVAX', 'BNB', 'ETH', 'SOL', 'USDC', 'USDT', 'XRP', 'ZAR'
+  'BTC', 'AVAX', 'BNB', 'ETH', 'SOL', 'USDC', 'USDT', 'XRP', 'ZAR', 'ZARSC'
 ];
 
 export default {

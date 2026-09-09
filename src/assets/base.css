@@ -80,7 +80,7 @@
     background-image: url('@/assets/wallets/valr-dark.png');
   }
   &.luno {
-    background-image: url('@/assets/wallets/luno-dark.png');
+    background-image: url('@/assets/wallets/luno-dark-15.png');
   }
   &.bybit {
     background-image: url('@/assets/wallets/bybit-dark.png');
@@ -115,7 +115,7 @@
       background-image: url('@/assets/wallets/bybit.png');
     }
     &.luno {
-      background-image: url('@/assets/wallets/luno.png');
+      background-image: url('@/assets/wallets/luno-15.png');
     }
     &.binance {
       background-image: url('@/assets/wallets/binance.png');

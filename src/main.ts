@@ -4,6 +4,7 @@ import './assets/typography.css'
 import { createApp } from 'vue'
 import { createPinia } from 'pinia'
 import { MixpanelPlugin } from './plugins/mixpanel';
+import Honeybadger from "@honeybadger-io/js"
 import HoneybadgerVue from "@honeybadger-io/vue"
 
 import App from './App.vue'
@@ -31,4 +32,12 @@ const config = {
 }
 
 app.use(HoneybadgerVue, config)
+
+// Drop errors thrown by browser extensions (e.g. "reading 'M_ID'" from chrome-extension://.../executors/200.js); not our code
+Honeybadger.beforeNotify((notice) => {
+  const fromExtension =
+    /(chrome|moz|safari-web)-extension:\/\//.test(notice?.stack ?? '') ||
+    notice?.backtrace?.some((frame) => /-extension:\/\//.test(frame.file ?? ''))
+  if (fromExtension) return false
+})
 app.mount('#app')

@@ -1,5 +1,6 @@
 <template>
-  <div v-if="remainingSeconds <= 90" class="box">
+  <p v-if="remainingSeconds > 120" class="my-2 text-center">Payment expires in {{ expiresIn }}</p>
+  <div v-else class="box">
     <div class="flex flex-col items-center text-center justify-between my-3
     ">
       <div class="flex items-baseline justify-between">

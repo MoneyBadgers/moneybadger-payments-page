@@ -15,7 +15,6 @@
     <div v-else class="flex justify-center items-center">
       <qrcode-vue :value="paymentRequestQrData" :size="300" :margin="3" level="L" />
     </div>
-    <p class="my-2 text-center">Payment link expires in 2 minutes</p>
   </div>
 </template>
 
